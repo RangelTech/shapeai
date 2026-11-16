@@ -65,7 +65,7 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
     def chamar_llm(mensagens: list[dict], max_tokens: int = 900) -> str:
         if llm:
             return llm(mensagens)
-        r = httpx.post(cfg.llm_base + "/chat/completions", headers={"Authorization": f"Bearer {cfg.llm_key}"}, timeout=240,
+        r = httpx.post(cfg.llm_base + "/chat/completions", headers={"Authorization": f"Bearer {cfg.llm_key}"}, timeout=300,
                        json={"model": cfg.llm_modelo, "messages": mensagens, "temperature": 0.6, "max_tokens": max_tokens})
         r.raise_for_status()
         return (r.json()["choices"][0]["message"]["content"] or "").strip()
@@ -338,11 +338,15 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
             raise HTTPException(409, "preencha o perfil antes")
         if not plano_de(u) and db.um("SELECT 1 FROM planos WHERE usuario=? AND tipo='treino'", (u["id"],)):
             raise HTTPException(402, "refazer o treino toda semana é do plano Pro")
-        txt = chamar_llm([{"role": "system", "content": PERSONA.format(contexto=contexto(u))},
-                          {"role": "user", "content": "Monte o meu treino da semana respeitando dias, minutos e local. Responda SÓ com JSON: "
-                                                      '{"dias":[{"dia":"Segunda","foco":"...","exercicios":[{"nome":"...","series":4,"reps":"10-12","descanso_s":60,'
-                                                      '"equipamento":"...","dica":"..."}]}],"observacoes":"..."}'}], 2500)
-        d = json_da_ia(txt)
+        pedido = [{"role": "system", "content": PERSONA.format(contexto=contexto(u))},
+                  {"role": "user", "content": "Monte o meu treino da semana respeitando dias, minutos e local. No máximo 6 exercícios por dia; dica com até 8 palavras. "
+                                              "Responda SÓ com JSON, sem texto antes ou depois: "
+                                              '{"dias":[{"dia":"Segunda","foco":"...","exercicios":[{"nome":"...","series":4,"reps":"10-12","descanso_s":60,'
+                                              '"equipamento":"...","dica":"..."}]}],"observacoes":"..."}'}]
+        try:
+            d = json_da_ia(chamar_llm(pedido, 4000))
+        except HTTPException:  # resposta cortada ou fora do formato: uma nova tentativa antes de devolver erro
+            d = json_da_ia(chamar_llm(pedido, 4000))
         for dia in d.get("dias") or []:
             for ex in dia.get("exercicios") or []:
                 ex["video"] = video(str(ex.get("nome") or ""))
@@ -356,12 +360,16 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
         r = resumo(u)
         if not r.get("gasto"):
             raise HTTPException(409, "registre o seu peso nas medidas antes")
-        txt = chamar_llm([{"role": "system", "content": PERSONA.format(contexto=contexto(u))},
+        pedido_dieta = [{"role": "system", "content": PERSONA.format(contexto=contexto(u))},
                           {"role": "user", "content": f"Monte a minha dieta dos 7 dias com horários pela minha rotina, perto de {r['gasto']['calorias_alvo']} kcal/dia "
                                                       f"e {r['gasto']['proteina_g']} g de proteína. Comida brasileira, fácil de achar. Responda SÓ com JSON: "
                                                       '{"dias":[{"dia":"Segunda","refeicoes":[{"horario":"07:00","nome":"Café da manhã","itens":[{"alimento":"...",'
-                                                      '"quantidade":"...","kcal":0}],"kcal":0}],"kcal_total":0}],"dicas":"..."}'}], 4000)
-        d = json_da_ia(txt)
+                                                      '"quantidade":"...","kcal":0}],"kcal":0}],"kcal_total":0}],"dicas":"..."}'}]
+        txt = chamar_llm(pedido_dieta, 6000)
+        try:
+            d = json_da_ia(txt)
+        except HTTPException:
+            d = json_da_ia(chamar_llm(pedido_dieta, 6000))
         pid = db.exec("INSERT INTO planos(usuario,tipo,dados,criado) VALUES(?,?,?,?)", (u["id"], "dieta", json.dumps(d, ensure_ascii=False), agora())).lastrowid
         return {"id": pid, **d}
 
