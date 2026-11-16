@@ -34,6 +34,22 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
 .rk{display:flex;justify-content:space-between;padding:12px 14px;border:1px solid var(--bd);border-radius:12px;margin-bottom:6px;background:#08100b}.rk.voce{border-color:var(--ac)}.rk em{font-style:normal;color:var(--mut);font-size:12px}
 .semana{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}.semana span{text-align:center;padding:8px 0;border-radius:10px;background:#08100b;border:1px solid var(--bd);font-size:12px;color:var(--mut)}
 .semana span.prev{border-color:#3ad7ff;color:#fff}.semana span.feito{background:rgba(124,255,178,.2);border-color:var(--ac);color:#fff}
+.fotos.guia img{aspect-ratio:1;object-fit:contain;background:#fff}.pk{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:8px;margin-bottom:8px}.pk-cab small{color:var(--mut);font-size:12px}.pk select,.pk input{background:#08100b;border:1px solid var(--bd);border-radius:12px;padding:10px;color:var(--fg);font:inherit;width:100%}.b img{display:block;max-width:240px;border-radius:12px;margin:8px 0;background:#fff}@media (max-width:760px){.pk{grid-template-columns:1fr 1fr}.pk-cab{display:none}}
+.h-heroi{display:grid;grid-template-columns:1.3fr .7fr;gap:24px;align-items:center;background:radial-gradient(600px 300px at 90% 50%,rgba(124,255,178,.12),transparent 70%),var(--card)}
+.h-heroi h2,.h-topo h2{font-size:30px;line-height:1.1;margin:10px 0}.selo-h{display:inline-block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(124,255,178,.35);border-radius:999px;padding:4px 12px}
+.h-heroi textarea{width:100%;margin-top:12px;background:#08100b;border:1px solid var(--bd);border-radius:12px;padding:12px;color:var(--fg);font:inherit}
+.ampolas-deco{display:flex;gap:14px;justify-content:center}.h-topo{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.ampolas{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-bottom:14px}
+.ampola{background:linear-gradient(160deg,#0f1a14,#0a110d);border:1px solid var(--bd);border-radius:22px;padding:20px;display:grid;grid-template-columns:70px 1fr;gap:16px;position:relative;overflow:hidden;animation:sobe .5s ease both}
+.ampola:before{content:"";position:absolute;inset:-40% -40% auto auto;width:200px;height:200px;background:radial-gradient(circle,var(--cor,#7CFFB2) 0,transparent 70%);opacity:.12}
+.ampola h4{font-size:17px;line-height:1.2}.ampola .dose{font-size:30px;font-weight:900;margin:6px 0 2px}.ampola .dose small{font-size:14px;color:var(--mut);font-weight:600}
+.ampola .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.ampola .meta span{font-size:12px;border:1px solid var(--bd);border-radius:999px;padding:3px 9px;color:#cfe}
+.ampola details{grid-column:1/-1;font-size:13px;color:var(--mut);border:0;padding:0;margin:0;background:none}.ampola details p{margin-top:8px;line-height:1.5}.ampola summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:13px;list-style:none;padding:0}.ampola summary:after{content:none}
+@keyframes sobe{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.alerta-rk{display:flex;align-items:center;gap:12px;border-radius:18px;padding:14px 18px;margin-bottom:14px;font-weight:700;background:linear-gradient(90deg,rgba(255,107,154,.18),rgba(255,181,71,.12));border:1px solid rgba(255,140,120,.45)}
+.alerta-rk.alvo{background:linear-gradient(90deg,rgba(124,255,178,.16),rgba(58,215,255,.1));border-color:rgba(124,255,178,.45)}.alerta-rk.lider{background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(255,181,71,.08));border-color:rgba(255,215,0,.5)}
+.alerta-rk i{font-style:normal;font-size:22px}
+@media (max-width:760px){.h-heroi{grid-template-columns:1fr}.ampolas-deco{display:none}}
 .aviso{background:rgba(255,200,80,.08);border:1px solid rgba(255,200,80,.35);border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:12px}
 .msg.erro{color:#f87171}.msg{min-height:20px;font-size:14px;margin-top:6px}
 @media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}}
@@ -44,13 +60,14 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   <a class="logo" href="/painel"><i>↗</i>Shape AI</a>
   <nav class="abas" role="tablist">
     <button data-aba="hoje" aria-selected="true">Hoje</button><button data-aba="treino">Treino</button><button data-aba="dieta">Dieta</button><button data-aba="medidas">Medidas</button>
-    <button data-aba="fotos">Fotos</button><button data-aba="ranking">Ranking</button><button data-aba="coach">Coach</button><button data-aba="receitas">Receitas médicas</button><button data-aba="perfil">Perfil</button><button data-aba="plano">Plano</button>
+    <button data-aba="fotos">Fotos</button><button data-aba="ranking">Ranking</button><button data-aba="coach">Coach</button><button data-aba="receitas">Hormônios</button><button data-aba="perfil">Perfil</button><button data-aba="plano">Plano</button>
   </nav>
   <button class="btn btn-ghost" id="sair">Sair</button>
 </div></header>
 <main class="p">
   <section data-painel="hoje">
     <div class="cartao" id="sem-perfil" hidden><b>Comece pelo seu perfil.</b> <span class="dim">Rotina, meta e medidas: é com isso que o plano é montado.</span> <button class="btn btn-pri" data-ir="perfil">Preencher</button></div>
+    <div id="alerta-hoje"></div>
     <div class="kpis" id="kpis"></div>
     <div class="cartao" style="margin-top:14px"><div class="cab"><h3>Check-in de hoje</h3><span class="dim" id="kcal-hoje"></span></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -69,18 +86,44 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
     <div class="cartao"><h3 style="margin-bottom:8px">Histórico</h3><div id="hist-med"></div></div>
   </section>
   <section data-painel="fotos" hidden><div class="cartao"><div class="cab"><h3>Linha do tempo</h3><label class="btn btn-pri">Adicionar foto (+25)<input type="file" accept="image/*" id="foto-evol" hidden></label></div><div class="msg" id="f-msg"></div><div class="fotos" id="lista-fotos"></div></div></section>
-  <section data-painel="ranking" hidden><div class="cartao"><div class="cab"><h3>Ranking da semana</h3><span class="dim">Rivais da IA sempre aparecem identificados</span></div><div id="ranking"></div></div></section>
+  <section data-painel="ranking" hidden><div class="cartao"><div class="cab"><h3>Ranking da semana</h3><span class="dim">Zera toda segunda. Treine, registre e suba.</span></div><div id="alerta-rk"></div><div id="ranking"></div></div></section>
   <section data-painel="coach" hidden><div class="cartao"><h3 style="margin-bottom:10px">Seu coach</h3>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px" id="sugestoes"><button class="btn btn-sec">Hoje só tenho ovo, arroz e frango. O que faço?</button><button class="btn btn-sec">Troca o treino de hoje, tô com 30 minutos</button><button class="btn btn-sec">Como estou em relação à meta?</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px" id="sugestoes"><button class="btn btn-sec">Hoje só tenho ovo, arroz e frango. O que faço?</button><button class="btn btn-sec">Troca o treino de hoje, tô com 30 minutos</button><button class="btn btn-sec">Como estou em relação à meta?</button><button class="btn btn-sec">Monta um primeiro ciclo pra mim</button><button class="btn btn-sec">Como fica a tirzepatida semana a semana?</button></div>
     <div class="chat" id="chat"></div><form class="envio" id="f-chat"><input id="chat-txt" placeholder="Pergunte ao seu coach…" autocomplete="off"><button class="btn btn-pri">Enviar</button></form><div class="msg" id="chat-msg"></div></div></section>
   <section data-painel="receitas" hidden>
-    <div class="aviso">Aqui você registra SOMENTE o que o seu médico prescreveu, para ter calendário e lembrete. O Shape AI não indica substância, dose nem protocolo.</div>
-    <div class="cartao"><h3 style="margin-bottom:12px">Registrar prescrição</h3><form class="form" id="f-rx">
-      <label>Nome (como na receita)<input id="rx-nome" required></label><label>Dose prescrita<input id="rx-dose" required placeholder="como está na receita"></label><label>Horário<input id="rx-hora" type="time"></label>
+    <div id="h-vazio" class="cartao h-heroi" hidden>
+      <div><span class="selo-h">Seu protocolo, do seu médico</span><h2>Transforme a sua receita em um painel vivo.</h2>
+        <p class="dim">Tire uma foto da receita. O Shape AI lê cada composto, dose e frequência e monta as ampolas, o gráfico da semana, o calendário de aplicações e os exames de cada fase.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><label class="btn btn-pri">Fotografar a receita<input type="file" accept="image/*" capture="environment" id="h-foto" hidden></label><button class="btn btn-sec" id="h-digitar">Digitar a receita</button></div>
+        <textarea id="h-texto" rows="4" hidden placeholder="Cole ou digite a receita como está escrita"></textarea><button class="btn btn-sec" id="h-ler-texto" hidden>Ler receita</button>
+        <div class="msg" id="h-msg"></div></div>
+      <div class="ampolas-deco" aria-hidden="true"></div>
+    </div>
+    <div id="h-conferir" class="cartao" hidden><div class="cab"><h3>Confira antes de salvar</h3><span class="dim" id="h-med"></span></div>
+      <p class="dim" style="margin-bottom:12px">Lemos a receita assim. Corrija o que estiver diferente do papel.</p>
+      <div class="pk pk-cab"><small>Composto</small><small>mg por aplicação</small><small>a cada (dias)</small><small>semanas</small><small>começa na semana</small><span></span></div>
+      <div id="h-itens"></div><p class="msg erro" id="h-ilegivel"></p>
+      <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-pri" id="h-salvar">Salvar meu protocolo</button><button class="btn btn-ghost" id="h-cancelar">Cancelar</button></div></div>
+    <div id="h-ativo" hidden>
+      <div class="cartao h-topo"><div><span class="selo-h">Protocolo ativo</span><h2 id="h-titulo">Seu protocolo</h2><p class="dim" id="h-origem"></p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sec" id="h-explicar">Explicar meu protocolo</button><label class="btn btn-ghost">Nova receita<input type="file" accept="image/*" id="h-foto2" hidden></label></div></div>
+      <div class="ampolas" id="h-ampolas"></div>
+      <div class="cartao"><div class="cab"><div><h3>Concentração estimada, semana a semana</h3><span class="dim">Cada aplicação sobe a curva; o éster define a descida.</span></div></div>
+        <div style="position:relative;height:360px"><canvas id="pk-graf"></canvas></div><p class="dim" id="pk-aviso" style="font-size:13px;margin-top:8px"></p></div>
+      <div class="cartao" id="h-obs" hidden></div>
+    </div>
+    <div class="cartao"><h3 style="margin-bottom:12px">Calendário de aplicações</h3><form class="form" id="f-rx">
+      <label>Composto<input id="rx-nome" required placeholder="ex.: Testosterona cipionato"></label><label>Dose<input id="rx-dose" required placeholder="como está na receita"></label><label>Horário<input id="rx-hora" type="time"></label>
       <label class="cheia">Dias da semana<span id="rx-dias" style="display:flex;gap:6px;flex-wrap:wrap"></span></label>
-      <label>Médico(a)<input id="rx-med"></label><label class="cheia" style="display:flex;gap:8px;align-items:center;flex-direction:row"><input type="checkbox" id="rx-ok" style="width:auto"> Confirmo que foi prescrito pelo meu médico</label>
-      <button class="btn btn-pri cheia">Salvar</button><div class="msg cheia" id="rx-msg"></div></form></div>
+      <label class="cheia">Observação<input id="rx-med" placeholder="local de aplicação, seringa, lembrete"></label>
+      <button class="btn btn-pri cheia">Adicionar ao calendário</button><div class="msg cheia" id="rx-msg"></div></form></div>
     <div id="lista-rx"></div>
+    <div class="cartao"><h3 style="margin-bottom:10px">Guia de aplicação</h3><div class="fotos guia">
+      <figure><img src="/s/guia/localgluteo.webp" alt="Glúteo" loading="lazy"><figcaption>Glúteo</figcaption></figure><figure><img src="/s/guia/localventregluteo.webp" alt="Ventroglúteo" loading="lazy"><figcaption>Ventroglúteo</figcaption></figure>
+      <figure><img src="/s/guia/localvastolateral.webp" alt="Vasto lateral" loading="lazy"><figcaption>Vasto lateral (coxa)</figcaption></figure><figure><img src="/s/guia/localdeltoide.webp" alt="Deltoide" loading="lazy"><figcaption>Deltoide</figcaption></figure>
+      <figure><img src="/s/guia/regiao_aplicacao.webp" alt="Subcutânea" loading="lazy"><figcaption>Subcutânea (tirzepatida)</figcaption></figure><figure><img src="/s/guia/anguloagulhasubcultaneoeIM.webp" alt="Ângulo da agulha" loading="lazy"><figcaption>Ângulo da agulha</figcaption></figure>
+      <figure><img src="/s/guia/seringa_u100.webp" alt="Seringa U-100" loading="lazy"><figcaption>Seringa U-100</figcaption></figure><figure><img src="/s/guia/seringa1ml.webp" alt="Seringa 1 mL" loading="lazy"><figcaption>Seringa 1 mL</figcaption></figure>
+    </div></div>
   </section>
   <section data-painel="perfil" hidden><div class="cartao"><h3 style="margin-bottom:12px">Seu perfil</h3><form class="form" id="f-perfil">
     <label>Nome<input id="p-nome" required></label><label>Sexo<select id="p-sexo"><option value="m">Homem</option><option value="f">Mulher</option></select></label><label>Nascimento<input id="p-nasc" type="date" required></label>
@@ -113,7 +156,7 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   function abrir(n) {
     $$('[data-aba]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.aba === n)))
     $$('[data-painel]').forEach((p) => (p.hidden = p.dataset.painel !== n)); history.replaceState(null, '', '#' + n)
-    ;({ hoje, treino, dieta, medidas, fotos, ranking, coach, receitas, perfil, plano })[n]?.()
+    ;({ hoje, treino, dieta, medidas, fotos, ranking, coach, receitas: () => { receitas(); hormonios() }, perfil, plano })[n]?.()
   }
   $$('[data-aba]').forEach((b) => (b.onclick = () => abrir(b.dataset.aba)))
   document.addEventListener('click', (e) => { const g = e.target.closest('[data-ir]'); if (g) { e.preventDefault(); abrir(g.dataset.ir) } })
@@ -121,7 +164,7 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   const conta = async () => (C = await api('/api/conta'))
 
   async function hoje() {
-    await conta(); $('#sem-perfil').hidden = !!C.perfil
+    alertaHoje(); await conta(); $('#sem-perfil').hidden = !!C.perfil
     const g = C.gasto || {}, m = C.medida || {}
     $('#kpis').innerHTML = `<div class="kpi"><small>Nível</small><b>${esc(C.pontos.nivel)}</b><small>${C.pontos.pontos} pontos${C.pontos.proximo ? ` · faltam ${C.pontos.faltam} para ${esc(C.pontos.proximo)}` : ''}</small></div>
       <div class="kpi"><small>Sequência</small><b>${C.sequencia} dia${C.sequencia === 1 ? '' : 's'}</b><small>não deixe zerar</small></div>
@@ -153,11 +196,15 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   async function fotos() { const { fotos } = await api('/api/fotos?tipo=evolucao'); $('#lista-fotos').innerHTML = fotos.length ? fotos.map((f) => `<figure><img src="${f.url}" alt="" loading="lazy"><figcaption>${new Date(f.criado * 1000).toLocaleDateString('pt-BR')}</figcaption></figure>`).join('') : '<p class="dim">Tire uma foto de frente, de lado e de costas, sempre no mesmo lugar e luz.</p>' }
   $('#foto-evol').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; try { const r = await api('/api/fotos?tipo=evolucao', { method: 'POST', body: f }); $('#f-msg').textContent = `+${r.ganhou} pontos`; $('#f-msg').className = 'msg'; fotos() } catch (err) { erro($('#f-msg'), err) } e.target.value = '' }
 
-  async function ranking() { const r = await api('/api/ranking'); $('#ranking').innerHTML = r.ranking.map((x) => `<div class="rk ${x.voce ? 'voce' : ''}"><span>${x.posicao}. ${esc(x.nome.replace(' (rival da IA)', ''))} ${x.simulado ? '<em>rival da IA</em>' : ''}</span><b>${x.pontos}</b></div>`).join('') }
+  const ICONE = { ameaca: '⚠', alvo: '🎯', lider: '👑' }
+  const htmlAlerta = (a) => a ? `<div class="alerta-rk ${a.tipo}"><i>${ICONE[a.tipo] || ''}</i><span>${esc(a.texto)}</span></div>` : ''
+  async function alertaHoje() { try { const r = await api('/api/ranking'); $('#alerta-hoje').innerHTML = htmlAlerta(r.alerta) } catch {} }
+  async function ranking() { const r = await api('/api/ranking'); $('#alerta-rk').innerHTML = htmlAlerta(r.alerta); $('#ranking').innerHTML = r.ranking.map((x) => `<div class="rk ${x.voce ? 'voce' : ''}"><span>${x.posicao}. ${esc(x.nome)}</span><b>${x.pontos}</b></div>`).join('') }
 
-  async function coach() { const { mensagens } = await api('/api/conversa'); $('#chat').innerHTML = mensagens.length ? mensagens.map((m) => `<div class="b ${m.papel}">${esc(m.texto)}</div>`).join('') : '<div class="b ia">Fala! Sou o seu coach. Pergunte sobre treino, dieta, substituições ou a sua meta.</div>'; $('#chat').scrollTop = 1e9 }
+  const fala = (t) => esc(t).replace(/(^|\s)(\/s\/guia\/[a-z0-9_]+\.webp)/gi, (_, a, u) => `${a}<img src="${u}" alt="" loading="lazy">`)
+  async function coach() { const { mensagens } = await api('/api/conversa'); $('#chat').innerHTML = mensagens.length ? mensagens.map((m) => `<div class="b ${m.papel}">${m.papel === 'ia' ? fala(m.texto) : esc(m.texto)}</div>`).join('') : '<div class="b ia">Fala! Sou o seu coach. Pergunte sobre treino, dieta, suplementos, protocolos hormonais, tirzepatida ou a sua meta.</div>'; $('#chat').scrollTop = 1e9 }
   async function enviar(t) { if (!t) return; $('#chat').insertAdjacentHTML('beforeend', `<div class="b usuario">${esc(t)}</div><div class="b ia" id="pens">Pensando…</div>`); $('#chat').scrollTop = 1e9
-    try { const r = await post('/api/conversa', { texto: t }); $('#pens').outerHTML = `<div class="b ia">${esc(r.resposta)}</div>` } catch (e) { $('#pens')?.remove(); erro($('#chat-msg'), e) } $('#chat').scrollTop = 1e9 }
+    try { const r = await post('/api/conversa', { texto: t }); $('#pens').outerHTML = `<div class="b ia">${fala(r.resposta)}</div>` } catch (e) { $('#pens')?.remove(); erro($('#chat-msg'), e) } $('#chat').scrollTop = 1e9 }
   $('#f-chat').onsubmit = (e) => { e.preventDefault(); const t = $('#chat-txt').value.trim(); $('#chat-txt').value = ''; enviar(t) }
   $$('#sugestoes button').forEach((b) => (b.onclick = () => enviar(b.textContent)))
 
@@ -167,7 +214,52 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
       <div class="semana">${p.semana.map((s, i) => `<span class="${s.feito ? 'feito' : s.previsto ? 'prev' : ''}">${DIAS[i]}</span>`).join('')}</div></div>`).join('')
     $$('[data-feito]').forEach((b) => (b.onclick = async () => { await post(`/api/prescricoes/${b.dataset.feito}/feito`); receitas() }))
     $$('[data-apagar]').forEach((b) => (b.onclick = async () => { if (confirm('Apagar este registro?')) { await api(`/api/prescricoes/${b.dataset.apagar}`, { method: 'DELETE' }); receitas() } })) }
-  $('#f-rx').onsubmit = async (e) => { e.preventDefault(); try { await post('/api/prescricoes', { nome: $('#rx-nome').value, dose: $('#rx-dose').value, horario: $('#rx-hora').value, medico: $('#rx-med').value, aceite_medico: $('#rx-ok').checked, dias: $$('#rx-dias input:checked').map((c) => +c.value) }); $('#rx-msg').textContent = 'Salvo.'; $('#rx-msg').className = 'msg'; receitas() } catch (err) { erro($('#rx-msg'), err) } }
+  $('#f-rx').onsubmit = async (e) => { e.preventDefault(); try { await post('/api/prescricoes', { nome: $('#rx-nome').value, dose: $('#rx-dose').value, horario: $('#rx-hora').value, medico: $('#rx-med').value, dias: $$('#rx-dias input:checked').map((c) => +c.value) }); $('#rx-msg').textContent = 'Salvo.'; $('#rx-msg').className = 'msg'; receitas() } catch (err) { erro($('#rx-msg'), err) } }
+
+  let COMP = [], GRAF = null, LIDO = null
+  const CORES = ['#7CFFB2', '#3ad7ff', '#ffb547', '#ff6b9a', '#b18cff', '#f5f06e', '#5ef0d0', '#ff8a5c']
+  const ampolaSvg = (cor, oral) => oral
+    ? `<svg viewBox="0 0 70 110" width="70" height="110"><rect x="12" y="10" width="46" height="20" rx="5" fill="#1d2a22" stroke="${cor}" stroke-opacity=".6"/><rect x="8" y="28" width="54" height="74" rx="10" fill="url(#gv)" stroke="${cor}" stroke-opacity=".7"/><rect x="14" y="48" width="42" height="30" rx="4" fill="${cor}" opacity=".85"/><circle cx="24" cy="92" r="4" fill="${cor}"/><circle cx="35" cy="92" r="4" fill="${cor}" opacity=".7"/><circle cx="46" cy="92" r="4" fill="${cor}" opacity=".5"/><defs><linearGradient id="gv" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/></linearGradient></defs></svg>`
+    : `<svg viewBox="0 0 70 110" width="70" height="110"><rect x="20" y="4" width="30" height="14" rx="3" fill="${cor}"/><rect x="17" y="16" width="36" height="6" rx="2" fill="#c9d4cd"/><path d="M24 22h22v6c8 4 12 10 12 18v50a10 10 0 0 1-10 10H22a10 10 0 0 1-10-10V46c0-8 4-14 12-18z" fill="rgba(255,255,255,.07)" stroke="${cor}" stroke-opacity=".75"/><path d="M14 62h42v34a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z" fill="${cor}" opacity=".55"/><rect x="18" y="44" width="34" height="14" rx="3" fill="#0b130e" stroke="${cor}" stroke-opacity=".5"/><path d="M20 30c-3 4-4 10-4 18" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/></svg>`
+  const ORAIS = ['oxandrolona', 'metandienona', 'oximetolona', 'estanozolol_oral', 'turanibol', 'mesterolona']
+  const freq = (d) => d === 7 ? '1x por semana' : d === 3.5 ? '2x por semana' : d === 1 ? 'todo dia' : d < 1 ? `${Math.round(1 / d)}x ao dia` : `a cada ${String(d).replace('.', ',')} dias`
+  const linhaRx = (v = {}) => `<div class="pk"><select>${COMP.map((c) => `<option value="${c.id}" ${c.id === v.composto ? 'selected' : ''}>${esc(c.nome)}</option>`).join('')}<option value="outro" ${v.composto === 'outro' ? 'selected' : ''}>Outro: ${esc(v.nome_na_receita || '')}</option></select>
+    <input type="number" min="0" step="any" value="${v.dose_mg ?? ''}"><input type="number" min="0.25" step="0.25" value="${v.a_cada_dias ?? 7}"><input type="number" min="1" value="${v.semanas ?? 12}"><input type="number" min="0" value="${v.inicio_semana ?? 0}"><button class="btn btn-ghost" title="Remover">×</button></div>`
+  function conferir(d) { LIDO = d; $('#h-vazio').hidden = true; $('#h-ativo').hidden = true; $('#h-conferir').hidden = false
+    $('#h-med').textContent = [d.medico, d.data].filter(Boolean).join(' · '); $('#h-ilegivel').textContent = d.ilegivel ? 'Não deu para ler: ' + d.ilegivel : ''
+    $('#h-itens').innerHTML = (d.itens.length ? d.itens : [{}]).map(linhaRx).join(''); $$('#h-itens .pk button').forEach((b) => (b.onclick = () => b.closest('.pk').remove())) }
+  async function lerFoto(f) { if (!f) return; $('#h-msg').textContent = 'Lendo a sua receita…'; $('#h-msg').className = 'msg'
+    try { const r = await fetch('/api/receita/ler', { method: 'POST', body: f, headers: { 'Content-Type': f.type || 'image/jpeg' } }); const j = await r.json(); if (!r.ok) throw new Error(j.detail || 'Não deu certo.'); conferir(j) } catch (e) { $('#h-msg').textContent = e.message; $('#h-msg').className = 'msg erro' } }
+  $('#h-foto').onchange = (e) => lerFoto(e.target.files[0]); $('#h-foto2').onchange = (e) => { $('#h-vazio').hidden = false; lerFoto(e.target.files[0]) }
+  $('#h-digitar').onclick = () => { $('#h-texto').hidden = false; $('#h-ler-texto').hidden = false; $('#h-texto').focus() }
+  $('#h-ler-texto').onclick = async () => { try { $('#h-msg').textContent = 'Lendo…'; conferir(await post('/api/receita/ler', { texto: $('#h-texto').value })) } catch (e) { erro($('#h-msg'), e) } }
+  $('#h-cancelar').onclick = () => hormonios()
+  $('#h-salvar').onclick = async () => { const itens = $$('#h-itens .pk').map((l, i) => { const [s, d, a, w, ini] = [...l.querySelectorAll('select,input')]; return { composto: s.value, nome_na_receita: (LIDO.itens[i] || {}).nome_na_receita || '', dose_mg: +d.value, a_cada_dias: +a.value, semanas: +w.value, inicio_semana: +ini.value, via: (LIDO.itens[i] || {}).via || '', obs: (LIDO.itens[i] || {}).obs || '' } })
+    try { await post('/api/protocolo', { ...LIDO, itens }); hormonios() } catch (e) { erro($('#h-ilegivel'), e) } }
+  $('#h-explicar').onclick = () => { abrir('coach'); enviar('Me explica o meu protocolo: cada composto, como aplicar, o calendário e os exames de cada fase.') }
+  function grafico(r) { if (!r) return; $('#pk-aviso').textContent = r.aviso
+    const maxG = Math.max(...Object.values(r.series).map((v) => Math.max(...v)))
+    const nomes = Object.keys(r.series), dados = { labels: r.dias.map((d) => d % 7 === 0 ? 'sem ' + (d / 7) : ''), datasets: [
+      ...nomes.map((n, i) => ({ label: n, data: r.series[n], yAxisID: Math.max(...r.series[n]) < maxG * 0.15 ? 'y1' : 'y', borderColor: CORES[i % CORES.length], backgroundColor: CORES[i % CORES.length] + '22', fill: nomes.length === 1, borderWidth: 2, pointRadius: 0, tension: .3 }))] }
+    const duplo = dados.datasets.some((d) => d.yAxisID === 'y1')
+    if (GRAF) GRAF.destroy()
+    GRAF = new Chart($('#pk-graf'), { type: 'line', data: dados, options: { maintainAspectRatio: false, animation: { duration: 900 }, interaction: { mode: 'index', intersect: false },
+      scales: { x: { ticks: { color: '#7d8f84', autoSkip: false, maxRotation: 0 }, grid: { color: '#14231a' } }, y: { title: { display: true, text: 'mg ativos (estimativa)', color: '#7d8f84' }, ticks: { color: '#7d8f84' }, grid: { color: '#14231a' } },
+        y1: { display: duplo, position: 'right', title: { display: true, text: 'mg (escala menor)', color: '#7d8f84' }, ticks: { color: '#7d8f84' }, grid: { drawOnChartArea: false } } },
+      plugins: { legend: { labels: { color: '#cfe' } }, tooltip: { callbacks: { title: (it) => 'Dia ' + r.dias[it[0].dataIndex] } } } } }) }
+  async function hormonios() { if (!COMP.length) COMP = (await api('/api/protocolo/compostos')).compostos
+    const { ativo } = await api('/api/protocolo'); $('#h-conferir').hidden = true
+    $('#h-vazio').hidden = !!ativo; $('#h-ativo').hidden = !ativo
+    if (!ativo) { $('#h-msg').textContent = ''; $('.ampolas-deco').innerHTML = [0, 1, 2].map((i) => ampolaSvg(CORES[i], i === 2)).join(''); return }
+    $('#h-titulo').textContent = ativo.itens.length + (ativo.itens.length === 1 ? ' composto' : ' compostos') + ' no seu protocolo'
+    $('#h-origem').textContent = 'Receita de ' + (ativo.medico || 'médico não identificado') + (ativo.data_receita ? ' · ' + ativo.data_receita.split('-').reverse().join('/') : '')
+    $('#h-ampolas').innerHTML = ativo.itens.map((i, k) => { const cor = CORES[k % CORES.length]
+      return `<div class="ampola" style="--cor:${cor};animation-delay:${k * 80}ms">${ampolaSvg(cor, ORAIS.includes(i.composto))}<div><h4>${esc(i.nome_na_receita || i.nome)}</h4><small class="dim">${esc(i.nome)}</small>
+        <div class="dose">${String(i.dose_mg).replace('.', ',')} <small>mg</small></div><small class="dim">${freq(i.a_cada_dias)}</small>
+        <div class="meta"><span>${i.semanas} semanas</span>${i.inicio_semana ? `<span>começa na sem. ${i.inicio_semana}</span>` : ''}${i.via ? `<span>${esc(i.via)}</span>` : ''}</div></div>
+        ${i.ficha || i.obs ? `<details><summary>Sobre este composto</summary>${i.obs ? `<p><b>Na receita:</b> ${esc(i.obs)}</p>` : ''}<p>${esc(i.ficha)}</p></details>` : ''}</div>` }).join('')
+    $('#h-obs').hidden = !ativo.observacoes; $('#h-obs').innerHTML = `<h3 style="margin-bottom:6px">Orientações da receita</h3><p class="dim">${esc(ativo.observacoes)}</p>`
+    grafico(ativo.curva) }
 
   async function perfil() { await conta(); const p = C.perfil; if (!p) return
     $('#p-nome').value = p.nome; $('#p-sexo').value = p.sexo; $('#p-nasc').value = p.nascimento; $('#p-alt').value = p.altura_cm; $('#p-ativ').value = p.atividade; $('#p-obj').value = p.objetivo
@@ -181,6 +273,7 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   conta().then(() => abrir((location.hash || '#hoje').slice(1)))
 })()
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="/s/login.js"></script>
 <script src="/s/olho.js"></script>
 </body>

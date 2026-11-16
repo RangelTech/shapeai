@@ -13,6 +13,9 @@ class Config:
     llm_base: str = "http://rt-hermes-produtos:8642/v1"   # toda IA pelo Hermes dos produtos (regra do Lucas, 16/11)
     llm_key: str = ""
     llm_modelo: str = "hermes-produtos"
+    visao_base: str = "https://qwen.rangeltech.net/v1"    # leitura da foto da receita (llm-access, modelo de visão)
+    visao_key: str = ""
+    visao_modelo: str = "visao"
     segredo_sessao: str = "dev"
     smtp_host: str = ""
     smtp_port: int = 587
@@ -37,6 +40,9 @@ def carregar() -> Config:
         llm_base=e("SHAPEAI_LLM_BASE", "http://rt-hermes-produtos:8642/v1").rstrip("/"),
         llm_key=e("SHAPEAI_LLM_KEY", ""),
         llm_modelo=e("SHAPEAI_LLM_MODELO", "hermes-produtos"),
+        visao_base=e("SHAPEAI_VISAO_BASE", "https://qwen.rangeltech.net/v1").rstrip("/"),
+        visao_key=e("SHAPEAI_VISAO_KEY", ""),
+        visao_modelo=e("SHAPEAI_VISAO_MODELO", "visao"),
         segredo_sessao=e("SHAPEAI_SEGREDO_SESSAO", "dev"),
         smtp_host=e("SMTP_HOST", ""),
         smtp_port=int(e("SMTP_PORT", "587") or 587),

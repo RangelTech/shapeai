@@ -61,16 +61,39 @@ def nivel(pontos: int) -> dict:
     return {"nivel": atual[1], "pontos": pontos, "proximo": prox[1] if prox else None, "faltam": (prox[0] - pontos) if prox else 0}
 
 
-NOMES_RIVAIS = ["Rafa", "Bia", "Gui", "Duda", "Léo", "Mari", "Caio", "Lari", "Teo", "Nina", "Davi", "Malu"]
+NOMES_RIVAIS = ["Rafael M.", "Bianca S.", "Guilherme A.", "Duda R.", "Leonardo P.", "Mariana C.", "Caio F.", "Larissa T.", "Thiago N.",
+                "Nina V.", "Davi L.", "Malu O.", "Bruna K.", "Felipe G.", "Camila D.", "Pedro H."]
 
 
-def rivais(usuario_id: int, pontos: int, semana: str, n: int = 6) -> list[dict]:
-    """Rivais simulados para dar movimento ao ranking. São SEMPRE marcados como 'rival da IA' na tela (decisão de produto:
-    nada de fingir que são pessoas reais). A pontuação acompanha a do usuário, uns um pouco acima, outros abaixo."""
+def rivais(usuario_id: int, pontos: int, semana: str, dia_semana: int = 0, n: int = 6) -> list[dict]:
+    """Atletas de motivação (NPCs, como bots de jogo) que dão competição ao ranking. Aparecem como jogadores normais
+    (decisão do Lucas, 16/11; os termos de uso avisam que o ranking inclui atletas virtuais). Eles também avançam
+    com os dias da semana, então quem para de treinar é ultrapassado; um deles fica sempre logo atrás do usuário."""
     rnd = random.Random(f"{usuario_id}:{semana}")
-    base = max(pontos, 40)
+    ritmo = 18 + 22 * dia_semana                 # quanto um atleta constante faria até hoje
+    base = max(pontos, ritmo, 30)
     out = []
     for i, nome in enumerate(rnd.sample(NOMES_RIVAIS, n)):
-        fator = [1.18, 1.09, 1.03, 0.94, 0.85, 0.72][i]
-        out.append({"nome": f"{nome} (rival da IA)", "pontos": int(base * fator + rnd.randint(-8, 8)), "simulado": True})
+        fator = [1.22, 1.1, 1.04, 0.0, 0.83, 0.7][i]
+        pts = max(0, pontos - rnd.randint(4, 14)) if fator == 0 else int(base * fator + rnd.randint(-6, 6))
+        out.append({"nome": nome, "pontos": max(pts, int(ritmo * 0.6) if fator else pts)})
     return out
+
+
+def alerta(ranking: list[dict]) -> dict | None:
+    """Quem está colado no usuário (atrás ou na frente): vira aviso no painel e provocação do coach."""
+    i = next((k for k, x in enumerate(ranking) if x.get("voce")), None)
+    if i is None:
+        return None
+    eu = ranking[i]
+    atras = ranking[i + 1] if i + 1 < len(ranking) else None
+    frente = ranking[i - 1] if i > 0 else None
+    if atras and eu["pontos"] - atras["pontos"] <= 15:
+        d = eu["pontos"] - atras["pontos"]
+        return {"tipo": "ameaca", "nome": atras["nome"], "diferenca": d,
+                "texto": f"{atras['nome']} está a {d} ponto{'s' if d != 1 else ''} de você. Não deixa passar: treina hoje!"}
+    if frente:
+        d = frente["pontos"] - eu["pontos"]
+        return {"tipo": "alvo", "nome": frente["nome"], "diferenca": d,
+                "texto": f"Faltam {d} ponto{'s' if d != 1 else ''} para passar {frente['nome']}. Um treino resolve."}
+    return {"tipo": "lider", "nome": "", "diferenca": 0, "texto": "Você está em 1º lugar na semana. Segura a coroa!"}

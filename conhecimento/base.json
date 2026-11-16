@@ -1,0 +1,586 @@
+[
+ {
+  "id": 1,
+  "titulo": "Testosterona Enantato (Óleo)",
+  "tags": [
+   "hormonio",
+   "testosterona",
+   "enantato (óleo)",
+   "testosterona"
+  ],
+  "texto": "Testosterona — Enantato (Óleo) (Injetável, família Testosterona, Éster Longo). Concentração comum: 250 mg/mL. Efeitos: Ganho de massa muscular bruto, aumento de força, melhora na síntese proteica e recuperação. Colaterais: Aromatização (ginecomastia, retenção), acne, queda de cabelo, inibição do eixo HPTO. Nota anabólica 8/10, nota de colaterais 5/10, razão benefício/colateral 1.6."
+ },
+ {
+  "id": 2,
+  "titulo": "Testosterona Cipionato (Óleo)",
+  "tags": [
+   "hormonio",
+   "testosterona",
+   "cipionato (óleo)",
+   "testosterona"
+  ],
+  "texto": "Testosterona — Cipionato (Óleo) (Injetável, família Testosterona, Éster Longo). Concentração comum: 200 mg/mL. Efeitos: Aumento significativo de força e volume, melhora da libido e disposição. Colaterais: Aromatização, acne, retenção hídrica, supressão severa do eixo HPTO. Nota anabólica 8/10, nota de colaterais 5/10, razão benefício/colateral 1.6."
+ },
+ {
+  "id": 3,
+  "titulo": "Testosterona Propionato (Óleo)",
+  "tags": [
+   "hormonio",
+   "testosterona",
+   "propionato (óleo)",
+   "testosterona"
+  ],
+  "texto": "Testosterona — Propionato (Óleo) (Injetável, família Testosterona, Éster Curto). Concentração comum: 100 mg/mL. Efeitos: Ganhos rápidos de força e densidade, menor retenção hídrica aparente devido a picos controlados. Colaterais: Aromatização rápida, oscilações hormonais se não aplicado com frequência, dor local. Nota anabólica 8/10, nota de colaterais 5.5/10, razão benefício/colateral 1.45."
+ },
+ {
+  "id": 4,
+  "titulo": "Testosterona Durateston / Sustanon",
+  "tags": [
+   "hormonio",
+   "testosterona",
+   "durateston / sustanon",
+   "testosterona"
+  ],
+  "texto": "Testosterona — Durateston / Sustanon (Injetável, família Testosterona, Blend de Ésteres). Concentração comum: 250 mg/mL. Efeitos: Aumento rápido de força e volume muscular devido à mescla de ação rápida e lenta. Colaterais: Aromatização, flutuações hormonais se aplicado raramente, acne e oleosidade. Nota anabólica 8/10, nota de colaterais 5/10, razão benefício/colateral 1.6."
+ },
+ {
+  "id": 5,
+  "titulo": "Testosterona Suspensão Aquosa",
+  "tags": [
+   "hormonio",
+   "testosterona",
+   "suspensão aquosa",
+   "testosterona"
+  ],
+  "texto": "Testosterona — Suspensão Aquosa (Injetável, família Testosterona, Sem Éster). Concentração comum: 100 mg/mL. Efeitos: Aumento instantâneo de força e agressividade no treino, sem atraso de liberação por éster. Colaterais: Picos agudos e imediatos, aromatização drástica, acne extrema, dores de cabeça. Nota anabólica 8.5/10, nota de colaterais 6.5/10, razão benefício/colateral 1.31."
+ },
+ {
+  "id": 6,
+  "titulo": "Nandrolona Decanoato (Óleo) - Deca",
+  "tags": [
+   "hormonio",
+   "nandrolona",
+   "decanoato (óleo) - deca",
+   "19-nor"
+  ],
+  "texto": "Nandrolona — Decanoato (Óleo) - Deca (Injetável, família 19-nor, Éster Longo). Concentração comum: 200 mg/mL. Efeitos: Altamente anabólica, síntese proteica excelente, alívio e lubrificação de dores articulares. Colaterais: Elevada prolactina (ginecomastia), forte inibição do eixo, disfunção erétil ('Deca Dick'), retenção. Nota anabólica 8.5/10, nota de colaterais 4/10, razão benefício/colateral 2.12."
+ },
+ {
+  "id": 7,
+  "titulo": "Nandrolona Fenilpropionato (NPP)",
+  "tags": [
+   "hormonio",
+   "nandrolona",
+   "fenilpropionato (npp)",
+   "19-nor"
+  ],
+  "texto": "Nandrolona — Fenilpropionato (NPP) (Injetável, família 19-nor, Éster Curto). Concentração comum: 100 mg/mL. Efeitos: Ganhos musculares rápidos com menor retenção hídrica aparente em comparação ao decanoato. Colaterais: Elevação de prolactina, inibição profunda do eixo HPTO, retenção moderada. Nota anabólica 8.5/10, nota de colaterais 4/10, razão benefício/colateral 2.12."
+ },
+ {
+  "id": 8,
+  "titulo": "Trembolona Acetato (Óleo)",
+  "tags": [
+   "hormonio",
+   "trembolona",
+   "acetato (óleo)",
+   "19-nor"
+  ],
+  "texto": "Trembolona — Acetato (Óleo) (Injetável, família 19-nor, Éster Curto). Concentração comum: 100 mg/mL. Efeitos: Poder de partição de nutrientes extremo, queima de gordura indireta, ganho de massa magra densa e força extrema. Colaterais: Insônia, suor noturno crônico, ansiedade, agressividade severa, piora lipídica drástica, tosse pós-aplicação. Nota anabólica 10/10, nota de colaterais 9.5/10, razão benefício/colateral 1.05."
+ },
+ {
+  "id": 9,
+  "titulo": "Trembolona Enantato (Óleo)",
+  "tags": [
+   "hormonio",
+   "trembolona",
+   "enantato (óleo)",
+   "19-nor"
+  ],
+  "texto": "Trembolona — Enantato (Óleo) (Injetável, família 19-nor, Éster Longo). Concentração comum: 200 mg/mL. Efeitos: Construção de massa magra extremamente densa a longo prazo, força constante e sem retenção. Colaterais: Mesmos colaterais psicológicos e físicos do acetato, porém de longa duração e depuração lenta. Nota anabólica 10/10, nota de colaterais 9.5/10, razão benefício/colateral 1.05."
+ },
+ {
+  "id": 10,
+  "titulo": "Boldenona Undecilinato (Óleo)",
+  "tags": [
+   "hormonio",
+   "boldenona",
+   "undecilinato (óleo)",
+   "testosterona"
+  ],
+  "texto": "Boldenona — Undecilinato (Óleo) (Injetável, família Testosterona, Éster Muito Longo). Concentração comum: 250 mg/mL. Efeitos: Ganhos lentos porém muito sólidos e secos; excelente para aumento de apetite em fases de ganho (bulking). Colaterais: Aumento expressivo do hematócrito (sangue espesso), ansiedade crônica, fome excessiva, ginecomastia leve. Nota anabólica 7/10, nota de colaterais 5/10, razão benefício/colateral 1.4."
+ },
+ {
+  "id": 11,
+  "titulo": "Drostanolona Propionato (Masteron)",
+  "tags": [
+   "hormonio",
+   "drostanolona",
+   "propionato (masteron)",
+   "dht"
+  ],
+  "texto": "Drostanolona — Propionato (Masteron) (Injetável, família DHT, Éster Curto). Concentração comum: 100 mg/mL. Efeitos: Densidade muscular e efeito estético seco ('empedrado'), atua como antiestrogênico suave no ciclo. Colaterais: Queda de cabelo acentuada (calvície), acne, virilização em mulheres, alteração do colesterol. Nota anabólica 6.5/10, nota de colaterais 4.5/10, razão benefício/colateral 1.44."
+ },
+ {
+  "id": 12,
+  "titulo": "Drostanolona Enantato (Masteron)",
+  "tags": [
+   "hormonio",
+   "drostanolona",
+   "enantato (masteron)",
+   "dht"
+  ],
+  "texto": "Drostanolona — Enantato (Masteron) (Injetável, família DHT, Éster Longo). Concentração comum: 200 mg/mL. Efeitos: Manutenção da densidade muscular e controle estrogênico em ciclos mais longos de cutting. Colaterais: Mesmos colaterais do propionato, com liberação lenta e menor frequência de aplicações. Nota anabólica 6.5/10, nota de colaterais 4.5/10, razão benefício/colateral 1.44."
+ },
+ {
+  "id": 13,
+  "titulo": "Metenolona Enantato (Primobolan)",
+  "tags": [
+   "hormonio",
+   "metenolona",
+   "enantato (primobolan)",
+   "dht"
+  ],
+  "texto": "Metenolona — Enantato (Primobolan) (Injetável, família DHT, Éster Longo). Concentração comum: 100 mg/mL. Efeitos: Ganhos extremamente limpos, excelente retenção de nitrogênio em cutting, estética refinada. Colaterais: Queda de cabelo, acne, virilização moderada em mulheres se as doses forem altas. Muito seguro. Nota anabólica 7/10, nota de colaterais 2.5/10, razão benefício/colateral 2.8."
+ },
+ {
+  "id": 14,
+  "titulo": "Oxandrolona Comprimido",
+  "tags": [
+   "hormonio",
+   "oxandrolona",
+   "comprimido",
+   "dht"
+  ],
+  "texto": "Oxandrolona — Comprimido (Oral, família DHT, 17-alfa alquilado). Concentração comum: 10 mg / 20 mg. Efeitos: Ganho significativo de força, queima de gordura visceral, ganhos secos e sólidos. Ótimo para pontes. Colaterais: Hepatotoxicidade leve, redução severa do HDL e aumento do LDL, queda de cabelo. Nota anabólica 6/10, nota de colaterais 3/10, razão benefício/colateral 2."
+ },
+ {
+  "id": 15,
+  "titulo": "Metandienona Comprimido (Dianabol)",
+  "tags": [
+   "hormonio",
+   "metandienona",
+   "comprimido (dianabol)",
+   "testosterona"
+  ],
+  "texto": "Metandienona — Comprimido (Dianabol) (Oral, família Testosterona, 17-alfa alquilado). Concentração comum: 10 mg. Efeitos: Aumento explosivo de peso corporal e força em poucas semanas. Muito usado como 'kickstart'. Colaterais: Alta hepatotoxicidade, forte aromatização, ginecomastia rápida, retenção hídrica brutal, picos de pressão. Nota anabólica 8.5/10, nota de colaterais 7/10, razão benefício/colateral 1.21."
+ },
+ {
+  "id": 16,
+  "titulo": "Oximetolona Comprimido (Hemogenin)",
+  "tags": [
+   "hormonio",
+   "oximetolona",
+   "comprimido (hemogenin)",
+   "dht (modificado)"
+  ],
+  "texto": "Oximetolona — Comprimido (Hemogenin) (Oral, família DHT (modificado), 17-alfa alquilado). Concentração comum: 50 mg. Efeitos: O oral mais potente para força e volume, pump intramuscular extremo, aumento rápido de hemácias. Colaterais: Altíssima hepatotoxicidade, dor de cabeça forte, ginecomastia, retenção líquida severa, letargia. Nota anabólica 9.5/10, nota de colaterais 7.5/10, razão benefício/colateral 1.27."
+ },
+ {
+  "id": 17,
+  "titulo": "Estanozolol Comprimido (Winstrol)",
+  "tags": [
+   "hormonio",
+   "estanozolol",
+   "comprimido (winstrol)",
+   "dht"
+  ],
+  "texto": "Estanozolol — Comprimido (Winstrol) (Oral, família DHT, 17-alfa alquilado). Concentração comum: 10 mg. Efeitos: Ganhos secos e rígidos, redução drástica do SHBG (aumentando outros hormônios livres), alta definição. Colaterais: Altíssima hepatotoxicidade, dor articular severa ('seca as juntas'), perfil lipídico muito prejudicado. Nota anabólica 7.5/10, nota de colaterais 7.5/10, razão benefício/colateral 1."
+ },
+ {
+  "id": 18,
+  "titulo": "Estanozolol Suspensão (Aquosa/Oleosa)",
+  "tags": [
+   "hormonio",
+   "estanozolol",
+   "suspensão (aquosa/oleosa)",
+   "dht"
+  ],
+  "texto": "Estanozolol — Suspensão (Aquosa/Oleosa) (Injetável, família DHT, 17-alfa alquilado). Concentração comum: 50 mg/mL. Efeitos: Similar ao oral, porém com maior aproveitamento biológico por pular a primeira passagem hepática parcial. Colaterais: Mesmos colaterais do oral + alto risco de infecção/abscesso local (se aquoso), dor severa na aplicação. Nota anabólica 8/10, nota de colaterais 7.5/10, razão benefício/colateral 1.07."
+ },
+ {
+  "id": 19,
+  "titulo": "Turanibol Comprimido",
+  "tags": [
+   "hormonio",
+   "turanibol",
+   "comprimido",
+   "testosterona"
+  ],
+  "texto": "Turanibol — Comprimido (Oral, família Testosterona, 17-alfa alquilado). Concentração comum: 10 mg. Efeitos: Ganhos parecidos com o Dianabol mas sem retenção hídrica. Massa magra limpa e melhora da resistência. Colaterais: Hepatotoxicidade moderada, alteração lipídica, acne leve, sem aromatização. Nota anabólica 7/10, nota de colaterais 4/10, razão benefício/colateral 1.75."
+ },
+ {
+  "id": 20,
+  "titulo": "Fluoximesterona Comprimido (Halotestin)",
+  "tags": [
+   "hormonio",
+   "fluoximesterona",
+   "comprimido (halotestin)",
+   "testosterona"
+  ],
+  "texto": "Fluoximesterona — Comprimido (Halotestin) (Oral, família Testosterona, 17-alfa alquilado). Concentração comum: 5-10 mg. Efeitos: Aumento absurdo de força pura e agressividade neurológica sem ganho de peso. Usado em finais de preparação. Colaterais: Altíssima agressividade, extrema hepatotoxicidade, zero aromatização, dores estomacais, acne severa. Nota anabólica 6/10, nota de colaterais 9.5/10, razão benefício/colateral 0.63."
+ },
+ {
+  "id": 21,
+  "titulo": "Trestolona (MENT) Acetato (Óleo)",
+  "tags": [
+   "hormonio",
+   "trestolona (ment)",
+   "acetato (óleo)",
+   "19-nor"
+  ],
+  "texto": "Trestolona (MENT) — Acetato (Óleo) (Injetável, família 19-nor, Éster Curto). Concentração comum: 50 mg/mL. Efeitos: Considerado por muitos mais potente que a trembolona; hipertrofia absurda, força extrema, aspecto cheio e denso constante. Colaterais: Aromatização fortíssima (estrogênio potente), supressão total e imediata do eixo, insônia, suor, picos de pressão. Nota anabólica 10/10, nota de colaterais 8.5/10, razão benefício/colateral 1.18."
+ },
+ {
+  "id": 22,
+  "titulo": "Mesterolona (Proviron) Comprimido",
+  "tags": [
+   "hormonio",
+   "mesterolona (proviron)",
+   "comprimido",
+   "dht"
+  ],
+  "texto": "Mesterolona (Proviron) — Comprimido (Oral, família DHT, Não-17aa). Concentração comum: 25 mg. Efeitos: Redução drástica do SHBG (libera mais testosterona no sangue), aumento da libido, rigidez muscular e vascularidade estática. Colaterais: Queda de cabelo severa se houver tendência, acne, virilização em mulheres. Seguro para o fígado. Nota anabólica 4/10, nota de colaterais 2/10, razão benefício/colateral 2."
+ },
+ {
+  "id": 23,
+  "titulo": "Metenolona Acetato Comprimido (Primobolan Oral)",
+  "tags": [
+   "hormonio",
+   "metenolona acetato",
+   "comprimido (primobolan oral)",
+   "dht"
+  ],
+  "texto": "Metenolona Acetato — Comprimido (Primobolan Oral) (Oral, família DHT, Não-17aa (Alquilado C1)). Concentração comum: 10 mg / 25 mg. Efeitos: Versão oral do Primobolan. Ganhos extremamente limpos, secos e de fácil manutenção. Ótimo para finalizações ou pontes. Colaterais: Queda de cabelo, acne leve, virilização moderada em mulheres se abusado. Baixo impacto sistêmico. Nota anabólica 5.5/10, nota de colaterais 2/10, razão benefício/colateral 2.75."
+ },
+ {
+  "id": 24,
+  "titulo": "Methasterone (Superdrol) Comprimido",
+  "tags": [
+   "hormonio",
+   "methasterone (superdrol)",
+   "comprimido",
+   "dht"
+  ],
+  "texto": "Methasterone (Superdrol) — Comprimido (Oral, família DHT, 17-alfa alquilado). Concentração comum: 10 mg. Efeitos: Ganhos explosivos de força e glicogênio intramuscular. Aparência tridimensional, cheia e bizarramente seca em semanas. Colaterais: Altíssima hepatotoxicidade, letargia brutal, perda total de apetite, azia, piora drástica do colesterol. Nota anabólica 9.5/10, nota de colaterais 9/10, razão benefício/colateral 1.06."
+ },
+ {
+  "id": 25,
+  "titulo": "Dihydroboldenone (DHB) Cipionato (Óleo)",
+  "tags": [
+   "hormonio",
+   "dihydroboldenone (dhb)",
+   "cipionato (óleo)",
+   "dht / boldenona"
+  ],
+  "texto": "Dihydroboldenone (DHB) — Cipionato (Óleo) (Injetável, família DHT / Boldenona, Éster Longo). Concentração comum: 100 mg/mL. Efeitos: Conhecido como 1-Testosterona. Promove ganhos densos, magros e secos parecidos com a Trembolona, mas sem a neurotoxicidade. Colaterais: Dor de aplicação extrema (PIP), febres locais frequentes, queda de cabelo, ansiedade moderada. Nota anabólica 8.5/10, nota de colaterais 6/10, razão benefício/colateral 1.42."
+ },
+ {
+  "id": 26,
+  "titulo": "Mibolerone (Cheque Drops) Gotas / Solução",
+  "tags": [
+   "hormonio",
+   "mibolerone (cheque drops)",
+   "gotas / solução",
+   "19-nor"
+  ],
+  "texto": "Mibolerone (Cheque Drops) — Gotas / Solução (Oral / Sublingual, família 19-nor, 17-alfa alquilado). Concentração comum: 250-500 mcg/mL. Efeitos: O esteroide mais potente do mercado para força e agressividade neurológica pura. Usado estritamente como pré-treino imediato. Colaterais: Toxicidade hepática extrema, agressividade violenta, insônia instantânea, danos cardiovasculares rápidos. Nota anabólica 7/10, nota de colaterais 10/10, razão benefício/colateral 0.7."
+ },
+ {
+  "id": 27,
+  "titulo": "Metiltestosterona Comprimido",
+  "tags": [
+   "hormonio",
+   "metiltestosterona",
+   "comprimido",
+   "testosterona"
+  ],
+  "texto": "Metiltestosterona — Comprimido (Oral, família Testosterona, 17-alfa alquilado). Concentração comum: 10 mg / 25 mg. Efeitos: Um dos primeiros orais criados. Proporciona explosão rápida de força, peso bruto e alta agressividade para treinos de força. Colaterais: Forte aromatização (ginecomastia rápida), alta hepatotoxicidade, retenção hídrica, picos de humor. Nota anabólica 6.5/10, nota de colaterais 7.5/10, razão benefício/colateral 0.87."
+ },
+ {
+  "id": 28,
+  "titulo": "GH (Somatropina)",
+  "tags": [
+   "peptideo",
+   "gh (somatropina)"
+  ],
+  "texto": "GH (Somatropina) (Injetável, Hormônio Peptídico, mecanismo Receptor de GH). Apresentação: Liofilizado / Líquido, concentração 4 UI, 16 UI, 36 UI. Efeitos: Hiperplasia celular, lipólise extrema, rápida cicatrização, efeito sinérgico com anabolizantes. Colaterais: Resistência insulínica, retenção, túnel do carpo, visceromegalia, letargia. Nota de performance 9.5/10, colaterais 4.5/10."
+ },
+ {
+  "id": 29,
+  "titulo": "SLU-PP-332 (Slupp)",
+  "tags": [
+   "peptideo",
+   "slu-pp-332 (slupp)"
+  ],
+  "texto": "SLU-PP-332 (Slupp) (Injetável / Oral, Mimético de Exercício, mecanismo Agonista ERR). Apresentação: Pó Liofilizado, concentração 1 mg, 2 mg. Efeitos: Imita atividade aeróbica, biogênese mitocondrial extrema, oxidação pura de gordura, anti-fadiga muscular. Colaterais: Cansaço mitocondrial severo no pós-efeito, dor de cabeça leve, riscos a longo prazo obscuros. Nota de performance 8.5/10, colaterais 4/10."
+ },
+ {
+  "id": 30,
+  "titulo": "TB-500",
+  "tags": [
+   "peptideo",
+   "tb-500"
+  ],
+  "texto": "TB-500 (Injetável, Peptídeo Curativo, mecanismo Timosina Beta-4). Apresentação: Liofilizado, concentração 2 mg / 5 mg. Efeitos: Recuperação fantástica de músculos rompidos, tendões inflamados e articulações. Redução sistêmica de inflamação. Colaterais: Vermelhidão no local, fadiga leve. Acelera angiogênese (atenção caso existam tumores). Nota de performance 8/10, colaterais 2/10."
+ },
+ {
+  "id": 31,
+  "titulo": "GHK-Cu",
+  "tags": [
+   "peptideo",
+   "ghk-cu"
+  ],
+  "texto": "GHK-Cu (Injetável / Tópico, Peptídeo de Cobre, mecanismo Renovação Celular). Apresentação: Liofilizado / Sérum, concentração 50 mg. Efeitos: Crescimento capilar, rejuvenescimento denso da pele, cicatrização de feridas, ação anti-inflamatória profunda. Colaterais: Dor aguda e queimação severa na aplicação (PIP), nódulos temporários locais. Nota de performance 7.5/10, colaterais 3.5/10."
+ },
+ {
+  "id": 32,
+  "titulo": "Tesamorelin",
+  "tags": [
+   "peptideo",
+   "tesamorelin"
+  ],
+  "texto": "Tesamorelin (Injetável, GHRH, mecanismo Estímulo Pituitário). Apresentação: Liofilizado, concentração 2 mg. Efeitos: O mais potente secretagogo para queima de gordura visceral, liberação pulsátil alta de GH natural. Colaterais: Dor articular passageira, leve retenção hídrica, possível aumento da glicemia. Nota de performance 8/10, colaterais 3/10."
+ },
+ {
+  "id": 33,
+  "titulo": "Ipamorelin",
+  "tags": [
+   "peptideo",
+   "ipamorelin"
+  ],
+  "texto": "Ipamorelin (Injetável, GHRP, mecanismo Secretagogo). Apresentação: Liofilizado, concentração 2 mg / 5 mg. Efeitos: Estímulo limpo de GH, melhora brutal do sono REM, auxílio na lipólise sem aumentar prolactina ou cortisol. Colaterais: Colaterais muito raros; rubor local ou letargia leve logo após aplicar. Nota de performance 7.5/10, colaterais 1.5/10."
+ },
+ {
+  "id": 34,
+  "titulo": "Clembuterol",
+  "tags": [
+   "peptideo",
+   "clembuterol"
+  ],
+  "texto": "Clembuterol (Oral / Gel, Estimulante, mecanismo Agonista Beta-2). Apresentação: Gel / Comp / Líquido, concentração 20 mcg, 25 mcg/mL. Efeitos: Lipólise agressiva (termogênico muito potente), leva o corpo a recrutar gordura rapidamente em cutting. Colaterais: Tremores extremos, taquicardia constante, insônia, cãibras brutais (depleção de potássio/taurina). Nota de performance 9/10, colaterais 8.5/10."
+ },
+ {
+  "id": 35,
+  "titulo": "Potenay",
+  "tags": [
+   "peptideo",
+   "potenay"
+  ],
+  "texto": "Potenay (Injetável, Veterinário / Estimulante, mecanismo Mefentermina (SNC)). Apresentação: Solução Injetável, concentração 10 mL. Efeitos: Energia instantânea absurda, pump vascular fora do normal e estado mental de agressividade temporária no treino. Colaterais: Risco de morte por arritmia. Dependência química total, ansiedade crônica, necrose de aplicação profunda. Nota de performance 6.5/10, colaterais 10/10."
+ },
+ {
+  "id": 36,
+  "titulo": "HCG",
+  "tags": [
+   "peptideo",
+   "hcg"
+  ],
+  "texto": "HCG (Injetável, Gonadotrofina, mecanismo Imita LH). Apresentação: Liofilizado, concentração 5000 UI. Efeitos: Mantém testículos cheios, previne atrofia testicular completa e estimula produção endógena temporária. Colaterais: Aumento da enzima aromatase (sobe o estradiol muito rápido), inibição prolongada se usado pós-ciclo sem cautela. Nota de performance 7/10, colaterais 3.5/10."
+ },
+ {
+  "id": 37,
+  "titulo": "Tirzepatida: escalonamento de dose da doutora",
+  "tags": [
+   "tirzepatida",
+   "mounjaro",
+   "glp-1",
+   "emagrecer",
+   "dose"
+  ],
+  "texto": "Tirzepatida (Mounjaro, agonista GIP/GLP-1), 1 aplicação por semana, subcutânea, sempre no mesmo dia. Escalonamento da doutora (sobe a dose a cada 4 semanas se tolerar bem; se a náusea estiver forte, segura a dose mais 4 semanas):\n- semanas 1 a 4: 2,5 mg = 8 UI na seringa U-100 = 0.08 mL\n- semanas 5 a 8: 5 mg = 17 UI na seringa U-100 = 0.17 mL\n- semanas 9 a 12: 7,5 mg = 25 UI na seringa U-100 = 0.25 mL\n- semanas 13 a 16: 10 mg = 33 UI na seringa U-100 = 0.33 mL\n- semanas 17 a 20: 12,5 mg = 42 UI na seringa U-100 = 0.42 mL\n- semanas 21 a -: 15 mg = 50 UI na seringa U-100 = 0.5 mL\nRegiões: abdômen (5 cm do umbigo), coxa ou parte de trás do braço, alternando o lado. Seringa de insulina U-100 (100 UI = 1 mL)."
+ },
+ {
+  "id": 38,
+  "titulo": "Suplemento: Proteína (whey, colágeno ou vegetal)",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "proteína (whey, colágeno ou vegetal)"
+  ],
+  "texto": "Proteína (whey, colágeno ou vegetal): Base da queratina (cabelo) e elasticidade da pele. Dose comum: 1,2–1,6 g/kg de peso corporal/dia. Mais importante de todos. Evita perda muscular e de cabelo."
+ },
+ {
+  "id": 39,
+  "titulo": "Suplemento: Ferro + Ferritina",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "ferro + ferritina"
+  ],
+  "texto": "Ferro + Ferritina: Deficiência é a causa #1 de queda de cabelo em mulheres. Dose comum: Só se baixo (ferritina ideal >70 ng/mL). Tomar com vitamina C. Médico deve supervisionar."
+ },
+ {
+  "id": 40,
+  "titulo": "Suplemento: Zinco",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "zinco"
+  ],
+  "texto": "Zinco: Crescimento capilar, cicatrização da pele. Dose comum: 15–30 mg/dia. Bom com biotina. Não exagerar (pode baixar cobre)."
+ },
+ {
+  "id": 41,
+  "titulo": "Suplemento: Biotina (B7)",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "biotina (b7)"
+  ],
+  "texto": "Biotina (B7): Fortalece fios e unhas. Dose comum: 2.500–5.000 mcg/dia. Popular, mas só funciona bem se houver deficiência."
+ },
+ {
+  "id": 42,
+  "titulo": "Suplemento: Vitamina D",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "vitamina d"
+  ],
+  "texto": "Vitamina D: Ciclo capilar e saúde da pele. Dose comum: 2.000–4.000 UI/dia (conforme exame). Muito comum estar baixa no Brasil."
+ },
+ {
+  "id": 43,
+  "titulo": "Suplemento: Complexo B (B12, B6 etc.)",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "complexo b (b12, b6 etc.)"
+  ],
+  "texto": "Complexo B (B12, B6 etc.): Energia nos folículos e metabolismo. Dose comum: Dose padrão de complexo B. B12 especialmente se tiver náuseas fortes."
+ },
+ {
+  "id": 44,
+  "titulo": "Suplemento: Omega-3 (EPA+DHA)",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "omega-3 (epa+dha)"
+  ],
+  "texto": "Omega-3 (EPA+DHA): Anti-inflamatório, hidratação da pele e couro cabeludo. Dose comum: 1.000–2.000 mg EPA+DHA/dia. Bom para pele seca e inflamação. Seguro com tirzepatida."
+ },
+ {
+  "id": 45,
+  "titulo": "Suplemento: Magnésio (glicinato ou citrato)",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "magnésio (glicinato ou citrato)"
+  ],
+  "texto": "Magnésio (glicinato ou citrato): Sono, relaxamento muscular, pode ajudar indiretamente na pele. Dose comum: 200–350 mg/dia. Útil contra constipação (efeito colateral comum)."
+ },
+ {
+  "id": 46,
+  "titulo": "Suplemento: Colágeno hidrolisado",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "colágeno hidrolisado"
+  ],
+  "texto": "Colágeno hidrolisado: Elasticidade da pele e fortalecimento de cabelo. Dose comum: 10–15 g/dia. Bom para pele flácida após emagrecimento."
+ },
+ {
+  "id": 47,
+  "titulo": "Suplemento: Silício orgânico",
+  "tags": [
+   "suplemento",
+   "tirzepatida",
+   "silício orgânico"
+  ],
+  "texto": "Silício orgânico: Estrutura do fio e pele. Dose comum: Conforme produto. Menos evidência, mas usado por dermatologistas."
+ },
+ {
+  "id": 48,
+  "titulo": "Tirzepatida: remédios para os efeitos colaterais",
+  "tags": [
+   "tirzepatida",
+   "colateral",
+   "nausea",
+   "diarreia",
+   "remedio"
+  ],
+  "texto": "Para os efeitos gastrointestinais da tirzepatida, a doutora usa:\n- Loperamida: Diarreia (1comp)\n- Recatrodila 100mg: Diarreia (1 comp)\n- Buscopn composto Dipirona: Dor e Colica (1 comp)\n- Repofluor: Recuperar a flora (1 comp)\n- Magnasia: Queimaçao, arroto azedo (5 ml)\n- Vonau Flash: Ansia de vomito ()"
+ },
+ {
+  "id": 49,
+  "titulo": "Tirzepatida: exames de acompanhamento",
+  "tags": [
+   "tirzepatida",
+   "exame"
+  ],
+  "texto": "Exames que a doutora pede para quem usa tirzepatida:\n- Glicemia de jejum (Tem que fazer): Ver se a glicose está baixando demais ou melhorando com o uso\n- Hemoglobina glicada HbA1c (Tem que fazer): Acompanhar controle da glicose nos últimos 2–3 meses\n- Creatinina + eTFG/TGF (Tem que fazer): Avaliar rim, principalmente se tiver náusea, vômito, diarreia ou pouca hidratação\n- Ureia (Tem que fazer): Complementa avaliação renal e hidratação\n- Sódio, potássio e magnésio (Tem que fazer): Importante se estiver comendo pouco, treinando pesado, suando muito ou com diarreia/vômito\n- TGO/AST e TGP/ALT (Tem que fazer): Avaliar fígado e segurança geral\n- GGT, fosfatase alcalina e bilirrubinas (Tem que fazer): Ajuda a ver vias biliares/vesícula, ponto importante em perda rápida de peso\n- Perfil lipídico: colesterol total, HDL, LDL, triglicerídeos (Tem que fazer): Acompanhar saúde cardiovascular e metabolismo\n- Hemograma completo (Tem que fazer): Avaliar anemia, infecção, hidratação, hemoglobina e hematócrito\n- TSH e T4 livre (Bom fazer): Triagem de tireoide, principalmente se tiver sintomas ou histórico familiar\n- Insulina de jejum + HOMA-IR (Bom fazer): Avaliar resistência à insulina com mais detalhe\n- PCR-us ou PCR (Bom fazer): Ver inflamação geral; útil se quiser acompanhamento metabólico mais completo\n- Ferritina (Bom fazer): Avaliar estoque de ferro, cansaço, queda de cabelo ou dieta muito restrita\n- Vitamina B12 (Bom fazer): Útil em dieta restrita, baixa ingestão de proteína animal ou cansaço\n- Vitamina D (Bom fazer): Saúde geral, imunidade, performance e metabolismo\n- Albumina e proteínas totais (Bom fazer): Ver estado nutricional, principalmente se estiver comendo pouco\n- Amilase e lipase (Opcional): Avaliar pâncreas; mais indicado se tiver dor abdominal forte/persistente, náuseas intensas ou vômitos\n- Ultrassom de abdome/vesícula (Opcional): Investigar pedra/inflamação na vesícula se tiver dor do lado direito da barriga, enjoo forte ou pele/olhos amarelados\n- Calcitonina (Opcional): Só costuma fazer sentido se houver risco específico de carcinoma medular de tireoide/MEN2\n- Ultrassom de tireoide (Opcional): Só se tiver nódulo, alteração no exame físico, sintomas ou histórico relevante"
+ },
+ {
+  "id": 50,
+  "titulo": "Ésteres, meia-vida e frequência de aplicação",
+  "tags": [
+   "ester",
+   "meia-vida",
+   "frequencia",
+   "aplicacao"
+  ],
+  "texto": "Cipionato: meia-vida ~7-10 dias, 1x por semana. Enantato: ~5-7 dias, 2x por semana. Propionato: ~1-2 dias, 3x por semana ou dia sim dia não. Decanoato: ~15 dias, 1x por semana. Undecilenato: muito longo. Quanto mais longo o éster, menos aplicações, mas mais tempo para estabilizar. Frequência escolhida define o éster: 1x/sem cipionato, 2x/sem enantato, 3x/sem propionato."
+ },
+ {
+  "id": 51,
+  "titulo": "Suporte durante o ciclo (on-cycle)",
+  "tags": [
+   "ciclo",
+   "on-cycle",
+   "suporte",
+   "aromatase",
+   "tudca",
+   "hcg",
+   "protocolo"
+  ],
+  "texto": "Inibidor de aromatase conforme o estradiol do exame; proteção do fígado com TUDCA 500 mg/dia ou NAC 600 mg/dia (principalmente com orais 17-alfa); coração: ômega-3 2 g/dia + CoQ10 100 mg/dia; proteína 2,0-2,4 g/kg/dia; HCG em ciclos acima de 12 semanas para preservar testículo e fertilidade. Duração típica: 12 semanas (iniciante/intermediário) a 16 semanas (avançado/atleta)."
+ },
+ {
+  "id": 52,
+  "titulo": "TPC — terapia pós-ciclo",
+  "tags": [
+   "tpc",
+   "pos-ciclo",
+   "serm",
+   "protocolo"
+  ],
+  "texto": "Começa cerca de 2 semanas após a última aplicação (depende do éster mais longo). Usa moduladores seletivos do receptor de estrogênio (SERMs) e suporte do fígado, por 4 a 6 semanas, para religar o eixo HPTO. Quem faz TRT ou blast & cruise não faz TPC."
+ },
+ {
+  "id": 53,
+  "titulo": "Exames para quem usa hormônio",
+  "tags": [
+   "exame",
+   "hormonio",
+   "ciclo",
+   "hematocrito"
+  ],
+  "texto": "Antes do ciclo: testosterona total e livre, LH, FSH, hemograma, lipidograma, TGO/TGP, PSA (homens), hematócrito, glicemia. Na 6ª semana: hemograma, lipidograma, TGO/TGP, hematócrito, estradiol, testosterona. No pós-ciclo/TPC: testosterona total e livre, LH, FSH, hemograma, lipidograma, TGO/TGP, estradiol. Hematócrito alto pede doação de sangue/ajuste."
+ },
+ {
+  "id": 54,
+  "titulo": "Tipos de protocolo",
+  "tags": [
+   "protocolo",
+   "trt",
+   "blast",
+   "cruise",
+   "primeiro ciclo",
+   "mulher"
+  ],
+  "texto": "TRT: reposição para hipogonadismo, níveis fisiológicos (300-1000 ng/dL). Primeiro ciclo: só testosterona, 12 semanas, com TPC. Ciclo com TPC: testosterona como base + 1 composto, termina com TPC. Blast & cruise: blast (fase de ganho, doses altas) alternado com cruise (manutenção em dose baixa), sem TPC. Mulheres: preferir compostos de baixa virilização (oxandrolona, primobolan) em doses baixas."
+ },
+ {
+  "id": 55,
+  "titulo": "Locais de aplicação intramuscular e seringas",
+  "tags": [
+   "aplicacao",
+   "seringa",
+   "agulha",
+   "intramuscular",
+   "subcutanea",
+   "local"
+  ],
+  "texto": "Intramuscular: glúteo (quadrante superior externo), ventroglúteo, vasto lateral da coxa e deltoide; alternar os locais. Seringa de 3-5 mL com agulha 25x7 ou 30x7 para volumes maiores (1x/sem); seringa de 1 mL para doses pequenas (3x/sem). Subcutânea (tirzepatida, peptídeos): seringa de insulina U-100, agulha curta, ângulo de 90 graus na prega da pele. Imagens no app: /s/guia/localgluteo.webp, /s/guia/localventregluteo.webp, /s/guia/localvastolateral.webp, /s/guia/localdeltoide.webp, /s/guia/anguloagulhasubcultaneoeIM.webp, /s/guia/seringa_u100.webp."
+ }
+]

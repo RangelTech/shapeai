@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin</title>
+<style>
+:root{--bg:#0a0a0b;--card:#121214;--bd:#232327;--fg:#ececef;--mut:#8b8b93;--ac:#e8e8ec;--ok:#4ade80;--err:#f87171}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input,textarea{font:inherit;color:inherit}
+.btn{border:1px solid var(--bd);background:#1a1a1d;border-radius:12px;padding:10px 16px;cursor:pointer;transition:.2s}
+.btn:hover{background:#232327}.btn.pri{background:var(--ac);color:#0a0a0b;border-color:var(--ac);font-weight:600}.btn.pri:hover{opacity:.9}
+.btn:disabled{opacity:.5;cursor:default}
+.entrar{min-height:100vh;display:grid;place-items:center;padding:16px}
+.caixa{width:min(380px,100%);background:var(--card);border:1px solid var(--bd);border-radius:24px;padding:32px;display:grid;gap:16px}
+.caixa h1{font-size:24px}.caixa p{color:var(--mut);font-size:14px}
+label{display:grid;gap:6px;font-size:14px;color:var(--mut)}
+input{background:#0d0d0f;border:1px solid var(--bd);border-radius:12px;padding:12px}
+input:focus,textarea:focus{outline:2px solid #3a3a40;outline-offset:0}
+.topo{position:sticky;top:0;z-index:5;background:rgba(10,10,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.topo .in{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px}
+.topo b{font-size:16px}.topo .dim{color:var(--mut);font-size:13px}
+.abas{display:flex;gap:4px;margin-left:auto;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:4px}
+.abas button{border:0;background:none;padding:6px 14px;border-radius:999px;cursor:pointer;color:var(--mut)}
+.abas button[aria-selected=true]{background:#232327;color:var(--fg)}
+main{max-width:1200px;margin:0 auto;padding:24px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px}.kpi small{color:var(--mut)}.kpi b{display:block;font-size:28px}
+.lista{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+.linha{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;padding:12px 16px;border-top:1px solid var(--bd);font-size:14px}
+.linha:first-child{border-top:0;color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;border:1px solid var(--bd)}.pill.on{border-color:#1f5f3a;color:var(--ok)}
+.busca{margin-bottom:12px;width:100%}
+.ed{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start}
+.skills{display:grid;gap:6px}.skills button{text-align:left;border:1px solid var(--bd);background:var(--card);border-radius:12px;padding:12px;cursor:pointer}
+.skills button[aria-current=true]{border-color:#55555d;background:#1a1a1d}.skills small{display:block;color:var(--mut);font-size:12px}
+.painel{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;display:grid;gap:12px}
+.painel .cab{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.painel .cab b{margin-right:auto}
+textarea{width:100%;min-height:62vh;background:#0d0d0f;border:1px solid var(--bd);border-radius:12px;padding:16px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;tab-size:2}
+.hist{display:flex;gap:6px;flex-wrap:wrap;font-size:12px}.hist button{border:1px solid var(--bd);background:none;border-radius:999px;padding:4px 10px;cursor:pointer;color:var(--mut)}
+.msg{font-size:13px;color:var(--mut);min-height:18px}.msg.erro{color:var(--err)}.msg.ok{color:var(--ok)}
+@media (max-width:760px){.ed{grid-template-columns:1fr}.linha{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="entrar" id="v-entrar" hidden>
+  <form class="caixa" id="f-entrar">
+    <h1>Painel administrador</h1><p id="produto-nome"></p>
+    <label>Usuário<input id="e-u" autocomplete="username" required></label>
+    <label>Senha<input id="e-s" type="password" autocomplete="current-password" required></label>
+    <button class="btn pri">Entrar</button><div class="msg" id="e-msg"></div>
+  </form>
+</div>
+<div id="v-painel" hidden>
+  <header class="topo"><div class="in"><b id="tit">Admin</b><span class="dim">painel administrador</span>
+    <nav class="abas"><button data-aba="clientes" aria-selected="true">Clientes</button><button data-aba="skills">Skills da IA</button></nav>
+    <button class="btn" id="sair">Sair</button></div></header>
+  <main>
+    <section data-p="clientes">
+      <div class="kpis" id="kpis"></div>
+      <input class="busca" id="busca" placeholder="Buscar por e-mail ou plano">
+      <div class="lista" id="clientes"></div>
+    </section>
+    <section data-p="skills" hidden>
+      <div class="ed"><div class="skills" id="skills"></div>
+        <div class="painel" id="editor"><p class="msg">Escolha uma skill.</p></div></div>
+    </section>
+  </main>
+</div>
+<script>
+;(() => {
+  const $ = (q) => document.querySelector(q), $$ = (q) => [...document.querySelectorAll(q)]
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
+  const data = (t) => t ? new Date(t * 1000).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '—'
+  const produto = location.hostname.split('.')[0].replace(/-/g, ' ')
+  document.title = 'Admin · ' + produto; $('#tit').textContent = produto; $('#produto-nome').textContent = produto
+  async function api(u, op = {}) {
+    const r = await fetch(u, { ...op, headers: { 'Content-Type': 'application/json' } })
+    let j = {}; try { j = await r.json() } catch {}
+    if (r.status === 401 && !u.endsWith('/entrar')) { mostrar(false); throw new Error('entre de novo') }
+    if (!r.ok) throw new Error(typeof j.detail === 'string' ? j.detail : 'Não deu certo.')
+    return j
+  }
+  let CLI = [], ATUAL = null, SUJO = false
+  function mostrar(logado) { $('#v-entrar').hidden = logado; $('#v-painel').hidden = !logado; if (logado) clientes() }
+  $('#f-entrar').onsubmit = async (e) => { e.preventDefault(); try { await api('/api/admin/entrar', { method: 'POST', body: JSON.stringify({ usuario: $('#e-u').value, senha: $('#e-s').value }) }); mostrar(true) } catch (err) { $('#e-msg').textContent = err.message; $('#e-msg').className = 'msg erro' } }
+  $('#sair').onclick = async () => { await api('/api/admin/sair', { method: 'POST' }); mostrar(false) }
+  $$('[data-aba]').forEach((b) => (b.onclick = () => { if (SUJO && !confirm('Há alterações não salvas. Sair mesmo assim?')) return
+    $$('[data-aba]').forEach((x) => x.setAttribute('aria-selected', String(x === b))); $$('[data-p]').forEach((p) => (p.hidden = p.dataset.p !== b.dataset.aba)); b.dataset.aba === 'skills' ? skills() : clientes() }))
+  function desenhar() {
+    const q = $('#busca').value.toLowerCase(), l = CLI.filter((c) => !q || JSON.stringify(c).toLowerCase().includes(q))
+    $('#clientes').innerHTML = '<div class="linha"><span>Cliente</span><span>Plano</span><span>Ativo até</span><span>Desde</span></div>' + (l.map((c) =>
+      `<div class="linha"><span>${esc(c.email)}</span><span><span class="pill ${c.ativo ? 'on' : ''}">${esc(c.plano || 'grátis')}</span></span><span>${data(c.ativo_ate)}</span><span>${data(c.criado)}</span></div>`).join('') || '<div class="linha"><span>Nenhum cliente.</span></div>')
+  }
+  async function clientes() { const r = await api('/api/admin/resumo'); CLI = r.clientes
+    $('#kpis').innerHTML = `<div class="kpi"><small>Clientes</small><b>${r.total}</b></div><div class="kpi"><small>Com plano ativo</small><b>${r.ativos}</b></div><div class="kpi"><small>Grátis</small><b>${r.total - r.ativos}</b></div>`; desenhar() }
+  $('#busca').oninput = desenhar
+  async function skills() { const { skills } = await api('/api/admin/skills')
+    $('#skills').innerHTML = skills.map((s) => `<button data-s="${esc(s.nome)}" aria-current="${s.nome === ATUAL}"><b>${esc(s.nome)}</b><small>${s.por === 'painel' ? 'editada no painel' : 'versão do repositório'} · ${data(s.atualizado)}</small></button>`).join('')
+    $$('[data-s]').forEach((b) => (b.onclick = () => { if (SUJO && !confirm('Há alterações não salvas. Trocar mesmo assim?')) return; abrir(b.dataset.s) }))
+    if (!ATUAL && skills[0]) abrir(skills[0].nome) }
+  async function abrir(nome) { const s = await api('/api/admin/skills/' + encodeURIComponent(nome)); ATUAL = nome; SUJO = false
+    $$('[data-s]').forEach((b) => b.setAttribute('aria-current', String(b.dataset.s === nome)))
+    $('#editor').innerHTML = `<div class="cab"><b>${esc(nome)}.md</b><button class="btn" id="restaurar">Restaurar do repositório</button><button class="btn pri" id="salvar">Salvar</button></div>
+      <textarea id="txt" spellcheck="false"></textarea><div class="msg" id="s-msg">Salvou, a próxima resposta da IA já usa esta versão.</div>
+      ${s.historico.length ? `<div class="hist"><span class="msg">Versões anteriores:</span>${s.historico.map((h) => `<button data-h="${h.id}">${data(h.salvo)}</button>`).join('')}</div>` : ''}`
+    $('#txt').value = s.conteudo; $('#txt').oninput = () => { SUJO = true; $('#s-msg').textContent = 'Alterações não salvas.'; $('#s-msg').className = 'msg' }
+    $('#salvar').onclick = async () => { try { await api('/api/admin/skills/' + encodeURIComponent(nome), { method: 'PUT', body: JSON.stringify({ conteudo: $('#txt').value }) }); SUJO = false; skills(); abrir(nome).then(() => { $('#s-msg').textContent = 'Salvo.'; $('#s-msg').className = 'msg ok' }) } catch (e) { $('#s-msg').textContent = e.message; $('#s-msg').className = 'msg erro' } }
+    $('#restaurar').onclick = async () => { if (!confirm('Voltar para a versão do repositório? A atual fica no histórico.')) return; await api(`/api/admin/skills/${encodeURIComponent(nome)}/restaurar`, { method: 'POST' }); SUJO = false; skills(); abrir(nome) }
+    $$('[data-h]').forEach((b) => (b.onclick = async () => { const h = await api(`/api/admin/skills/${encodeURIComponent(nome)}/historico/${b.dataset.h}`); if (confirm('Carregar esta versão no editor? (só grava ao clicar em Salvar)')) { $('#txt').value = h.conteudo; SUJO = true; $('#s-msg').textContent = 'Versão antiga carregada. Clique em Salvar para usar.'; $('#s-msg').className = 'msg' } }))
+  }
+  window.addEventListener('beforeunload', (e) => { if (SUJO) { e.preventDefault(); e.returnValue = '' } })
+  fetch('/api/admin/resumo').then((r) => mostrar(r.ok)).catch(() => mostrar(false))
+})()
+</script>
+</body>
+</html>

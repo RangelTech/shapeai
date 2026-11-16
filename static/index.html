@@ -3,165 +3,175 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shape AI: treino, dieta e evolução com IA</title>
-<meta name="description" content="Seu personal e nutricionista com IA: calcula o seu BF, monta treino com vídeo e dieta dia a dia pela sua rotina, e transforma a constância em jogo.">
-<meta property="og:title" content="Shape AI: o seu shape, com plano de verdade">
-<meta property="og:description" content="Calcule o seu BF grátis. Treino com vídeo, dieta com horários e um ranking que não deixa você parar.">
+<title>Shape AI · acompanhamento de nível celebridade, 24 horas no seu bolso</title>
+<meta name="description" content="Personal, nutri e coach com IA no seu celular: treino, dieta casada com a sua rotina, tirzepatida, protocolo hormonal visual e ranking que não te deixa desistir.">
+<meta property="og:title" content="Shape AI · o corpo que você quer, acompanhado 24 horas"><meta property="og:image" content="/s/img/heroi.webp">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b130e'/><path d='M14 40l10-14 9 9 17-20' stroke='%237CFFB2' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/s/estilo.css">
 <link rel="stylesheet" href="/s/cinema.css">
 <style>
-:root{--marca:#7CFFB2;--bg:#050806;--bg2:#0a0f0c;--card:#0f1712;--bd:#1b2a21}
-.heroi::after{background:radial-gradient(900px 500px at 75% 35%,rgba(124,255,178,.18),transparent 60%),linear-gradient(180deg,rgba(5,8,6,.2),rgba(5,8,6,.5) 60%,var(--bg))}
-.anel{position:relative;width:min(400px,100%);aspect-ratio:1;margin:0 auto}
-.anel svg{width:100%;height:100%;transform:rotate(-90deg)}
-.anel .arco{stroke-dasharray:1000;stroke-dashoffset:1000;animation:enche 3.2s cubic-bezier(.2,.7,.2,1) .4s forwards}
-@keyframes enche{to{stroke-dashoffset:var(--fim)}}
-.anel .meio{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-.anel .meio b{display:block;font-size:64px;font-weight:900;letter-spacing:-.04em}
-.anel .meio span{color:var(--mut);font-size:14px}
-.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
-.chips span{background:rgba(124,255,178,.1);border:1px solid rgba(124,255,178,.3);color:#c8ffe0;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700}
-.calc{background:linear-gradient(160deg,rgba(124,255,178,.08),var(--card));border:1px solid var(--bd);border-radius:28px;padding:32px;display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
-.calc form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.calc label{display:grid;gap:6px;font-size:14px;color:var(--mut)}
-.calc input,.calc select{background:#08100b;border:1px solid var(--bd);border-radius:12px;padding:12px;color:var(--fg);font:inherit}
-.calc .cheia{grid-column:1/-1}
-.res{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.res div{background:#08100b;border:1px solid var(--bd);border-radius:16px;padding:16px}
-.res b{display:block;font-size:32px;font-weight:900;color:var(--ac)}.res small{color:var(--mut)}
-.rank{display:grid;gap:8px;max-width:440px}
-.rank div{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 16px}
-.rank div.eu{border-color:var(--ac);background:rgba(124,255,178,.08)}
-.rank em{font-style:normal;color:var(--mut);font-size:12px}
-@media (max-width:860px){.calc{grid-template-columns:1fr}.calc form{grid-template-columns:1fr}}
+:root{--marca:#7CFFB2;--ac:#7CFFB2;--ac2:#3ad7ff;--bg:#040605;--bg2:#08100b;--card:#0d1611;--bd:#1b2a21;--fg:#f2f7f3;--mut:#93a89a}
+body{background:var(--bg);color:var(--fg);font-family:Inter,system-ui,sans-serif}
+.mega{font-family:Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.01em;line-height:.92;font-weight:400}
+.verde{color:var(--ac)}
+.topo{position:fixed;inset:0 0 auto;z-index:20;transition:.3s}.topo.rolou{background:rgba(4,6,5,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+.topo .wrap{display:flex;align-items:center;gap:24px;padding:16px 24px;max-width:1240px;margin:0 auto}
+.logo{display:flex;gap:10px;align-items:center;font-weight:800;color:var(--fg);text-decoration:none;font-size:18px}.logo i{font-style:normal;background:var(--ac);color:#03140a;border-radius:8px;width:28px;height:28px;display:grid;place-items:center}
+.topo nav{margin-left:auto;display:flex;gap:24px;align-items:center}.topo nav a{color:var(--mut);text-decoration:none;font-size:15px}.topo nav a:hover{color:var(--fg)}
+.btn-pri{background:var(--ac);color:#03140a;border:0;font-weight:800}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+.heroi{position:relative;min-height:100vh;display:grid;align-items:end;overflow:hidden}
+.heroi .fundo{position:absolute;inset:0;background:url(/s/img/heroi.webp) 60% center/cover;transform:scale(1.1);animation:zoom 16s ease-out forwards}
+@keyframes zoom{to{transform:scale(1)}}
+.heroi:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,5,.95) 0%,rgba(4,6,5,.65) 45%,rgba(4,6,5,.1) 75%),linear-gradient(0deg,var(--bg) 0%,transparent 30%)}
+.heroi .c{position:relative;z-index:2;padding-bottom:12vh;max-width:720px}
+.selo{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(124,255,178,.45);background:rgba(124,255,178,.08);color:var(--ac);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;margin-bottom:22px}
+.heroi h1{font-size:clamp(56px,8.4vw,128px);margin-bottom:22px}
+.heroi p{font-size:20px;color:#d3e2d8;max-width:560px;margin-bottom:30px}
+.acoes{display:flex;gap:12px;flex-wrap:wrap}
+.prova{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap}.prova div b{display:block;font-size:30px;font-weight:800}.prova div span{color:var(--mut);font-size:14px}
+.faixa-txt{overflow:hidden;border-block:1px solid var(--bd);background:var(--bg2);padding:18px 0;white-space:nowrap}
+.faixa-txt div{display:inline-block;animation:corre 30s linear infinite;font-size:26px}.faixa-txt span{margin:0 28px;color:var(--mut)}.faixa-txt span b{color:var(--ac)}
+@keyframes corre{to{transform:translateX(-50%)}}
+section.bloco{padding:130px 0}
+.tit{font-size:clamp(44px,6vw,86px);margin-bottom:18px}.lead{font-size:19px;color:var(--mut);max-width:620px}
+.corpos{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:16px;align-items:stretch}
+.corpos figure{margin:0;border-radius:28px;overflow:hidden;position:relative;min-height:560px;border:1px solid var(--bd)}
+.corpos img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform 1.4s}.corpos figure:hover img{transform:scale(1.05)}
+.corpos figcaption{position:absolute;left:20px;bottom:20px;right:20px;z-index:2;background:rgba(4,6,5,.65);backdrop-filter:blur(10px);border:1px solid rgba(124,255,178,.25);border-radius:16px;padding:14px 16px;font-size:14px}
+.corpos figcaption b{display:block;font-size:18px;color:var(--ac)}
+.corpos .txt{display:flex;flex-direction:column;justify-content:center;padding:0 0 0 24px}
+.lista-check{list-style:none;padding:0;margin:24px 0}.lista-check li{padding:10px 0 10px 34px;position:relative;font-size:17px;border-top:1px solid var(--bd)}
+.lista-check li:before{content:"";position:absolute;left:0;top:13px;width:20px;height:20px;border-radius:50%;background:var(--ac) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' stroke='%2303140a' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")}
+.app{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center;margin-top:90px}
+.app.inv{grid-template-columns:1.1fr .9fr}.app.inv .tela{order:-1}
+.tela{border-radius:22px;overflow:hidden;border:1px solid #23402f;box-shadow:0 50px 140px rgba(124,255,178,.12),0 30px 80px rgba(0,0,0,.6);transform:perspective(1400px) rotateY(-6deg) rotateX(2deg);transition:transform .8s}
+.app.inv .tela{transform:perspective(1400px) rotateY(6deg) rotateX(2deg)}.tela:hover{transform:none!important}
+.tela img{display:block;width:100%}
+.etq{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);font-weight:700;margin-bottom:12px;display:block}
+.app h3{font-size:clamp(34px,4vw,54px);margin-bottom:14px}.app p{color:var(--mut);font-size:18px}
+.cinema{position:relative;min-height:90vh;display:grid;align-items:center;overflow:hidden}
+.cinema>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cinema:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,5,.92),rgba(4,6,5,.55) 55%,rgba(4,6,5,.2))}
+.cinema .wrap{position:relative;z-index:2;width:100%}.cinema .c{max-width:620px}
+.cifras{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
+.cifra{background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:26px}.cifra b{display:block;font-size:44px}.cifra span{color:var(--mut)}
+.planos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:40px}
+.plano{background:var(--card);border:1px solid var(--bd);border-radius:26px;padding:30px}.plano.destaque{border-color:var(--ac);box-shadow:0 0 0 1px rgba(124,255,178,.25),0 40px 120px rgba(124,255,178,.1)}
+.plano .preco{font-size:48px;font-weight:900;margin:10px 0}.plano .preco small{font-size:16px;color:var(--mut)}.plano ul{padding:0;margin:18px 0}.plano li{list-style:none;padding:7px 0;color:#d7e6dc}
+.plano .depois{color:var(--mut);font-size:13px}
+details{border-top:1px solid var(--bd);padding:20px 0}details summary{cursor:pointer;font-size:18px;font-weight:700}details p{color:var(--mut);margin-top:10px}
+.final{text-align:center;padding:150px 24px;background:radial-gradient(700px 400px at 50% 0,rgba(124,255,178,.14),transparent 70%)}
+footer{padding:40px 0;color:var(--mut);font-size:13px;border-top:1px solid var(--bd)}
+@media (max-width:960px){.corpos,.app,.app.inv{grid-template-columns:1fr}.app.inv .tela{order:0}.corpos figure{min-height:460px}.corpos .txt{padding:0}.cifras{grid-template-columns:1fr 1fr}.topo nav a.lnk{display:none}section.bloco{padding:86px 0}.tela,.app.inv .tela{transform:none}.heroi:after{background:linear-gradient(0deg,rgba(4,6,5,.98) 30%,rgba(4,6,5,.4) 75%,rgba(4,6,5,.2))}}
 </style>
 </head>
 <body>
 <header class="topo"><div class="wrap">
   <a class="logo" href="/"><i>↗</i>Shape AI</a>
-  <nav><a class="lnk" href="#calculadora">Calcule seu BF</a><a class="lnk" href="#como">Como funciona</a><a class="lnk" href="#jogo">Ranking</a><a class="lnk" href="#planos">Planos</a><button class="btn btn-sec" data-entrar>Entrar</button></nav>
+  <nav><a class="lnk" href="#metodo">O método</a><a class="lnk" href="#app">O app</a><a class="lnk" href="#hormonios">Protocolo</a><a class="lnk" href="#planos">Planos</a><button class="btn btn-sec" data-entrar>Entrar</button></nav>
 </div></header>
 
-<main>
 <section class="heroi">
-  <div class="aurora" aria-hidden="true"></div><div class="grade-fina" aria-hidden="true"></div>
-  <div class="wrap heroi-split">
-    <div>
-      <span class="selo"><b></b>Personal + nutricionista com IA, no seu bolso</span>
-      <h1>O shape que você quer, com <em>plano de verdade</em>.</h1>
-      <p class="lead">Você conta a rotina e a meta. O Shape AI calcula o seu BF, monta o treino com vídeo de cada exercício e a dieta dia a dia nos seus horários, e transforma constância em jogo.</p>
-      <div class="ctas"><a class="btn btn-pri btn-lg pulsa" href="#calculadora">Calcular meu BF grátis</a><a class="btn btn-sec btn-lg" href="#como">Como funciona</a></div>
-      <div class="numeros"><div><b>30 s</b><span>para saber o seu BF</span></div><div><b>7 dias</b><span>de dieta com horários e calorias</span></div><div><b>+20</b><span>pontos por treino feito</span></div></div>
-    </div>
-    <div aria-hidden="true">
-      <div class="anel"><svg viewBox="0 0 340 340"><circle cx="170" cy="170" r="150" fill="none" stroke="#14231a" stroke-width="22"/>
-        <circle class="arco" cx="170" cy="170" r="150" fill="none" stroke="url(#gv)" stroke-width="22" stroke-linecap="round" style="--fim:330"/>
-        <defs><linearGradient id="gv"><stop offset="0" stop-color="#7CFFB2"/><stop offset="1" stop-color="#3ad7ff"/></linearGradient></defs></svg>
-        <div class="meio"><div><b>68%</b><span>da meta de peso concluída</span></div></div></div>
-      <div class="chips"><span>BF 21,4% → 18%</span><span>Sequência 12 dias</span><span>Nível Disciplinado</span></div>
-    </div>
-  </div>
+  <div class="fundo" role="img" aria-label="Mulher e homem com corpos definidos em academia escura"></div>
+  <div class="wrap"><div class="c rev">
+    <span class="selo">● O acompanhamento das influenciadoras fitness, agora para você</span>
+    <h1 class="mega">O corpo de capa<br>começa <span class="verde">hoje.</span></h1>
+    <p>Personal, nutri e coach com inteligência artificial, 24 horas no seu bolso. Treino, dieta casada com a sua rotina, tirzepatida e o seu protocolo hormonal em um app que não deixa você desistir.</p>
+    <div class="acoes"><button class="btn btn-pri" data-entrar="codigo">Quero começar agora</button><a class="btn btn-sec" href="#app">Ver o app por dentro</a></div>
+    <div class="prova"><div><b>24h</b><span>coach respondendo</span></div><div><b>7 dias</b><span>de dieta com horários</span></div><div><b>100%</b><span>no ritmo da sua rotina</span></div></div>
+  </div></div>
 </section>
 
-<div class="faixa" aria-hidden="true"><div>
-  <span>Cálculo de BF</span><span>Treino com vídeo</span><span>Dieta dia a dia</span><span>Substituições pelo chat</span><span>Fotos de evolução</span><span>Ranking semanal</span><span>Metas</span>
-  <span>Cálculo de BF</span><span>Treino com vídeo</span><span>Dieta dia a dia</span><span>Substituições pelo chat</span><span>Fotos de evolução</span><span>Ranking semanal</span><span>Metas</span>
+<div class="faixa-txt" aria-hidden="true"><div class="mega">
+  <span>Treino <b>sob medida</b></span><span>Dieta <b>com horários</b></span><span>Tirzepatida <b>organizada</b></span><span>Protocolo <b>visual</b></span><span>Ranking <b>semanal</b></span><span>BF <b>calculado</b></span>
+  <span>Treino <b>sob medida</b></span><span>Dieta <b>com horários</b></span><span>Tirzepatida <b>organizada</b></span><span>Protocolo <b>visual</b></span><span>Ranking <b>semanal</b></span><span>BF <b>calculado</b></span>
 </div></div>
 
-<section class="bloco" id="calculadora"><div class="wrap">
-  <div class="olho">Grátis, agora</div>
-  <h2 class="rev">Quanto de gordura você tem? E quanto deve comer?</h2>
-  <p class="sub rev">Método da Marinha dos EUA (só com fita métrica) e gasto calórico pela fórmula de Mifflin-St Jeor. Sem cadastro.</p>
-  <div class="calc rev">
-    <form id="f-calc">
-      <label>Sexo<select id="c-sexo"><option value="m">Homem</option><option value="f">Mulher</option></select></label>
-      <label>Idade<input id="c-idade" type="number" min="14" max="90" value="30" required></label>
-      <label>Altura (cm)<input id="c-alt" type="number" min="120" max="230" value="175" required></label>
-      <label>Peso (kg)<input id="c-peso" type="number" step=".1" min="35" max="250" value="80" required></label>
-      <label>Pescoço (cm)<input id="c-pesc" type="number" step=".1" value="38" required></label>
-      <label>Cintura no umbigo (cm)<input id="c-cint" type="number" step=".1" value="88" required></label>
-      <label id="l-quad" hidden>Quadril (cm)<input id="c-quad" type="number" step=".1" value="98"></label>
-      <label>Objetivo<select id="c-obj"><option value="emagrecer">Emagrecer</option><option value="definir">Definir</option><option value="manter">Manter</option><option value="ganhar_massa">Ganhar massa</option></select></label>
-      <button class="btn btn-pri btn-lg cheia">Calcular</button><div class="msg cheia" id="c-msg"></div>
-    </form>
-    <div><div class="res" id="res"><div><small>Gordura corporal</small><b>?</b></div><div><small>Calorias por dia</small><b>?</b></div><div><small>Proteína</small><b>?</b></div><div><small>Água</small><b>?</b></div></div>
-      <p class="dim" id="c-cta" style="margin-top:14px;font-size:14px" hidden>Agora deixe o Shape AI montar o treino e a dieta em cima desses números. <a href="#" data-entrar style="color:var(--ac)">Criar conta grátis</a></p></div>
+<section class="bloco" id="metodo"><div class="wrap">
+  <div class="corpos">
+    <figure class="rev"><img src="/s/img/mulher.webp" alt="Mulher com abdômen definido" loading="lazy"><figcaption><b>Definição</b>Dieta e treino ajustados toda semana conforme a sua evolução.</figcaption></figure>
+    <figure class="rev"><img src="/s/img/homem.webp" alt="Homem musculoso treinando" loading="lazy"><figcaption><b>Hipertrofia</b>Progressão de carga com vídeo de cada exercício.</figcaption></figure>
+    <div class="txt rev">
+      <h2 class="tit mega">Rotina de atleta.<br><span class="verde">Sem ter</span> uma equipe.</h2>
+      <p class="lead">Quem tem o corpo que você admira tem alguém cobrando todo dia. Agora você também tem.</p>
+      <ul class="lista-check">
+        <li>Treino montado para os seus dias, o seu tempo e o seu local</li>
+        <li>Dieta encaixada nos horários: treina às 6h? Ela já sabe o que você come às 5h30</li>
+        <li>BF, medidas e fotos lado a lado mostrando a sua evolução</li>
+        <li>Coach no chat a qualquer hora: “só tenho ovo e arroz, e agora?”</li>
+      </ul>
+      <div><button class="btn btn-pri" data-entrar="codigo">Começar grátis</button></div>
+    </div>
   </div>
 </div></section>
 
-<section class="bloco" id="como" style="background:var(--bg2)"><div class="wrap">
-  <div class="olho">Como funciona</div>
-  <h2 class="rev">Feito para a sua rotina, não para a de um atleta.</h2>
-  <div class="passos" style="margin-top:40px">
-    <div class="passo rev"><h3>Conte a sua vida</h3><p>Horário de trabalho, quantos dias pode treinar, em casa ou academia, o que você não come. A IA faz as perguntas.</p></div>
-    <div class="passo rev"><h3>Receba o plano</h3><p>Treino da semana com vídeo curto de cada exercício e dieta dia a dia, com horários e calorias que batem com a sua meta.</p></div>
-    <div class="passo rev"><h3>Registre e evolua</h3><p>Marque o treino feito, fotografe o prato, atualize as medidas. Seu BF, suas metas e sua linha do tempo de fotos vão se movendo.</p></div>
-  </div>
-  <div class="grade" style="margin-top:24px">
-    <div class="beneficio rev"><div class="ic">⇄</div><h3>Substitui na hora</h3><p>"Hoje só tenho isto na geladeira": o coach monta a troca mantendo as calorias.</p></div>
-    <div class="beneficio rev"><div class="ic">▶</div><h3>Vídeo de cada exercício</h3><p>Curtos, mostrando o equipamento e o movimento certo.</p></div>
-    <div class="beneficio rev"><div class="ic">◎</div><h3>Metas visíveis</h3><p>Peso e BF com barra de progresso: você vê o quanto falta.</p></div>
-    <div class="beneficio rev"><div class="ic">▣</div><h3>Linha do tempo</h3><p>Suas fotos lado a lado mostram o que a balança não mostra.</p></div>
-  </div>
+<section class="bloco" id="app" style="background:var(--bg2)"><div class="wrap">
+  <div class="rev"><h2 class="tit mega">Por dentro <span class="verde">do app.</span></h2><p class="lead">Nada de PDF esquecido no celular. Tudo vivo, atualizado e na palma da mão.</p></div>
+  <div class="app rev"><div><span class="etq">Seu dia</span><h3 class="mega">Acorda, abre, <span class="verde">executa.</span></h3><p>Nível, sequência, BF e calorias do dia em uma tela. Um toque para o check-in do treino, da água e do sono. Cada ação vale ponto.</p></div>
+    <div class="tela"><img src="/s/img/app-hoje.webp" alt="Tela inicial do Shape AI com nível, sequência, BF e calorias" loading="lazy"></div></div>
+  <div class="app inv rev"><div><span class="etq">Treino</span><h3 class="mega">Cada exercício <span class="verde">com vídeo.</span></h3><p>Séries, repetições, descanso e a dica certa. Montado para o seu tempo e refeito conforme você evolui.</p></div>
+    <div class="tela"><img src="/s/img/app-treino.webp" alt="Treino da semana com vídeo de cada exercício" loading="lazy"></div></div>
+  <div class="app rev"><div><span class="etq">Competição</span><h3 class="mega">Alguém está <span class="verde">chegando.</span></h3><p>Ranking da semana, níveis e sequência. Quando alguém encosta em você, o app avisa. Faltar o treino fica bem mais difícil.</p></div>
+    <div class="tela"><img src="/s/img/app-ranking.webp" alt="Ranking semanal com aviso de quem está perto" loading="lazy"></div></div>
 </div></section>
 
-<section class="bloco" id="jogo"><div class="wrap heroi-split" style="align-items:start">
-  <div>
-    <div class="olho">Constância vira jogo</div>
-    <h2 class="rev">Pontos, níveis, sequência e ranking da semana.</h2>
-    <p class="sub rev">Treino feito vale 20 pontos, prato fotografado 10, medida 15, foto de evolução 25. Para o ranking nunca ficar parado, você também disputa com rivais da IA, sempre identificados como rivais.</p>
-  </div>
-  <div class="rank rev">
-    <div><span>1. Rafa <em>rival da IA</em></span><b>412</b></div>
-    <div class="eu"><span>2. Você</span><b>398</b></div>
-    <div><span>3. Duda <em>rival da IA</em></span><b>371</b></div>
-    <div><span>4. Carla</span><b>355</b></div>
+<section class="cinema" id="hormonios"><img src="/s/img/ampolas.webp" alt="Frascos e seringa sobre superfície escura" loading="lazy">
+  <div class="wrap"><div class="c rev">
+    <span class="etq">Protocolo hormonal e tirzepatida</span>
+    <h2 class="tit mega">Seu protocolo,<br><span class="verde">como você nunca viu.</span></h2>
+    <p class="lead" style="color:#d3e2d8">Fotografou a receita do seu médico? O Shape AI lê e transforma em um painel: cada composto em uma ampola, a dose, a frequência, o gráfico da concentração semana a semana, o calendário de aplicações e os exames de cada fase. E explica tudo no chat, quantas vezes você quiser.</p>
+    <div class="acoes" style="margin-top:28px"><button class="btn btn-pri" data-entrar="codigo">Montar o meu painel</button></div>
+  </div></div>
+</section>
+
+<section class="bloco"><div class="wrap">
+  <div class="app inv rev" style="margin-top:0"><div><span class="etq">Visual de outro nível</span><h3 class="mega">Ampolas, curvas <span class="verde">e calendário.</span></h3><p>Veja o pico e o vale de cada aplicação, quando aplicar, onde aplicar, com qual seringa, e quais exames fazer na 6ª semana.</p></div>
+    <div class="tela"><img src="/s/img/app-hormonios.webp" alt="Painel de hormônios com ampolas e gráfico de concentração" loading="lazy"></div></div>
+</div></section>
+
+<section class="cinema"><img src="/s/img/comida.webp" alt="Marmitas fitness com frango, salmão e legumes" loading="lazy">
+  <div class="wrap"><div class="c rev">
+    <span class="etq">Dieta</span>
+    <h2 class="tit mega">Comida de verdade.<br><span class="verde">Nos seus horários.</span></h2>
+    <p class="lead" style="color:#d3e2d8">Sete dias de cardápio com horário, gramas e calorias. Pré e pós-treino no lugar certo. Mandou foto do prato, ganhou ponto. Faltou ingrediente, o coach troca na hora.</p>
+  </div></div>
+</section>
+
+<section class="bloco"><div class="wrap">
+  <div class="rev"><h2 class="tit mega">Tudo isso <span class="verde">por menos</span><br>que um almoço por semana.</h2></div>
+  <div class="cifras">
+    <div class="cifra rev"><b class="verde">24h</b><span>coach no chat, sem horário marcado</span></div>
+    <div class="cifra rev"><b>7</b><span>dias de dieta com horários e gramas</span></div>
+    <div class="cifra rev"><b>1 toque</b><span>para fotografar a receita e ver o protocolo</span></div>
+    <div class="cifra rev"><b>Toda</b><span>semana um novo ranking para vencer</span></div>
   </div>
 </div></section>
 
 <section class="bloco" id="planos" style="background:var(--bg2)"><div class="wrap">
-  <div class="olho">Planos</div>
-  <h2 class="rev">Menos que uma consulta. Todo dia com você.</h2>
-  <p class="sub rev">Grátis: calculadora, perfil, medidas, metas e o primeiro treino. Preço de lançamento nos planos.</p>
-  <div class="planos" data-planos="/api/planos" data-destaque="0"></div>
+  <div class="rev"><h2 class="tit mega">Escolha o <span class="verde">seu nível.</span></h2><p class="lead">Comece grátis. Preço de lançamento por tempo limitado. Cancele quando quiser.</p></div>
+  <div class="planos" data-planos="/api/planos" data-destaque="1"></div>
 </div></section>
 
-<section class="bloco"><div class="wrap" style="max-width:860px">
-  <div class="olho">Dúvidas</div>
-  <h2 style="margin-bottom:24px">Perguntas frequentes</h2>
-  <details><summary>O BF é confiável?</summary><p>O método da Marinha dos EUA é usado no mundo todo e só precisa de fita métrica. Tem margem de erro de alguns pontos; o que importa é a tendência ao longo das semanas, medindo sempre do mesmo jeito.</p></details>
-  <details><summary>A IA indica hormônio, peptídeo ou remédio para emagrecer?</summary><p>Não. Isso é decisão do seu médico. O Shape AI só guarda o que o médico prescreveu, num calendário com lembretes, e nunca sugere substância nem dose.</p></details>
-  <details><summary>Substitui personal e nutricionista?</summary><p>É um apoio diário. Para lesões, doenças ou necessidades especiais, siga um profissional; o app ajuda você a cumprir o plano dele.</p></details>
-  <details><summary>Como cancelo?</summary><p>Pela própria Cakto, a qualquer momento. Nos primeiros 7 dias o dinheiro volta inteiro.</p></details>
+<section class="bloco" id="duvidas"><div class="wrap" style="max-width:860px">
+  <h2 class="tit mega rev">Dúvidas</h2>
+  <details><summary>Preciso de academia?</summary><p>Não. O treino é montado para onde você treina: academia, condomínio ou casa.</p></details>
+  <details><summary>A dieta é genérica?</summary><p>Não. Ela usa as suas calorias e macros calculados, os seus horários, o que você gosta e o que tem em casa.</p></details>
+  <details><summary>Como funciona a parte de hormônios?</summary><p>Quem prescreve é o seu médico. Você fotografa a receita e o Shape AI monta o painel: ampolas, doses, gráfico, calendário e exames. O coach explica cada item no chat.</p></details>
+  <details><summary>E a tirzepatida?</summary><p>O app organiza a dose semana a semana em mg, unidades e mL, ensina a aplicar, sugere o que fazer com os enjoos e lembra os exames de acompanhamento.</p></details>
+  <details><summary>Como cancelo?</summary><p>Pela Cakto, a qualquer momento, sem multa.</p></details>
 </div></section>
 
-<section class="fechamento"><div class="wrap">
-  <h2 class="rev">Daqui a 90 dias você vai agradecer por ter começado hoje.</h2>
-  <p class="rev">Comece pelo seu BF. Leva 30 segundos.</p>
-  <a class="btn btn-pri btn-lg pulsa" href="#calculadora">Calcular meu BF</a>
+<section class="final"><div class="rev">
+  <h2 class="tit mega">Daqui a 90 dias<br><span class="verde">você vai agradecer.</span></h2>
+  <p class="lead" style="margin:0 auto 30px">Comece hoje. A primeira semana de treino e o cálculo do seu BF são grátis.</p>
+  <button class="btn btn-pri" data-entrar="codigo">Criar minha conta</button>
 </div></section>
-</main>
-<footer class="rodape"><div class="wrap"><span>Shape AI, um produto Rangel Tech · não substitui acompanhamento médico</span><span>contato@rangeltech.net</span></div></footer>
-<div class="fixo-cel"><a class="btn btn-pri" href="#calculadora">Calcular meu BF</a></div>
+
+<footer><div class="wrap">Shape AI · Rangel Tech · O ranking reúne atletas da comunidade e atletas virtuais de motivação. Conteúdo informativo: protocolos com medicamentos são definidos pelo seu médico.</div></footer>
 <div class="modal" id="m-entrar" hidden role="dialog" aria-modal="true" aria-labelledby="m-tit"><div class="caixa"><button class="x" data-fechar aria-label="Fechar">×</button></div></div>
-<script>
-;(() => {
-  const $ = (q) => document.querySelector(q)
-  $('#c-sexo').onchange = () => { $('#l-quad').hidden = $('#c-sexo').value !== 'f' }
-  $('#f-calc').onsubmit = async (e) => {
-    e.preventDefault(); const m = $('#c-msg'); m.textContent = 'Calculando…'; m.className = 'msg cheia'
-    try {
-      const r = await fetch('/api/calcular', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sexo: $('#c-sexo').value, idade: +$('#c-idade').value,
-        altura_cm: +$('#c-alt').value, peso: +$('#c-peso').value, pescoco: +$('#c-pesc').value, cintura: +$('#c-cint').value, quadril: +$('#c-quad').value, objetivo: $('#c-obj').value, atividade: 'moderado' }) })
-      const j = await r.json(); if (!r.ok) throw new Error(j.detail || 'confira as medidas')
-      $('#res').innerHTML = `<div><small>Gordura corporal</small><b>${String(j.bf).replace('.', ',')}%</b><small>${j.categoria}</small></div><div><small>Calorias por dia</small><b>${j.calorias_alvo}</b><small>gasto ${j.gasto_diario} kcal</small></div>
-        <div><small>Proteína</small><b>${j.proteina_g} g</b><small>por dia</small></div><div><small>Água</small><b>${(j.agua_ml / 1000).toFixed(1).replace('.', ',')} L</b><small>por dia</small></div>`
-      m.textContent = ''; $('#c-cta').hidden = false
-    } catch (err) { m.textContent = err.message; m.className = 'msg cheia erro' }
-  }
-})()
-</script>
 <script src="/s/login.js" data-conta="/api/conta" data-destino="/painel"></script>
 <script src="/s/cinema.js"></script>
 <script src="/s/olho.js"></script>

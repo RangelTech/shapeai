@@ -2,8 +2,9 @@
 
 A pessoa conta a rotina e a meta, registra medidas (o BF sai pelo método da Marinha), e a IA monta treino e dieta da semana
 em cima das calorias e macros calculados aqui (app/fitness.py). Check-ins dão pontos, nível e sequência; o ranking mistura
-pessoas reais com rivais simulados SEMPRE identificados como "rival da IA".
-Ergogênicos: só o registro e o calendário do que o MÉDICO prescreveu. O app não sugere substância, dose nem protocolo.
+pessoas reais com atletas de motivação gerados pela IA (decisão do Lucas, 16/11: aparecem como jogadores normais).
+Protocolos (hormônio, tirzepatida, peptídeos): o chat responde com o material da doutora do projeto loki (RAG em
+app/protocolos.py) e o painel mostra a curva estimada de cada composto, no estilo do steroidplotter.
 """
 from __future__ import annotations
 
@@ -23,7 +24,9 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from app import auth, fitness, mailer, senha_rotas
+import base64
+
+from app import admin, auth, fitness, mailer, protocolos, receita, senha_rotas
 from app.config import Config, carregar
 from app.db import Banco, agora
 
@@ -41,22 +44,31 @@ PLANOS = {
                       "Tabela de substituições pelo chat", "Ranking, níveis e sequência"]},
     "elite": {"nome": "Elite", "preco": 79.90, "depois": 119.90,
               "itens": ["Tudo do Pro", "Planos refeitos toda semana conforme a evolução", "Linha do tempo de fotos ilimitada",
-                        "Calendário do que o seu médico prescreveu, com lembretes", "Prioridade na fila da IA"]},
+                        "Protocolo hormonal e de tirzepatida com gráfico da curva", "Calendário de aplicações com lembrete", "Prioridade na fila da IA"]},
 }
 
-PERSONA = """Você é o Shape AI, coach de treino e alimentação da Rangel Tech. Use a skill shape-ai.
-Português do Brasil, motivador, direto e prático. Respostas curtas no chat (até 8 linhas), com números quando ajudarem.
-Use os números calculados do CONTEXTO (calorias, macros, BF); não invente medida nem caloria do usuário.
-NUNCA sugira, dose ou monte protocolo de hormônio, anabolizante, peptídeo, tirzepatida ou qualquer medicamento: diga que isso é com o médico
-e que o app só guarda o que o médico prescreveu. Dor, lesão, desmaio, distúrbio alimentar: oriente procurar um profissional.
+CABECA = """Você é o Shape AI, coach premium da Rangel Tech. Siga a skill shape-ai abaixo em tudo.
+=== SKILL shape-ai ===
+{skill}
+=== FIM DA SKILL ===
 CONTEXTO:
-{contexto}"""
+{contexto}
+RECEITA DO CLIENTE:
+{solicitacoes}
+MATERIAL DE REFERÊNCIA (planilha, trechos relevantes):
+{material}"""
 
 
-def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
+def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
     cfg = cfg or carregar()
     os.makedirs(cfg.dados, exist_ok=True)
     db = Banco(os.path.join(cfg.dados, "shapeai.db"))
+    receita.preparar(db)
+    admin.preparar(db)
+
+    def persona(**kw) -> str:
+        """Prompt de sistema: a skill shape-ai (editável no /admin) + contexto, receita e material."""
+        return CABECA.format(skill=admin.skill(db, "shape-ai"), **kw)
     FOTOS = Path(cfg.dados) / "fotos"
     FOTOS.mkdir(exist_ok=True)
     app = FastAPI(title="Shape AI", docs_url=None, redoc_url=None, openapi_url=None)
@@ -169,7 +181,8 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
                 f"Treina {p['dias_treino']}x/semana, {p['minutos_treino']} min, em {p['local_treino']}.\n"
                 f"Última medida: peso {m.get('peso')} kg, BF {m.get('bf')}% ({r.get('categoria_bf', '?')}), cintura {m.get('cintura')} cm.\n"
                 f"Calorias alvo {g.get('calorias_alvo')} kcal; proteína {g.get('proteina_g')} g, carboidrato {g.get('carboidrato_g')} g, gordura {g.get('gordura_g')} g; água {g.get('agua_ml')} ml.\n"
-                f"Metas: peso {p.get('meta_peso')} kg, BF {p.get('meta_bf')}%. Nível {r['pontos']['nivel']}, sequência de {r['sequencia']} dias.")
+                f"Metas: peso {p.get('meta_peso')} kg, BF {p.get('meta_bf')}%. Nível {r['pontos']['nivel']}, sequência de {r['sequencia']} dias.\n"
+                f"Ranking da semana: {(fitness.alerta(placar(u)) or {}).get('texto', 'sem dados')}")
 
     def video(nome: str) -> str:
         return "https://www.youtube.com/results?search_query=" + urllib.parse.quote(f"{nome} execução correta shorts")
@@ -338,7 +351,7 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
             raise HTTPException(409, "preencha o perfil antes")
         if not plano_de(u) and db.um("SELECT 1 FROM planos WHERE usuario=? AND tipo='treino'", (u["id"],)):
             raise HTTPException(402, "refazer o treino toda semana é do plano Pro")
-        pedido = [{"role": "system", "content": PERSONA.format(contexto=contexto(u))},
+        pedido = [{"role": "system", "content": persona(contexto=contexto(u), solicitacoes="(não se aplica)", material="(não se aplica)")},
                   {"role": "user", "content": "Monte o meu treino da semana respeitando dias, minutos e local. No máximo 6 exercícios por dia; dica com até 8 palavras. "
                                               "Responda SÓ com JSON, sem texto antes ou depois: "
                                               '{"dias":[{"dia":"Segunda","foco":"...","exercicios":[{"nome":"...","series":4,"reps":"10-12","descanso_s":60,'
@@ -360,7 +373,7 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
         r = resumo(u)
         if not r.get("gasto"):
             raise HTTPException(409, "registre o seu peso nas medidas antes")
-        pedido_dieta = [{"role": "system", "content": PERSONA.format(contexto=contexto(u))},
+        pedido_dieta = [{"role": "system", "content": persona(contexto=contexto(u), solicitacoes="(não se aplica)", material="(não se aplica)")},
                           {"role": "user", "content": f"Monte a minha dieta dos 7 dias com horários pela minha rotina, perto de {r['gasto']['calorias_alvo']} kcal/dia "
                                                       f"e {r['gasto']['proteina_g']} g de proteína. Comida brasileira, fácil de achar. Responda SÓ com JSON: "
                                                       '{"dias":[{"dia":"Segunda","refeicoes":[{"horario":"07:00","nome":"Café da manhã","itens":[{"alimento":"...",'
@@ -390,21 +403,104 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
         ganho = pontuar(u, tipo, ref=str(b.get("ref") or "")[:80])
         return {**resumo(u), "ganhou": ganho}
 
-    @app.get("/api/ranking")
-    def ranking(request: Request):
-        u = usuario(request)
-        ini = (dt.datetime.now(TZ).date() - dt.timedelta(days=dt.datetime.now(TZ).weekday())).isoformat()
+    def placar(u: dict) -> list[dict]:
+        hoje_ = dt.datetime.now(TZ).date()
+        ini = (hoje_ - dt.timedelta(days=hoje_.weekday())).isoformat()
         reais = db.todos("""SELECT c.usuario, COALESCE(p.nome,'Atleta') nome, SUM(c.pontos) pontos FROM checkins c LEFT JOIN perfis p ON p.usuario=c.usuario
                             WHERE c.dia>=? GROUP BY c.usuario ORDER BY pontos DESC LIMIT 30""", (ini,))
         meus = next((r["pontos"] for r in reais if r["usuario"] == u["id"]), 0)
-        lista = [{"nome": (r["nome"].split(" ")[0] + (" (você)" if r["usuario"] == u["id"] else "")), "pontos": int(r["pontos"]), "simulado": False, "voce": r["usuario"] == u["id"]} for r in reais]
-        if not any(x["voce"] for x in lista):
-            lista.append({"nome": "Você", "pontos": 0, "simulado": False, "voce": True})
-        lista += fitness.rivais(u["id"], meus, semana())
-        lista.sort(key=lambda x: -x["pontos"])
-        return {"semana": semana(), "ranking": [{**x, "posicao": i + 1} for i, x in enumerate(lista)]}
 
-    # ------------------------------------------------ ergogênicos: registro do que o médico prescreveu
+        def curto(nome: str) -> str:
+            p = nome.split()
+            return p[0] + (f" {p[-1][0]}." if len(p) > 1 else "")
+        lista = [{"nome": curto(r["nome"]) + (" (você)" if r["usuario"] == u["id"] else ""), "pontos": int(r["pontos"]), "voce": r["usuario"] == u["id"]} for r in reais]
+        if not any(x["voce"] for x in lista):
+            lista.append({"nome": "Você", "pontos": 0, "voce": True})
+        lista += fitness.rivais(u["id"], meus, semana(), hoje_.weekday())
+        lista.sort(key=lambda x: (-x["pontos"], not x.get("voce")))
+        return [{**x, "posicao": i + 1} for i, x in enumerate(lista)]
+
+    @app.get("/api/ranking")
+    def ranking(request: Request):
+        u = usuario(request)
+        lista = placar(u)
+        return {"semana": semana(), "ranking": lista, "alerta": fitness.alerta(lista)}
+
+    # ------------------------------------------------ protocolo: curva estimada (estilo steroidplotter) e calendário
+    @app.get("/api/protocolo/compostos")
+    def compostos():
+        return {"compostos": [{"id": k, "nome": v[0]} for k, v in protocolos.COMPOSTOS.items()]}
+
+    def ficha(chave: str) -> str:
+        nome = protocolos.COMPOSTOS.get(chave, ("",))[0].split(" (")[0].split(" ")[0].lower()
+        alvo = next((t for t in protocolos.BASE if nome and nome in t["titulo"].lower()), None)
+        return alvo["texto"] if alvo else ""
+
+    @app.get("/api/protocolo")
+    def meu_protocolo(request: Request):
+        u = usuario(request)
+        p = receita.ativo(db, u["id"])
+        if not p:
+            return {"ativo": None}
+        for i in p["itens"]:
+            i["nome"] = protocolos.COMPOSTOS.get(i["composto"], (i["nome_na_receita"] or "Outro",))[0]
+            i["ficha"] = ficha(i["composto"])
+        plot = [i for i in p["itens"] if i["composto"] in protocolos.COMPOSTOS]
+        p["curva"] = protocolos.curva(plot) if plot else None
+        p.pop("foto", None)
+        return {"ativo": p}
+
+    def ler_receita(conteudo: list[dict]) -> dict:
+        msgs = [{"role": "system", "content": receita.prompt_leitura()}, {"role": "user", "content": conteudo}]
+        if visao:
+            return receita.ler_json(visao(msgs))
+        r = httpx.post(cfg.visao_base + "/chat/completions", headers={"Authorization": f"Bearer {cfg.visao_key}"}, timeout=180,
+                       json={"model": cfg.visao_modelo, "messages": msgs, "temperature": 0, "max_tokens": 2000})
+        r.raise_for_status()
+        return receita.ler_json(r.json()["choices"][0]["message"]["content"] or "")
+
+    @app.post("/api/receita/ler")
+    async def receita_ler(request: Request):
+        """Foto (corpo binário, image/*) ou texto ({"texto": ...}) da receita -> itens para o cliente conferir."""
+        u = usuario(request)
+        tipo = request.headers.get("content-type", "")
+        if tipo.startswith("image/"):
+            corpo = await request.body()
+            if not corpo or len(corpo) > MAX_FOTO:
+                raise HTTPException(422, "foto vazia ou grande demais (até 12 MB)")
+            nome = uuid.uuid4().hex + ".jpg"
+            (FOTOS / nome).write_bytes(corpo)
+            db.exec("INSERT INTO fotos(nome,usuario,tipo,criado) VALUES(?,?,?,?)", (nome, u["id"], "receita", agora()))
+            conteudo = [{"type": "text", "text": "Transcreva esta receita."},
+                        {"type": "image_url", "image_url": {"url": f"data:{tipo.split(';')[0]};base64,{base64.b64encode(corpo).decode()}"}}]
+        else:
+            b = await request.json()
+            texto = str(b.get("texto") or "").strip()[:6000]
+            if not texto:
+                raise HTTPException(422, "envie a foto ou o texto da receita")
+            nome, conteudo = "", [{"type": "text", "text": "Transcreva esta receita:\n" + texto}]
+        try:
+            d = ler_receita(conteudo)
+        except Exception:  # noqa: BLE001
+            raise HTTPException(502, "não consegui ler a receita agora; tente de novo ou digite os itens")
+        return {**d, "foto": nome}
+
+    @app.post("/api/protocolo")
+    async def salvar_protocolo(request: Request):
+        u = usuario(request)
+        b = await request.json()
+        try:
+            pid = receita.salvar(db, u["id"], b, str(b.get("foto") or "")[:40])
+        except ValueError as e:
+            raise HTTPException(422, str(e))
+        return {"id": pid}
+
+    @app.post("/api/protocolo/curva")
+    async def curva(request: Request):
+        usuario(request)
+        b = await request.json()
+        return protocolos.curva(b.get("itens") or [], b.get("dias"))
+
     @app.get("/api/prescricoes")
     def prescricoes(request: Request):
         u = usuario(request)
@@ -415,18 +511,16 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
         for p in itens:
             p["dias"] = json.loads(p["dias"])
             p["semana"] = [{"dia": d, "previsto": dt.date.fromisoformat(d).weekday() in p["dias"], "feito": (p["id"], d) in feitas} for d in dias]
-        return {"prescricoes": itens, "aviso": "Registro e lembrete do que o seu médico prescreveu. O Shape AI não indica substância, dose nem protocolo."}
+        return {"prescricoes": itens, "aviso": "Seu protocolo: marque cada aplicação e acompanhe os exames da fase."}
 
     @app.post("/api/prescricoes")
     async def nova_prescricao(request: Request):
         u = usuario(request)
         b = await request.json()
-        if not b.get("aceite_medico"):
-            raise HTTPException(422, "confirme que foi prescrito pelo seu médico")
         nome, dose = str(b.get("nome") or "").strip()[:80], str(b.get("dose") or "").strip()[:80]
         dias = sorted({int(d) for d in b.get("dias") or [] if str(d).isdigit() and 0 <= int(d) <= 6})
         if not nome or not dose or not dias:
-            raise HTTPException(422, "informe o nome, a dose prescrita e os dias")
+            raise HTTPException(422, "informe o nome, a dose e os dias")
         pid = db.exec("INSERT INTO prescricoes(usuario,nome,dose,dias,horario,medico,observacao,criado) VALUES(?,?,?,?,?,?,?,?)",
                       (u["id"], nome, dose, json.dumps(dias), str(b.get("horario") or "")[:5], str(b.get("medico") or "")[:80],
                        str(b.get("observacao") or "")[:300], agora())).lastrowid
@@ -468,12 +562,13 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
             if db.um("SELECT COUNT(*) n FROM mensagens WHERE usuario=? AND papel='usuario' AND criado>=?", (u["id"], ini))["n"] >= GRATIS_MSGS_DIA:
                 raise HTTPException(402, f"as {GRATIS_MSGS_DIA} mensagens grátis de hoje acabaram; no Pro o chat é sem limite")
         hist = db.todos("SELECT papel, texto FROM mensagens WHERE usuario=? ORDER BY criado DESC, id DESC LIMIT 14", (u["id"],))[::-1]
-        msgs = [{"role": "system", "content": PERSONA.format(contexto=contexto(u))}]
+        material = protocolos.contexto_rag(" ".join([m["texto"] for m in hist[-2:] if m["papel"] == "usuario"] + [texto])) or "(nada específico; responda pelo seu conhecimento)"
+        msgs = [{"role": "system", "content": persona(contexto=contexto(u), solicitacoes=receita.contexto(db, u["id"]), material=material)}]
         msgs += [{"role": "user" if m["papel"] == "usuario" else "assistant", "content": m["texto"]} for m in hist]
         msgs.append({"role": "user", "content": texto})
         db.exec("INSERT INTO mensagens(usuario,papel,texto,criado) VALUES(?,?,?,?)", (u["id"], "usuario", texto, agora()))
         try:
-            resposta = chamar_llm(msgs)
+            resposta = chamar_llm(msgs, 3000)
         except Exception:  # noqa: BLE001
             raise HTTPException(502, "o coach não respondeu agora; tente de novo em instantes")
         db.exec("INSERT INTO mensagens(usuario,papel,texto,criado) VALUES(?,?,?,?)", (u["id"], "ia", resposta, agora()))
@@ -512,6 +607,13 @@ def criar_app(cfg: Config | None = None, llm=None) -> FastAPI:
             db.exec("UPDATE assinaturas SET ativo_ate=? WHERE usuario=?", (agora(), u["id"]))
             return {"ok": True, "revogado": email}
         return {"ok": True, "ignorado": evento}
+
+    app.include_router(admin.rotas(db, cfg.segredo_sessao, """SELECT u.email, u.criado, a.plano, a.ativo_ate, (a.ativo_ate > strftime('%s','now')) ativo
+        FROM usuarios u LEFT JOIN assinaturas a ON a.usuario=u.id ORDER BY u.criado DESC""", seguro=not cfg.dev))
+
+    @app.get("/admin", response_class=HTMLResponse)
+    def pagina_admin():
+        return FileResponse(ESTATICO / "admin.html")
 
     app.mount("/s", StaticFiles(directory=ESTATICO), name="estatico")
 

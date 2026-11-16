@@ -44,9 +44,12 @@ def test_bf_marinha_e_gasto():
         fitness.gordura_marinha("f", 165, 32, 72)
 
 
-def test_rivais_sempre_marcados():
+def test_rivais_parecem_jogadores():
     r = fitness.rivais(1, 300, "2026-46")
-    assert all(x["simulado"] and "rival da IA" in x["nome"] for x in r)
+    assert len(r) == 6 and all("IA" not in x["nome"] and "simulado" not in x for x in r)
+    rk = sorted(r + [{"nome": "Você", "pontos": 300, "voce": True}], key=lambda x: -x["pontos"])
+    a = fitness.alerta(rk)
+    assert a["tipo"] == "ameaca" and a["diferenca"] <= 15
     assert r == fitness.rivais(1, 300, "2026-46")
 
 
@@ -77,16 +80,43 @@ def test_fluxo_completo(amb):
     assert f["ganhou"] == 10 and c.get(f["url"]).status_code == 200
     assert c.post("/api/fotos?tipo=evolucao", content=b"texto").status_code == 422
     rk = c.get("/api/ranking").json()["ranking"]
-    assert any(x.get("voce") for x in rk) and sum(1 for x in rk if x["simulado"]) == 6
+    assert any(x.get("voce") for x in rk) and len(rk) == 7 and not any("simulado" in x for x in rk)
     assert c.get("/api/conta").json()["kcal_hoje"] == 450
 
 
-def test_ergogenico_so_registro_medico(amb):
+def test_protocolo_rag_e_curva(amb):
     c = amb
-    assert c.post("/api/prescricoes", json={"nome": "X", "dose": "conforme receita", "dias": [0, 3]}).status_code == 422  # sem aceite médico
-    pid = c.post("/api/prescricoes", json={"nome": "Medicação prescrita", "dose": "conforme receita", "dias": [0, 3], "aceite_medico": True, "medico": "Dra. Ana"}).json()["id"]
+    pid = c.post("/api/prescricoes", json={"nome": "Testosterona enantato", "dose": "250 mg", "dias": [0, 3]}).json()["id"]
     j = c.get("/api/prescricoes").json()
-    assert "não indica substância" in j["aviso"] and len(j["prescricoes"][0]["semana"]) == 7
-    assert c.post(f"/api/prescricoes/{pid}/feito").json()["ok"]
-    c.post("/api/conversa", json={"texto": "qual dose de tirzepatida eu tomo?"})
-    assert "NUNCA sugira, dose" in VISTOS[-1][0]["content"]
+    assert len(j["prescricoes"][0]["semana"]) == 7 and c.post(f"/api/prescricoes/{pid}/feito").json()["ok"]
+    c.post("/api/conversa", json={"texto": "qual a dose de deca pra iniciante e como fica a tirzepatida?"})
+    sistema = VISTOS[-1][0]["content"]
+    assert "Nandrolona" in sistema and "Tirzepatida" in sistema and "NÃO monte" in sistema
+    comp = c.get("/api/protocolo/compostos").json()["compostos"]
+    assert any(x["id"] == "sustanon" for x in comp)
+    r = c.post("/api/protocolo/curva", json={"itens": [{"composto": "testosterona_enantato", "dose_mg": 250, "a_cada_dias": 3.5, "semanas": 12},
+                                                        {"composto": "sustanon", "dose_mg": 250, "a_cada_dias": 7, "semanas": 8}]}).json()
+    assert len(r["series"]) == 2 and max(r["total"]) > 300 and r["total"][0] == 0
+
+
+def test_receita_vira_protocolo(tmp_path):
+    lido = json.dumps({"medico": "Dra. Ana CRM 1", "data": "2026-11-10", "observacoes": "exames na 6a semana",
+                       "itens": [{"composto": "testosterona_cipionato", "nome_na_receita": "Deposteron", "dose_mg": 100, "a_cada_dias": 7, "semanas": 8, "via": "IM"},
+                                 {"composto": "xyz", "nome_na_receita": "Vitamina D", "dose_mg": 0, "a_cada_dias": 1, "semanas": 8}]})
+    vistos = []
+    cfg = Config(dados=str(tmp_path), segredo_sessao="s", dev=True)
+    c = TestClient(criar_app(cfg, llm=lambda m: (vistos.append(m), "ok")[1], visao=lambda m: lido))
+    cod = c.post("/api/entrar/codigo", json={"email": "r@x.com"}).json()["codigo_dev"]
+    c.post("/api/entrar", json={"email": "r@x.com", "codigo": cod})
+    assert c.get("/api/protocolo").json()["ativo"] is None
+    d = c.post("/api/receita/ler", content=JPG, headers={"content-type": "image/jpeg"}).json()
+    assert d["medico"].startswith("Dra. Ana") and d["itens"][1]["composto"] == "outro" and d["foto"]
+    assert c.post("/api/receita/ler", json={"texto": "Deposteron 100 mg semanal"}).json()["itens"]
+    assert c.post("/api/protocolo", json={"itens": []}).status_code == 422
+    c.post("/api/protocolo", json=d)
+    p = c.get("/api/protocolo").json()["ativo"]
+    assert p["itens"][0]["nome"].startswith("Testosterona cipionato") and p["curva"]["total"] and "foto" not in p
+    assert "Testosterona" in p["itens"][0]["ficha"]
+    c.post("/api/conversa", json={"texto": "me explica minha receita"})
+    sistema = vistos[-1][0]["content"]
+    assert "Deposteron: 100 mg a cada 7 dias" in sistema and "NÃO monte" in sistema and "Blast Iniciante" not in sistema
