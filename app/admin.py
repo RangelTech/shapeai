@@ -2,7 +2,8 @@
 
 Mesmo módulo em todos os produtos da Rangel Tech. Login único (usuário e senha em RT_ADMIN_USUARIO / RT_ADMIN_SENHA,
 guardados no cofre pessoal) com cookie assinado de 12 h.
-As skills nascem dos arquivos skills/*.md do repositório (semente) e passam a morar no banco; o texto salvo no painel
+As skills nascem dos arquivos skills/*.md do repositório e moram no banco; enquanto ninguém editar no painel,
+acompanham o arquivo a cada deploy. Editou no painel, vale a versão do painel (até "Restaurar"). o texto salvo no painel
 vale na próxima resposta, porque o app manda a skill no prompt de sistema de cada chamada ao Hermes.
 "Restaurar" volta ao arquivo do repositório; toda gravação guarda a versão anterior no histórico.
 """
@@ -30,7 +31,10 @@ CREATE TABLE IF NOT EXISTS skills_historico (id INTEGER PRIMARY KEY, nome TEXT N
 def preparar(db: Banco) -> None:
     db.con.executescript(ESQUEMA)
     for f in sorted(SEMENTES.glob("*.md")):
-        db.exec("INSERT OR IGNORE INTO skills(nome,conteudo,atualizado) VALUES(?,?,?)", (f.stem, f.read_text(encoding="utf-8"), agora()))
+        txt = f.read_text(encoding="utf-8")
+        db.exec("INSERT OR IGNORE INTO skills(nome,conteudo,atualizado) VALUES(?,?,?)", (f.stem, txt, agora()))
+        # skill que ninguém editou no painel acompanha o arquivo do repositório a cada deploy
+        db.exec("UPDATE skills SET conteudo=?, atualizado=? WHERE nome=? AND por='repositorio' AND conteudo!=?", (txt, agora(), f.stem, txt))
 
 
 def skill(db: Banco, nome: str) -> str:
