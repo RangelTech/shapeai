@@ -82,7 +82,12 @@ def contexto(db: Banco, usuario: int) -> str:
     p = ativo(db, usuario)
     if not p:
         return "Nenhuma receita cadastrada. Se a pessoa já tem prescrição, peça a foto da receita na aba Hormônios."
-    linhas = [f"- {i['nome_na_receita'] or COMPOSTOS.get(i['composto'], ('?',))[0]}: {i['dose_mg']:g} mg a cada {i['a_cada_dias']:g} dias, "
+    def nome(i: dict) -> str:
+        oficial = COMPOSTOS.get(i["composto"], ("",))[0]
+        if i["nome_na_receita"] and oficial:
+            return f"{i['nome_na_receita']} (= {oficial})"
+        return i["nome_na_receita"] or oficial or "?"
+    linhas = [f"- {nome(i)}: {i['dose_mg']:g} mg a cada {i['a_cada_dias']:g} dias, "
               f"{i['semanas']} semanas{', começa na semana ' + str(i['inicio_semana']) if i['inicio_semana'] else ''}"
               f"{' (' + i['via'] + ')' if i['via'] else ''}{' — ' + i['obs'] if i['obs'] else ''}" for i in p["itens"]]
     return (f"Receita de {p['medico'] or 'médico não identificado'}{' em ' + p['data_receita'] if p['data_receita'] else ''} (transcrita da receita do cliente):\n"

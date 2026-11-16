@@ -119,4 +119,4 @@ def test_receita_vira_protocolo(tmp_path):
     assert "Testosterona" in p["itens"][0]["ficha"]
     c.post("/api/conversa", json={"texto": "me explica minha receita"})
     sistema = vistos[-1][0]["content"]
-    assert "Deposteron: 100 mg a cada 7 dias" in sistema and "NÃO monte" in sistema and "Blast Iniciante" not in sistema
+    assert "Deposteron (= Testosterona cipionato): 100 mg a cada 7 dias" in sistema and "NÃO monte" in sistema and "Blast Iniciante" not in sistema
