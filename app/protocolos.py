@@ -16,7 +16,8 @@ from pathlib import Path
 BASE = json.loads((Path(__file__).resolve().parent.parent / "conhecimento" / "base.json").read_text(encoding="utf-8"))
 
 APELIDOS = {
-    "deca": "nandrolona decanoato", "durateston": "testosterona sustanon blend", "sustanon": "testosterona blend",
+    "deca": "nandrolona decanoato", "deposteron": "testosterona cipionato", "cipionato": "cipionato testosterona",
+    "androxon": "testosterona undecanoato", "nebido": "testosterona undecanoato", "hormus": "testosterona", "durateston": "testosterona sustanon blend", "sustanon": "testosterona blend",
     "enantato": "enantato", "cipionato": "cipionato", "tren": "trembolona", "trembo": "trembolona", "bold": "boldenona",
     "equipoise": "boldenona", "masteron": "drostanolona", "primo": "metenolona primobolan", "primobolan": "metenolona",
     "oxa": "oxandrolona", "anavar": "oxandrolona", "dianabol": "metandienona", "dbol": "metandienona", "hemogenin": "oximetolona",

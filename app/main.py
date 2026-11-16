@@ -48,6 +48,8 @@ PLANOS = {
 }
 
 CABECA = """Você é o Shape AI, coach premium da Rangel Tech. Siga a skill shape-ai abaixo em tudo.
+Responda SEMPRE à última mensagem do cliente. A RECEITA DO CLIENTE é a verdade sobre os compostos: se uma resposta sua
+anterior na conversa disser outra coisa, ela estava errada; corrija sem repetir o erro.
 === SKILL shape-ai ===
 {skill}
 === FIM DA SKILL ===
