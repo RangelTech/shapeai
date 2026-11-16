@@ -85,8 +85,8 @@ textarea{width:100%;min-height:62vh;background:#0d0d0f;border:1px solid var(--bd
   }
   let CLI = [], ATUAL = null, SUJO = false
   function mostrar(logado) { $('#v-entrar').hidden = logado; $('#v-painel').hidden = !logado; if (logado) clientes() }
-  $('#f-entrar').onsubmit = async (e) => { e.preventDefault(); try { await api('/api/admin/entrar', { method: 'POST', body: JSON.stringify({ usuario: $('#e-u').value, senha: $('#e-s').value }) }); mostrar(true) } catch (err) { $('#e-msg').textContent = err.message; $('#e-msg').className = 'msg erro' } }
-  $('#sair').onclick = async () => { await api('/api/admin/sair', { method: 'POST' }); mostrar(false) }
+  $('#f-entrar').onsubmit = async (e) => { e.preventDefault(); try { await api('/api/painel/entrar', { method: 'POST', body: JSON.stringify({ usuario: $('#e-u').value, senha: $('#e-s').value }) }); mostrar(true) } catch (err) { $('#e-msg').textContent = err.message; $('#e-msg').className = 'msg erro' } }
+  $('#sair').onclick = async () => { await api('/api/painel/sair', { method: 'POST' }); mostrar(false) }
   $$('[data-aba]').forEach((b) => (b.onclick = () => { if (SUJO && !confirm('Há alterações não salvas. Sair mesmo assim?')) return
     $$('[data-aba]').forEach((x) => x.setAttribute('aria-selected', String(x === b))); $$('[data-p]').forEach((p) => (p.hidden = p.dataset.p !== b.dataset.aba)); b.dataset.aba === 'skills' ? skills() : clientes() }))
   function desenhar() {
@@ -94,25 +94,25 @@ textarea{width:100%;min-height:62vh;background:#0d0d0f;border:1px solid var(--bd
     $('#clientes').innerHTML = '<div class="linha"><span>Cliente</span><span>Plano</span><span>Ativo até</span><span>Desde</span></div>' + (l.map((c) =>
       `<div class="linha"><span>${esc(c.email)}</span><span><span class="pill ${c.ativo ? 'on' : ''}">${esc(c.plano || 'grátis')}</span></span><span>${data(c.ativo_ate)}</span><span>${data(c.criado)}</span></div>`).join('') || '<div class="linha"><span>Nenhum cliente.</span></div>')
   }
-  async function clientes() { const r = await api('/api/admin/resumo'); CLI = r.clientes
+  async function clientes() { const r = await api('/api/painel/resumo'); CLI = r.clientes
     $('#kpis').innerHTML = `<div class="kpi"><small>Clientes</small><b>${r.total}</b></div><div class="kpi"><small>Com plano ativo</small><b>${r.ativos}</b></div><div class="kpi"><small>Grátis</small><b>${r.total - r.ativos}</b></div>`; desenhar() }
   $('#busca').oninput = desenhar
-  async function skills() { const { skills } = await api('/api/admin/skills')
+  async function skills() { const { skills } = await api('/api/painel/skills')
     $('#skills').innerHTML = skills.map((s) => `<button data-s="${esc(s.nome)}" aria-current="${s.nome === ATUAL}"><b>${esc(s.nome)}</b><small>${s.por === 'painel' ? 'editada no painel' : 'versão do repositório'} · ${data(s.atualizado)}</small></button>`).join('')
     $$('[data-s]').forEach((b) => (b.onclick = () => { if (SUJO && !confirm('Há alterações não salvas. Trocar mesmo assim?')) return; abrir(b.dataset.s) }))
     if (!ATUAL && skills[0]) abrir(skills[0].nome) }
-  async function abrir(nome) { const s = await api('/api/admin/skills/' + encodeURIComponent(nome)); ATUAL = nome; SUJO = false
+  async function abrir(nome) { const s = await api('/api/painel/skills/' + encodeURIComponent(nome)); ATUAL = nome; SUJO = false
     $$('[data-s]').forEach((b) => b.setAttribute('aria-current', String(b.dataset.s === nome)))
     $('#editor').innerHTML = `<div class="cab"><b>${esc(nome)}.md</b><button class="btn" id="restaurar">Restaurar do repositório</button><button class="btn pri" id="salvar">Salvar</button></div>
       <textarea id="txt" spellcheck="false"></textarea><div class="msg" id="s-msg">Salvou, a próxima resposta da IA já usa esta versão.</div>
       ${s.historico.length ? `<div class="hist"><span class="msg">Versões anteriores:</span>${s.historico.map((h) => `<button data-h="${h.id}">${data(h.salvo)}</button>`).join('')}</div>` : ''}`
     $('#txt').value = s.conteudo; $('#txt').oninput = () => { SUJO = true; $('#s-msg').textContent = 'Alterações não salvas.'; $('#s-msg').className = 'msg' }
-    $('#salvar').onclick = async () => { try { await api('/api/admin/skills/' + encodeURIComponent(nome), { method: 'PUT', body: JSON.stringify({ conteudo: $('#txt').value }) }); SUJO = false; skills(); abrir(nome).then(() => { $('#s-msg').textContent = 'Salvo.'; $('#s-msg').className = 'msg ok' }) } catch (e) { $('#s-msg').textContent = e.message; $('#s-msg').className = 'msg erro' } }
-    $('#restaurar').onclick = async () => { if (!confirm('Voltar para a versão do repositório? A atual fica no histórico.')) return; await api(`/api/admin/skills/${encodeURIComponent(nome)}/restaurar`, { method: 'POST' }); SUJO = false; skills(); abrir(nome) }
-    $$('[data-h]').forEach((b) => (b.onclick = async () => { const h = await api(`/api/admin/skills/${encodeURIComponent(nome)}/historico/${b.dataset.h}`); if (confirm('Carregar esta versão no editor? (só grava ao clicar em Salvar)')) { $('#txt').value = h.conteudo; SUJO = true; $('#s-msg').textContent = 'Versão antiga carregada. Clique em Salvar para usar.'; $('#s-msg').className = 'msg' } }))
+    $('#salvar').onclick = async () => { try { await api('/api/painel/skills/' + encodeURIComponent(nome), { method: 'PUT', body: JSON.stringify({ conteudo: $('#txt').value }) }); SUJO = false; skills(); abrir(nome).then(() => { $('#s-msg').textContent = 'Salvo.'; $('#s-msg').className = 'msg ok' }) } catch (e) { $('#s-msg').textContent = e.message; $('#s-msg').className = 'msg erro' } }
+    $('#restaurar').onclick = async () => { if (!confirm('Voltar para a versão do repositório? A atual fica no histórico.')) return; await api(`/api/painel/skills/${encodeURIComponent(nome)}/restaurar`, { method: 'POST' }); SUJO = false; skills(); abrir(nome) }
+    $$('[data-h]').forEach((b) => (b.onclick = async () => { const h = await api(`/api/painel/skills/${encodeURIComponent(nome)}/historico/${b.dataset.h}`); if (confirm('Carregar esta versão no editor? (só grava ao clicar em Salvar)')) { $('#txt').value = h.conteudo; SUJO = true; $('#s-msg').textContent = 'Versão antiga carregada. Clique em Salvar para usar.'; $('#s-msg').className = 'msg' } }))
   }
   window.addEventListener('beforeunload', (e) => { if (SUJO) { e.preventDefault(); e.returnValue = '' } })
-  fetch('/api/admin/resumo').then((r) => mostrar(r.ok)).catch(() => mostrar(false))
+  fetch('/api/painel/resumo').then((r) => mostrar(r.ok)).catch(() => mostrar(false))
 })()
 </script>
 </body>

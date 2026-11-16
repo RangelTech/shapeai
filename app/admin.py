@@ -28,7 +28,12 @@ CREATE TABLE IF NOT EXISTS skills_historico (id INTEGER PRIMARY KEY, nome TEXT N
 """
 
 
+_DB: Banco | None = None
+
+
 def preparar(db: Banco) -> None:
+    global _DB
+    _DB = db
     db.con.executescript(ESQUEMA)
     for f in sorted(SEMENTES.glob("*.md")):
         txt = f.read_text(encoding="utf-8")
@@ -38,14 +43,35 @@ def preparar(db: Banco) -> None:
 
 
 def skill(db: Banco, nome: str) -> str:
+    """Conteúdo da skill sem o cabeçalho (--- name/description ---)."""
     r = db.um("SELECT conteudo FROM skills WHERE nome=?", (nome,))
-    return r["conteudo"] if r else ""
+    txt = r["conteudo"] if r else ""
+    if txt.startswith("---"):
+        fim = txt.find("\n---", 3)
+        if fim != -1:
+            txt = txt[fim + 4:].lstrip("\n")
+    return txt
+
+
+def texto(nome: str, padrao: str = "") -> str:
+    """Skill pelo nome (editável no /admin); sem banco ou sem skill, o texto padrão do código."""
+    if _DB is None:
+        return padrao
+    return skill(_DB, nome) or padrao
+
+
+def formatar(nome: str, padrao: str, **campos) -> str:
+    """Prompt-modelo editável: usa a versão do painel; se a edição quebrou algum {campo}, volta ao padrão do código."""
+    try:
+        return texto(nome, padrao).format(**campos)
+    except (KeyError, IndexError, ValueError):
+        return padrao.format(**campos)
 
 
 def rotas(db: Banco, segredo: str, consulta_clientes: str, usuario: str | None = None, senha: str | None = None, seguro: bool = True) -> APIRouter:
     usuario = usuario if usuario is not None else os.environ.get("RT_ADMIN_USUARIO", "")
     senha = senha if senha is not None else os.environ.get("RT_ADMIN_SENHA", "")
-    r = APIRouter(prefix="/api/admin")
+    r = APIRouter(prefix="/api/painel")
 
     def assinar(exp: int) -> str:
         return f"{exp}.{hmac.new(segredo.encode(), f'admin:{usuario}:{exp}'.encode(), hashlib.sha256).hexdigest()}"
