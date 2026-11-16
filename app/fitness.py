@@ -90,8 +90,9 @@ def alerta(ranking: list[dict]) -> dict | None:
     frente = ranking[i - 1] if i > 0 else None
     if atras and eu["pontos"] - atras["pontos"] <= 15:
         d = eu["pontos"] - atras["pontos"]
-        return {"tipo": "ameaca", "nome": atras["nome"], "diferenca": d,
-                "texto": f"{atras['nome']} está a {d} ponto{'s' if d != 1 else ''} de você. Não deixa passar: treina hoje!"}
+        txt = (f"{atras['nome']} está empatado com você. Um treino hoje e você abre vantagem!" if d == 0
+               else f"{atras['nome']} está a {d} ponto{'s' if d != 1 else ''} de você. Não deixa passar: treina hoje!")
+        return {"tipo": "ameaca", "nome": atras["nome"], "diferenca": d, "texto": txt}
     if frente:
         d = frente["pontos"] - eu["pontos"]
         return {"tipo": "alvo", "nome": frente["nome"], "diferenca": d,

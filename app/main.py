@@ -76,6 +76,16 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
     app = FastAPI(title="Shape AI", docs_url=None, redoc_url=None, openapi_url=None)
     app.state.cfg, app.state.db = cfg, db
 
+    def tentar_json(pedido: list[dict], max_tokens: int, vezes: int = 3) -> dict:
+        """Plano em JSON: a IA às vezes devolve texto fora do formato; tenta de novo antes de devolver erro."""
+        for i in range(vezes):
+            try:
+                return json_da_ia(chamar_llm(pedido, max_tokens))
+            except HTTPException:
+                if i == vezes - 1:
+                    raise
+        return {}
+
     def chamar_llm(mensagens: list[dict], max_tokens: int = 900) -> str:
         if llm:
             return llm(mensagens)
@@ -358,10 +368,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
                                               "Responda SÓ com JSON, sem texto antes ou depois: "
                                               '{"dias":[{"dia":"Segunda","foco":"...","exercicios":[{"nome":"...","series":4,"reps":"10-12","descanso_s":60,'
                                               '"equipamento":"...","dica":"..."}]}],"observacoes":"..."}'}]
-        try:
-            d = json_da_ia(chamar_llm(pedido, 4000))
-        except HTTPException:  # resposta cortada ou fora do formato: uma nova tentativa antes de devolver erro
-            d = json_da_ia(chamar_llm(pedido, 4000))
+        d = tentar_json(pedido, 4000)
         for dia in d.get("dias") or []:
             for ex in dia.get("exercicios") or []:
                 ex["video"] = video(str(ex.get("nome") or ""))
@@ -380,11 +387,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
                                                       f"e {r['gasto']['proteina_g']} g de proteína. Comida brasileira, fácil de achar. Responda SÓ com JSON: "
                                                       '{"dias":[{"dia":"Segunda","refeicoes":[{"horario":"07:00","nome":"Café da manhã","itens":[{"alimento":"...",'
                                                       '"quantidade":"...","kcal":0}],"kcal":0}],"kcal_total":0}],"dicas":"..."}'}]
-        txt = chamar_llm(pedido_dieta, 6000)
-        try:
-            d = json_da_ia(txt)
-        except HTTPException:
-            d = json_da_ia(chamar_llm(pedido_dieta, 6000))
+        d = tentar_json(pedido_dieta, 6000)
         pid = db.exec("INSERT INTO planos(usuario,tipo,dados,criado) VALUES(?,?,?,?)", (u["id"], "dieta", json.dumps(d, ensure_ascii=False), agora())).lastrowid
         return {"id": pid, **d}
 
