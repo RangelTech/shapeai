@@ -52,6 +52,15 @@ section.bloco{padding:130px 0}
 .tela img{display:block;width:100%}
 .etq{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);font-weight:700;margin-bottom:12px;display:block}
 .app h3{font-size:clamp(34px,4vw,54px);margin-bottom:14px}.app p{color:var(--mut);font-size:18px}
+.chat-sec{display:grid;grid-template-columns:1fr .9fr;gap:56px;align-items:center}
+.famosas{color:var(--ac);font-weight:700;margin:6px 0 22px;font-size:16px}
+.fone{background:linear-gradient(180deg,#0f1a14,#08100b);border:1px solid #23402f;border-radius:34px;padding:20px;box-shadow:0 50px 140px rgba(124,255,178,.12)}
+.fone-cab{display:flex;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--bd);margin-bottom:14px}.fone-cab small{display:block;color:var(--ac);font-size:12px}
+.av{width:40px;height:40px;border-radius:12px;background:var(--ac);color:#03140a;display:grid;place-items:center;font-weight:900}
+.msg-b{opacity:0;transform:translateY(8px);transition:.5s;padding:11px 15px;border-radius:18px;font-size:14.5px;line-height:1.55;margin-bottom:10px;max-width:90%}
+.msg-b.on{opacity:1;transform:none}.msg-b.eu{background:#183a27;margin-left:auto;border-bottom-right-radius:4px}
+.msg-b.ela{background:rgba(124,255,178,.07);border:1px solid rgba(124,255,178,.22);border-bottom-left-radius:4px}
+@media (max-width:960px){.chat-sec{grid-template-columns:1fr}}
 .cinema{position:relative;min-height:90vh;display:grid;align-items:center;overflow:hidden}
 .cinema>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cinema:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,5,.92),rgba(4,6,5,.55) 55%,rgba(4,6,5,.2))}
@@ -71,13 +80,13 @@ footer{padding:40px 0;color:var(--mut);font-size:13px;border-top:1px solid var(-
 <body>
 <header class="topo"><div class="wrap">
   <a class="logo" href="/"><i>↗</i>Shape AI</a>
-  <nav><a class="lnk" href="#metodo">O método</a><a class="lnk" href="#app">O app</a><a class="lnk" href="#hormonios">Protocolo</a><a class="lnk" href="#planos">Planos</a><button class="btn btn-sec" data-entrar>Entrar</button></nav>
+  <nav><a class="lnk" href="#chat">Coach com IA</a><a class="lnk" href="#metodo">O método</a><a class="lnk" href="#app">O app</a><a class="lnk" href="#hormonios">Protocolo</a><a class="lnk" href="#planos">Planos</a><button class="btn btn-sec" data-entrar>Entrar</button></nav>
 </div></header>
 
 <section class="heroi">
   <div class="fundo" role="img" aria-label="Mulher e homem com corpos definidos em academia escura"></div>
   <div class="wrap"><div class="c rev">
-    <span class="selo">● O acompanhamento das influenciadoras fitness, agora para você</span>
+    <span class="selo">● A tecnologia que já acompanha influenciadoras famosas, agora para você</span>
     <h1 class="mega">O corpo de capa<br>começa <span class="verde">hoje.</span></h1>
     <p>Personal, nutri e coach com inteligência artificial, 24 horas no seu bolso. Treino, dieta casada com a sua rotina, tirzepatida e o seu protocolo hormonal em um app que não deixa você desistir.</p>
     <div class="acoes"><button class="btn btn-pri" data-entrar="codigo">Quero começar agora</button><a class="btn btn-sec" href="#app">Ver o app por dentro</a></div>
@@ -89,6 +98,29 @@ footer{padding:40px 0;color:var(--mut);font-size:13px;border-top:1px solid var(-
   <span>Treino <b>sob medida</b></span><span>Dieta <b>com horários</b></span><span>Tirzepatida <b>organizada</b></span><span>Protocolo <b>visual</b></span><span>Ranking <b>semanal</b></span><span>BF <b>calculado</b></span>
   <span>Treino <b>sob medida</b></span><span>Dieta <b>com horários</b></span><span>Tirzepatida <b>organizada</b></span><span>Protocolo <b>visual</b></span><span>Ranking <b>semanal</b></span><span>BF <b>calculado</b></span>
 </div></div>
+
+<section class="bloco" id="chat"><div class="wrap chat-sec">
+  <div class="rev">
+    <span class="etq">Coach com inteligência artificial</span>
+    <h2 class="tit mega">Um coach que<br><span class="verde">conversa com você.</span></h2>
+    <p class="lead">Pergunte qualquer coisa, a qualquer hora, como se mandasse mensagem para o seu personal. Ele conhece o seu corpo, a sua rotina, as suas metas e o que você comeu hoje. Cada resposta é feita para você, não copiada de um PDF.</p>
+    <ul class="lista-check">
+      <li>Monta e ajusta a dieta e o treino pela conversa</li>
+      <li>Troca refeição na hora: “só tenho ovo, arroz e frango”</li>
+      <li>Explica tirzepatida, exames e o seu protocolo, item por item</li>
+      <li>Lembra do seu histórico e cobra quando você some</li>
+    </ul>
+    <p class="famosas">✦ Tecnologia que já acompanha influenciadoras famosas no dia a dia.</p>
+    <button class="btn btn-pri" data-entrar="codigo">Conversar com o meu coach</button>
+  </div>
+  <div class="fone rev" data-conversa>
+    <div class="fone-cab"><span class="av">↗</span><div><b>Seu coach</b><small>● online agora</small></div></div>
+    <div class="msg-b eu">Treino às 6h e trabalho das 8h às 18h. Como como no dia?</div>
+    <div class="msg-b ela"><b>5h20</b> pão integral, 2 ovos e banana.<br><b>6h50</b> pós-treino: whey e 2 bananas.<br><b>12h30</b> 180 g de frango, arroz, feijão e salada.<br><b>16h</b> iogurte com granola.<br><b>20h</b> peixe e batata-doce. Total 2.430 kcal, 200 g de proteína. 💪</div>
+    <div class="msg-b eu">Hoje não deu tempo de almoçar 😩</div>
+    <div class="msg-b ela">Sem drama: no lanche das 16h troca por um sanduíche de frango no pão integral e eu ajusto o jantar. E olha: o Guilherme está a 6 pontos de você no ranking. Treino amanhã, combinado?</div>
+  </div>
+</div></section>
 
 <section class="bloco" id="metodo"><div class="wrap">
   <div class="corpos">
