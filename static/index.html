@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shape AI: treino, dieta e evolução com IA</title>
+<meta name="description" content="Seu personal e nutricionista com IA: calcula o seu BF, monta treino com vídeo e dieta dia a dia pela sua rotina, e transforma a constância em jogo.">
+<meta property="og:title" content="Shape AI: o seu shape, com plano de verdade">
+<meta property="og:description" content="Calcule o seu BF grátis. Treino com vídeo, dieta com horários e um ranking que não deixa você parar.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b130e'/><path d='M14 40l10-14 9 9 17-20' stroke='%237CFFB2' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="stylesheet" href="/s/estilo.css">
+<link rel="stylesheet" href="/s/cinema.css">
+<style>
+:root{--marca:#7CFFB2;--bg:#050806;--bg2:#0a0f0c;--card:#0f1712;--bd:#1b2a21}
+.heroi::after{background:radial-gradient(900px 500px at 75% 35%,rgba(124,255,178,.18),transparent 60%),linear-gradient(180deg,rgba(5,8,6,.2),rgba(5,8,6,.5) 60%,var(--bg))}
+.anel{position:relative;width:min(400px,100%);aspect-ratio:1;margin:0 auto}
+.anel svg{width:100%;height:100%;transform:rotate(-90deg)}
+.anel .arco{stroke-dasharray:1000;stroke-dashoffset:1000;animation:enche 3.2s cubic-bezier(.2,.7,.2,1) .4s forwards}
+@keyframes enche{to{stroke-dashoffset:var(--fim)}}
+.anel .meio{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.anel .meio b{display:block;font-size:64px;font-weight:900;letter-spacing:-.04em}
+.anel .meio span{color:var(--mut);font-size:14px}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.chips span{background:rgba(124,255,178,.1);border:1px solid rgba(124,255,178,.3);color:#c8ffe0;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700}
+.calc{background:linear-gradient(160deg,rgba(124,255,178,.08),var(--card));border:1px solid var(--bd);border-radius:28px;padding:32px;display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+.calc form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.calc label{display:grid;gap:6px;font-size:14px;color:var(--mut)}
+.calc input,.calc select{background:#08100b;border:1px solid var(--bd);border-radius:12px;padding:12px;color:var(--fg);font:inherit}
+.calc .cheia{grid-column:1/-1}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.res div{background:#08100b;border:1px solid var(--bd);border-radius:16px;padding:16px}
+.res b{display:block;font-size:32px;font-weight:900;color:var(--ac)}.res small{color:var(--mut)}
+.rank{display:grid;gap:8px;max-width:440px}
+.rank div{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 16px}
+.rank div.eu{border-color:var(--ac);background:rgba(124,255,178,.08)}
+.rank em{font-style:normal;color:var(--mut);font-size:12px}
+@media (max-width:860px){.calc{grid-template-columns:1fr}.calc form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="wrap">
+  <a class="logo" href="/"><i>↗</i>Shape AI</a>
+  <nav><a class="lnk" href="#calculadora">Calcule seu BF</a><a class="lnk" href="#como">Como funciona</a><a class="lnk" href="#jogo">Ranking</a><a class="lnk" href="#planos">Planos</a><button class="btn btn-sec" data-entrar>Entrar</button></nav>
+</div></header>
+
+<main>
+<section class="heroi">
+  <div class="aurora" aria-hidden="true"></div><div class="grade-fina" aria-hidden="true"></div>
+  <div class="wrap heroi-split">
+    <div>
+      <span class="selo"><b></b>Personal + nutricionista com IA, no seu bolso</span>
+      <h1>O shape que você quer, com <em>plano de verdade</em>.</h1>
+      <p class="lead">Você conta a rotina e a meta. O Shape AI calcula o seu BF, monta o treino com vídeo de cada exercício e a dieta dia a dia nos seus horários, e transforma constância em jogo.</p>
+      <div class="ctas"><a class="btn btn-pri btn-lg pulsa" href="#calculadora">Calcular meu BF grátis</a><a class="btn btn-sec btn-lg" href="#como">Como funciona</a></div>
+      <div class="numeros"><div><b>30 s</b><span>para saber o seu BF</span></div><div><b>7 dias</b><span>de dieta com horários e calorias</span></div><div><b>+20</b><span>pontos por treino feito</span></div></div>
+    </div>
+    <div aria-hidden="true">
+      <div class="anel"><svg viewBox="0 0 340 340"><circle cx="170" cy="170" r="150" fill="none" stroke="#14231a" stroke-width="22"/>
+        <circle class="arco" cx="170" cy="170" r="150" fill="none" stroke="url(#gv)" stroke-width="22" stroke-linecap="round" style="--fim:330"/>
+        <defs><linearGradient id="gv"><stop offset="0" stop-color="#7CFFB2"/><stop offset="1" stop-color="#3ad7ff"/></linearGradient></defs></svg>
+        <div class="meio"><div><b>68%</b><span>da meta de peso concluída</span></div></div></div>
+      <div class="chips"><span>BF 21,4% → 18%</span><span>Sequência 12 dias</span><span>Nível Disciplinado</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="faixa" aria-hidden="true"><div>
+  <span>Cálculo de BF</span><span>Treino com vídeo</span><span>Dieta dia a dia</span><span>Substituições pelo chat</span><span>Fotos de evolução</span><span>Ranking semanal</span><span>Metas</span>
+  <span>Cálculo de BF</span><span>Treino com vídeo</span><span>Dieta dia a dia</span><span>Substituições pelo chat</span><span>Fotos de evolução</span><span>Ranking semanal</span><span>Metas</span>
+</div></div>
+
+<section class="bloco" id="calculadora"><div class="wrap">
+  <div class="olho">Grátis, agora</div>
+  <h2 class="rev">Quanto de gordura você tem? E quanto deve comer?</h2>
+  <p class="sub rev">Método da Marinha dos EUA (só com fita métrica) e gasto calórico pela fórmula de Mifflin-St Jeor. Sem cadastro.</p>
+  <div class="calc rev">
+    <form id="f-calc">
+      <label>Sexo<select id="c-sexo"><option value="m">Homem</option><option value="f">Mulher</option></select></label>
+      <label>Idade<input id="c-idade" type="number" min="14" max="90" value="30" required></label>
+      <label>Altura (cm)<input id="c-alt" type="number" min="120" max="230" value="175" required></label>
+      <label>Peso (kg)<input id="c-peso" type="number" step=".1" min="35" max="250" value="80" required></label>
+      <label>Pescoço (cm)<input id="c-pesc" type="number" step=".1" value="38" required></label>
+      <label>Cintura no umbigo (cm)<input id="c-cint" type="number" step=".1" value="88" required></label>
+      <label id="l-quad" hidden>Quadril (cm)<input id="c-quad" type="number" step=".1" value="98"></label>
+      <label>Objetivo<select id="c-obj"><option value="emagrecer">Emagrecer</option><option value="definir">Definir</option><option value="manter">Manter</option><option value="ganhar_massa">Ganhar massa</option></select></label>
+      <button class="btn btn-pri btn-lg cheia">Calcular</button><div class="msg cheia" id="c-msg"></div>
+    </form>
+    <div><div class="res" id="res"><div><small>Gordura corporal</small><b>?</b></div><div><small>Calorias por dia</small><b>?</b></div><div><small>Proteína</small><b>?</b></div><div><small>Água</small><b>?</b></div></div>
+      <p class="dim" id="c-cta" style="margin-top:14px;font-size:14px" hidden>Agora deixe o Shape AI montar o treino e a dieta em cima desses números. <a href="#" data-entrar style="color:var(--ac)">Criar conta grátis</a></p></div>
+  </div>
+</div></section>
+
+<section class="bloco" id="como" style="background:var(--bg2)"><div class="wrap">
+  <div class="olho">Como funciona</div>
+  <h2 class="rev">Feito para a sua rotina, não para a de um atleta.</h2>
+  <div class="passos" style="margin-top:40px">
+    <div class="passo rev"><h3>Conte a sua vida</h3><p>Horário de trabalho, quantos dias pode treinar, em casa ou academia, o que você não come. A IA faz as perguntas.</p></div>
+    <div class="passo rev"><h3>Receba o plano</h3><p>Treino da semana com vídeo curto de cada exercício e dieta dia a dia, com horários e calorias que batem com a sua meta.</p></div>
+    <div class="passo rev"><h3>Registre e evolua</h3><p>Marque o treino feito, fotografe o prato, atualize as medidas. Seu BF, suas metas e sua linha do tempo de fotos vão se movendo.</p></div>
+  </div>
+  <div class="grade" style="margin-top:24px">
+    <div class="beneficio rev"><div class="ic">⇄</div><h3>Substitui na hora</h3><p>"Hoje só tenho isto na geladeira": o coach monta a troca mantendo as calorias.</p></div>
+    <div class="beneficio rev"><div class="ic">▶</div><h3>Vídeo de cada exercício</h3><p>Curtos, mostrando o equipamento e o movimento certo.</p></div>
+    <div class="beneficio rev"><div class="ic">◎</div><h3>Metas visíveis</h3><p>Peso e BF com barra de progresso: você vê o quanto falta.</p></div>
+    <div class="beneficio rev"><div class="ic">▣</div><h3>Linha do tempo</h3><p>Suas fotos lado a lado mostram o que a balança não mostra.</p></div>
+  </div>
+</div></section>
+
+<section class="bloco" id="jogo"><div class="wrap heroi-split" style="align-items:start">
+  <div>
+    <div class="olho">Constância vira jogo</div>
+    <h2 class="rev">Pontos, níveis, sequência e ranking da semana.</h2>
+    <p class="sub rev">Treino feito vale 20 pontos, prato fotografado 10, medida 15, foto de evolução 25. Para o ranking nunca ficar parado, você também disputa com rivais da IA, sempre identificados como rivais.</p>
+  </div>
+  <div class="rank rev">
+    <div><span>1. Rafa <em>rival da IA</em></span><b>412</b></div>
+    <div class="eu"><span>2. Você</span><b>398</b></div>
+    <div><span>3. Duda <em>rival da IA</em></span><b>371</b></div>
+    <div><span>4. Carla</span><b>355</b></div>
+  </div>
+</div></section>
+
+<section class="bloco" id="planos" style="background:var(--bg2)"><div class="wrap">
+  <div class="olho">Planos</div>
+  <h2 class="rev">Menos que uma consulta. Todo dia com você.</h2>
+  <p class="sub rev">Grátis: calculadora, perfil, medidas, metas e o primeiro treino. Preço de lançamento nos planos.</p>
+  <div class="planos" data-planos="/api/planos" data-destaque="0"></div>
+</div></section>
+
+<section class="bloco"><div class="wrap" style="max-width:860px">
+  <div class="olho">Dúvidas</div>
+  <h2 style="margin-bottom:24px">Perguntas frequentes</h2>
+  <details><summary>O BF é confiável?</summary><p>O método da Marinha dos EUA é usado no mundo todo e só precisa de fita métrica. Tem margem de erro de alguns pontos; o que importa é a tendência ao longo das semanas, medindo sempre do mesmo jeito.</p></details>
+  <details><summary>A IA indica hormônio, peptídeo ou remédio para emagrecer?</summary><p>Não. Isso é decisão do seu médico. O Shape AI só guarda o que o médico prescreveu, num calendário com lembretes, e nunca sugere substância nem dose.</p></details>
+  <details><summary>Substitui personal e nutricionista?</summary><p>É um apoio diário. Para lesões, doenças ou necessidades especiais, siga um profissional; o app ajuda você a cumprir o plano dele.</p></details>
+  <details><summary>Como cancelo?</summary><p>Pela própria Cakto, a qualquer momento. Nos primeiros 7 dias o dinheiro volta inteiro.</p></details>
+</div></section>
+
+<section class="fechamento"><div class="wrap">
+  <h2 class="rev">Daqui a 90 dias você vai agradecer por ter começado hoje.</h2>
+  <p class="rev">Comece pelo seu BF. Leva 30 segundos.</p>
+  <a class="btn btn-pri btn-lg pulsa" href="#calculadora">Calcular meu BF</a>
+</div></section>
+</main>
+<footer class="rodape"><div class="wrap"><span>Shape AI, um produto Rangel Tech · não substitui acompanhamento médico</span><span>contato@rangeltech.net</span></div></footer>
+<div class="fixo-cel"><a class="btn btn-pri" href="#calculadora">Calcular meu BF</a></div>
+<div class="modal" id="m-entrar" hidden role="dialog" aria-modal="true" aria-labelledby="m-tit"><div class="caixa"><button class="x" data-fechar aria-label="Fechar">×</button></div></div>
+<script>
+;(() => {
+  const $ = (q) => document.querySelector(q)
+  $('#c-sexo').onchange = () => { $('#l-quad').hidden = $('#c-sexo').value !== 'f' }
+  $('#f-calc').onsubmit = async (e) => {
+    e.preventDefault(); const m = $('#c-msg'); m.textContent = 'Calculando…'; m.className = 'msg cheia'
+    try {
+      const r = await fetch('/api/calcular', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sexo: $('#c-sexo').value, idade: +$('#c-idade').value,
+        altura_cm: +$('#c-alt').value, peso: +$('#c-peso').value, pescoco: +$('#c-pesc').value, cintura: +$('#c-cint').value, quadril: +$('#c-quad').value, objetivo: $('#c-obj').value, atividade: 'moderado' }) })
+      const j = await r.json(); if (!r.ok) throw new Error(j.detail || 'confira as medidas')
+      $('#res').innerHTML = `<div><small>Gordura corporal</small><b>${String(j.bf).replace('.', ',')}%</b><small>${j.categoria}</small></div><div><small>Calorias por dia</small><b>${j.calorias_alvo}</b><small>gasto ${j.gasto_diario} kcal</small></div>
+        <div><small>Proteína</small><b>${j.proteina_g} g</b><small>por dia</small></div><div><small>Água</small><b>${(j.agua_ml / 1000).toFixed(1).replace('.', ',')} L</b><small>por dia</small></div>`
+      m.textContent = ''; $('#c-cta').hidden = false
+    } catch (err) { m.textContent = err.message; m.className = 'msg cheia erro' }
+  }
+})()
+</script>
+<script src="/s/login.js" data-conta="/api/conta" data-destino="/painel"></script>
+<script src="/s/cinema.js"></script>
+<script src="/s/olho.js"></script>
+</body>
+</html>

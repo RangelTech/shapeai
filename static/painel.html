@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel · Shape AI</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b130e'/><path d='M14 40l10-14 9 9 17-20' stroke='%237CFFB2' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="stylesheet" href="/s/estilo.css">
+<link rel="stylesheet" href="/s/cinema.css">
+<style>
+:root{--marca:#7CFFB2;--bg:#050806;--bg2:#0a0f0c;--card:#0f1712;--bd:#1b2a21}
+body{background:radial-gradient(900px 400px at 85% -10%,rgba(124,255,178,.1),transparent 60%),var(--bg)}
+.topo{background:rgba(5,8,6,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.abas{display:flex;gap:2px;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:4px;overflow:auto;max-width:100%}
+.abas button{background:none;border:0;color:var(--mut);padding:8px 13px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+.abas button[aria-selected=true]{background:#183a27;color:#fff}
+main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
+.cartao{background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:22px;margin-bottom:14px}
+.cab{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:#08100b;border:1px solid var(--bd);border-radius:16px;padding:16px}.kpi small{color:var(--mut)}.kpi b{display:block;font-size:28px;font-weight:900}
+.barra{height:10px;background:#14231a;border-radius:99px;overflow:hidden;margin-top:8px}.barra i{display:block;height:100%;background:linear-gradient(90deg,#7CFFB2,#3ad7ff);border-radius:99px}
+.form{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.form label{display:grid;gap:6px;font-size:14px;color:var(--mut)}
+.form input,.form select,.form textarea,.envio input{background:#08100b;border:1px solid var(--bd);border-radius:12px;padding:11px 12px;color:var(--fg);font:inherit;width:100%}
+.form .cheia{grid-column:1/-1}
+.dia{background:#08100b;border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:10px}
+.dia h4{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ex{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-top:1px solid var(--bd)}.ex small{color:var(--mut)}
+.ex a{color:var(--ac);font-weight:700;text-decoration:none;white-space:nowrap}
+.chat{display:flex;flex-direction:column;gap:10px;min-height:320px;max-height:56vh;overflow:auto}
+.b{padding:11px 15px;border-radius:18px;max-width:82%;line-height:1.55;white-space:pre-wrap}.b.usuario{background:#14231a;align-self:flex-end}.b.ia{background:rgba(124,255,178,.08);border:1px solid rgba(124,255,178,.25)}
+.envio{display:flex;gap:8px;margin-top:12px}
+.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}.fotos figure{margin:0}.fotos img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:14px}.fotos figcaption{font-size:12px;color:var(--mut);margin-top:4px}
+.rk{display:flex;justify-content:space-between;padding:12px 14px;border:1px solid var(--bd);border-radius:12px;margin-bottom:6px;background:#08100b}.rk.voce{border-color:var(--ac)}.rk em{font-style:normal;color:var(--mut);font-size:12px}
+.semana{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}.semana span{text-align:center;padding:8px 0;border-radius:10px;background:#08100b;border:1px solid var(--bd);font-size:12px;color:var(--mut)}
+.semana span.prev{border-color:#3ad7ff;color:#fff}.semana span.feito{background:rgba(124,255,178,.2);border-color:var(--ac);color:#fff}
+.aviso{background:rgba(255,200,80,.08);border:1px solid rgba(255,200,80,.35);border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:12px}
+.msg.erro{color:#f87171}.msg{min-height:20px;font-size:14px;margin-top:6px}
+@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="wrap">
+  <a class="logo" href="/painel"><i>↗</i>Shape AI</a>
+  <nav class="abas" role="tablist">
+    <button data-aba="hoje" aria-selected="true">Hoje</button><button data-aba="treino">Treino</button><button data-aba="dieta">Dieta</button><button data-aba="medidas">Medidas</button>
+    <button data-aba="fotos">Fotos</button><button data-aba="ranking">Ranking</button><button data-aba="coach">Coach</button><button data-aba="receitas">Receitas médicas</button><button data-aba="perfil">Perfil</button><button data-aba="plano">Plano</button>
+  </nav>
+  <button class="btn btn-ghost" id="sair">Sair</button>
+</div></header>
+<main class="p">
+  <section data-painel="hoje">
+    <div class="cartao" id="sem-perfil" hidden><b>Comece pelo seu perfil.</b> <span class="dim">Rotina, meta e medidas: é com isso que o plano é montado.</span> <button class="btn btn-pri" data-ir="perfil">Preencher</button></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="cartao" style="margin-top:14px"><div class="cab"><h3>Check-in de hoje</h3><span class="dim" id="kcal-hoje"></span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-pri" data-check="treino">Treinei hoje (+20)</button><button class="btn btn-sec" data-check="agua">Bati a meta de água (+5)</button><button class="btn btn-sec" data-check="sono">Dormi 7h+ (+5)</button>
+        <label class="btn btn-sec">Foto do prato (+10)<input type="file" accept="image/*" capture="environment" id="foto-prato" hidden></label>
+      </div><div class="msg" id="check-msg"></div></div>
+    <div class="cartao" id="metas"></div>
+  </section>
+  <section data-painel="treino" hidden><div class="cartao"><div class="cab"><h3>Treino da semana</h3><button class="btn btn-pri" id="gerar-treino">Montar meu treino</button></div><div class="msg" id="tr-msg"></div><div id="treino"></div></div></section>
+  <section data-painel="dieta" hidden><div class="cartao"><div class="cab"><h3>Dieta dia a dia</h3><button class="btn btn-pri" id="gerar-dieta">Montar minha dieta</button></div><div class="msg" id="di-msg"></div><div id="dieta"></div></div></section>
+  <section data-painel="medidas" hidden>
+    <div class="cartao"><h3 style="margin-bottom:12px">Nova medida</h3><form class="form" id="f-med">
+      <label>Data<input type="date" id="m-data"></label><label>Peso (kg)<input id="m-peso" type="number" step=".1"></label><label>Pescoço (cm)<input id="m-pesc" type="number" step=".1"></label>
+      <label>Cintura no umbigo (cm)<input id="m-cint" type="number" step=".1"></label><label>Quadril (cm)<input id="m-quad" type="number" step=".1"></label><label>Braço (cm)<input id="m-braco" type="number" step=".1"></label>
+      <button class="btn btn-pri cheia">Salvar medida (+15)</button><div class="msg cheia" id="m-msg"></div></form></div>
+    <div class="cartao"><h3 style="margin-bottom:8px">Histórico</h3><div id="hist-med"></div></div>
+  </section>
+  <section data-painel="fotos" hidden><div class="cartao"><div class="cab"><h3>Linha do tempo</h3><label class="btn btn-pri">Adicionar foto (+25)<input type="file" accept="image/*" id="foto-evol" hidden></label></div><div class="msg" id="f-msg"></div><div class="fotos" id="lista-fotos"></div></div></section>
+  <section data-painel="ranking" hidden><div class="cartao"><div class="cab"><h3>Ranking da semana</h3><span class="dim">Rivais da IA sempre aparecem identificados</span></div><div id="ranking"></div></div></section>
+  <section data-painel="coach" hidden><div class="cartao"><h3 style="margin-bottom:10px">Seu coach</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px" id="sugestoes"><button class="btn btn-sec">Hoje só tenho ovo, arroz e frango. O que faço?</button><button class="btn btn-sec">Troca o treino de hoje, tô com 30 minutos</button><button class="btn btn-sec">Como estou em relação à meta?</button></div>
+    <div class="chat" id="chat"></div><form class="envio" id="f-chat"><input id="chat-txt" placeholder="Pergunte ao seu coach…" autocomplete="off"><button class="btn btn-pri">Enviar</button></form><div class="msg" id="chat-msg"></div></div></section>
+  <section data-painel="receitas" hidden>
+    <div class="aviso">Aqui você registra SOMENTE o que o seu médico prescreveu, para ter calendário e lembrete. O Shape AI não indica substância, dose nem protocolo.</div>
+    <div class="cartao"><h3 style="margin-bottom:12px">Registrar prescrição</h3><form class="form" id="f-rx">
+      <label>Nome (como na receita)<input id="rx-nome" required></label><label>Dose prescrita<input id="rx-dose" required placeholder="como está na receita"></label><label>Horário<input id="rx-hora" type="time"></label>
+      <label class="cheia">Dias da semana<span id="rx-dias" style="display:flex;gap:6px;flex-wrap:wrap"></span></label>
+      <label>Médico(a)<input id="rx-med"></label><label class="cheia" style="display:flex;gap:8px;align-items:center;flex-direction:row"><input type="checkbox" id="rx-ok" style="width:auto"> Confirmo que foi prescrito pelo meu médico</label>
+      <button class="btn btn-pri cheia">Salvar</button><div class="msg cheia" id="rx-msg"></div></form></div>
+    <div id="lista-rx"></div>
+  </section>
+  <section data-painel="perfil" hidden><div class="cartao"><h3 style="margin-bottom:12px">Seu perfil</h3><form class="form" id="f-perfil">
+    <label>Nome<input id="p-nome" required></label><label>Sexo<select id="p-sexo"><option value="m">Homem</option><option value="f">Mulher</option></select></label><label>Nascimento<input id="p-nasc" type="date" required></label>
+    <label>Altura (cm)<input id="p-alt" type="number" required></label><label>Atividade no dia a dia<select id="p-ativ"><option value="sedentario">Sedentário</option><option value="leve">Leve</option><option value="moderado" selected>Moderado</option><option value="intenso">Intenso</option><option value="atleta">Atleta</option></select></label>
+    <label>Objetivo<select id="p-obj"><option value="emagrecer">Emagrecer</option><option value="definir">Definir</option><option value="manter">Manter</option><option value="ganhar_massa">Ganhar massa</option></select></label>
+    <label>Dias de treino por semana<input id="p-dias" type="number" min="1" max="7" value="4"></label><label>Minutos por treino<input id="p-min" type="number" value="60"></label><label>Onde treina<select id="p-local"><option value="academia">Academia</option><option value="casa">Em casa</option></select></label>
+    <label>Meta de peso (kg)<input id="p-mpeso" type="number" step=".1"></label><label>Meta de BF (%)<input id="p-mbf" type="number" step=".1"></label><span></span>
+    <label class="cheia">Sua rotina (horários de trabalho, sono, refeições)<textarea id="p-rot" rows="2"></textarea></label>
+    <label class="cheia">Restrições e preferências (alergias, o que não come)<textarea id="p-res" rows="2"></textarea></label>
+    <button class="btn btn-pri cheia">Salvar perfil</button><div class="msg cheia" id="p-msg"></div></form></div></section>
+  <section data-painel="plano" hidden><div class="cartao" id="meu-plano"></div><div class="planos" id="planos"></div></section>
+</main>
+<div class="modal" id="m-entrar" hidden role="dialog" aria-modal="true" aria-labelledby="m-tit"><div class="caixa"><button class="x" data-fechar aria-label="Fechar">×</button></div></div>
+<script>
+;(() => {
+  const $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)]
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
+  async function api(url, op = {}) {
+    const r = await fetch(url, { ...op, headers: op.body instanceof Blob ? (op.headers || {}) : { 'Content-Type': 'application/json', ...(op.headers || {}) } })
+    let j = {}; try { j = await r.json() } catch {}
+    if (r.status === 401) { location.href = '/?entrar=1'; throw new Error('entre de novo') }
+    if (!r.ok) { const e = new Error(typeof j.detail === 'string' ? j.detail : 'Não deu certo.'); e.status = r.status; throw e }
+    return j
+  }
+  const post = (u, b) => api(u, { method: 'POST', body: JSON.stringify(b || {}) })
+  const mais = (e) => e.status === 402 ? ' <a href="#" data-ir="plano" style="color:var(--ac)">Ver planos</a>' : ''
+  const erro = (el, e) => { el.innerHTML = esc(e.message) + mais(e); el.className = 'msg erro' }
+  let C = null
+  const DIAS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
+  function abrir(n) {
+    $$('[data-aba]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.aba === n)))
+    $$('[data-painel]').forEach((p) => (p.hidden = p.dataset.painel !== n)); history.replaceState(null, '', '#' + n)
+    ;({ hoje, treino, dieta, medidas, fotos, ranking, coach, receitas, perfil, plano })[n]?.()
+  }
+  $$('[data-aba]').forEach((b) => (b.onclick = () => abrir(b.dataset.aba)))
+  document.addEventListener('click', (e) => { const g = e.target.closest('[data-ir]'); if (g) { e.preventDefault(); abrir(g.dataset.ir) } })
+  $('#sair').onclick = async () => { await post('/api/sair'); location.href = '/' }
+  const conta = async () => (C = await api('/api/conta'))
+
+  async function hoje() {
+    await conta(); $('#sem-perfil').hidden = !!C.perfil
+    const g = C.gasto || {}, m = C.medida || {}
+    $('#kpis').innerHTML = `<div class="kpi"><small>Nível</small><b>${esc(C.pontos.nivel)}</b><small>${C.pontos.pontos} pontos${C.pontos.proximo ? ` · faltam ${C.pontos.faltam} para ${esc(C.pontos.proximo)}` : ''}</small></div>
+      <div class="kpi"><small>Sequência</small><b>${C.sequencia} dia${C.sequencia === 1 ? '' : 's'}</b><small>não deixe zerar</small></div>
+      <div class="kpi"><small>BF</small><b>${m.bf ? String(m.bf).replace('.', ',') + '%' : '—'}</b><small>${esc(C.categoria_bf || 'registre as medidas')}</small></div>
+      <div class="kpi"><small>Calorias alvo</small><b>${g.calorias_alvo || '—'}</b><small>${g.proteina_g ? g.proteina_g + ' g de proteína' : ''}</small></div>`
+    $('#kcal-hoje').textContent = C.kcal_hoje ? `${C.kcal_hoje} kcal registradas hoje` : ''
+    const mt = C.metas || {}
+    $('#metas').innerHTML = '<h3 style="margin-bottom:10px">Metas</h3>' + (Object.keys(mt).length ? Object.entries(mt).map(([k, v]) => `<div style="margin-bottom:12px"><div class="cab" style="margin:0"><b>${k === 'peso' ? 'Peso' : 'Gordura corporal'}</b><span class="dim">${v.inicio} → ${v.atual} (meta ${v.alvo})</span></div><div class="barra"><i style="width:${v.pct}%"></i></div><small class="dim">${v.pct}% do caminho</small></div>`).join('')
+      : '<p class="dim">Defina metas no perfil e registre medidas para ver o progresso.</p>')
+  }
+  $$('[data-check]').forEach((b) => (b.onclick = async () => { try { const r = await post('/api/checkin', { tipo: b.dataset.check, ref: new Date().toDateString() }); $('#check-msg').textContent = r.ganhou ? `+${r.ganhou} pontos!` : 'Já registrado hoje.'; $('#check-msg').className = 'msg'; hoje() } catch (e) { erro($('#check-msg'), e) } }))
+  $('#foto-prato').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; const kcal = prompt('Quantas calorias, mais ou menos? (opcional)') || 0
+    try { const r = await api(`/api/fotos?tipo=refeicao&kcal=${+kcal || 0}`, { method: 'POST', body: f }); $('#check-msg').textContent = `Prato registrado! +${r.ganhou} pontos`; hoje() } catch (err) { erro($('#check-msg'), err) } e.target.value = '' }
+
+  const htmlTreino = (t) => t.dias ? t.dias.map((d) => `<div class="dia"><h4>${esc(d.dia)} <small class="dim">${esc(d.foco || '')}</small></h4>${(d.exercicios || []).map((x) => `<div class="ex"><div><b>${esc(x.nome)}</b> <small>${x.series}x${esc(x.reps)} · descanso ${x.descanso_s}s · ${esc(x.equipamento || '')}</small><br><small>${esc(x.dica || '')}</small></div><a href="${esc(x.video)}" target="_blank" rel="noopener">Ver vídeo</a></div>`).join('')}</div>`).join('') + (t.observacoes ? `<p class="dim">${esc(t.observacoes)}</p>` : '') : '<p class="dim">Toque em Montar meu treino.</p>'
+  async function treino() { $('#treino').innerHTML = htmlTreino(await api('/api/plano/treino')) }
+  $('#gerar-treino').onclick = async (e) => { e.target.disabled = true; $('#tr-msg').textContent = 'O coach está montando o seu treino…'; $('#tr-msg').className = 'msg'
+    try { $('#treino').innerHTML = htmlTreino(await post('/api/plano/treino')); $('#tr-msg').textContent = '' } catch (err) { erro($('#tr-msg'), err) } e.target.disabled = false }
+  const htmlDieta = (d) => d.dias ? d.dias.map((x) => `<div class="dia"><h4>${esc(x.dia)} <small class="dim">${x.kcal_total || ''} kcal</small></h4>${(x.refeicoes || []).map((r) => `<div class="ex"><div><b>${esc(r.horario)} · ${esc(r.nome)}</b><br><small>${(r.itens || []).map((i) => `${esc(i.alimento)} (${esc(i.quantidade)})`).join(', ')}</small></div><small>${r.kcal || ''} kcal</small></div>`).join('')}</div>`).join('') + (d.dicas ? `<p class="dim">${esc(d.dicas)}</p>` : '') : '<p class="dim">Toque em Montar minha dieta.</p>'
+  async function dieta() { $('#dieta').innerHTML = htmlDieta(await api('/api/plano/dieta')) }
+  $('#gerar-dieta').onclick = async (e) => { e.target.disabled = true; $('#di-msg').textContent = 'Montando os 7 dias com as suas calorias…'; $('#di-msg').className = 'msg'
+    try { $('#dieta').innerHTML = htmlDieta(await post('/api/plano/dieta')); $('#di-msg').textContent = '' } catch (err) { erro($('#di-msg'), err) } e.target.disabled = false }
+
+  async function medidas() { $('#m-data').value ||= new Date().toISOString().slice(0, 10); const { medidas } = await api('/api/medidas')
+    $('#hist-med').innerHTML = medidas.length ? medidas.slice().reverse().map((m) => `<div class="ex"><div><b>${esc(m.data)}</b> <small>${m.peso ? m.peso + ' kg' : ''}${m.cintura ? ' · cintura ' + m.cintura : ''}${m.quadril ? ' · quadril ' + m.quadril : ''}</small></div><b>${m.bf ? String(m.bf).replace('.', ',') + '% BF' : ''}</b></div>`).join('') : '<p class="dim">Nenhuma medida ainda.</p>' }
+  $('#f-med').onsubmit = async (e) => { e.preventDefault(); try { const r = await post('/api/medidas', { data: $('#m-data').value, peso: $('#m-peso').value, pescoco: $('#m-pesc').value, cintura: $('#m-cint').value, quadril: $('#m-quad').value, braco: $('#m-braco').value })
+    $('#m-msg').textContent = `Salvo${r.medida.bf ? ': BF ' + String(r.medida.bf).replace('.', ',') + '%' : ''}${r.ganhou ? ' · +' + r.ganhou + ' pontos' : ''}`; $('#m-msg').className = 'msg'; medidas() } catch (err) { erro($('#m-msg'), err) } }
+
+  async function fotos() { const { fotos } = await api('/api/fotos?tipo=evolucao'); $('#lista-fotos').innerHTML = fotos.length ? fotos.map((f) => `<figure><img src="${f.url}" alt="" loading="lazy"><figcaption>${new Date(f.criado * 1000).toLocaleDateString('pt-BR')}</figcaption></figure>`).join('') : '<p class="dim">Tire uma foto de frente, de lado e de costas, sempre no mesmo lugar e luz.</p>' }
+  $('#foto-evol').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; try { const r = await api('/api/fotos?tipo=evolucao', { method: 'POST', body: f }); $('#f-msg').textContent = `+${r.ganhou} pontos`; $('#f-msg').className = 'msg'; fotos() } catch (err) { erro($('#f-msg'), err) } e.target.value = '' }
+
+  async function ranking() { const r = await api('/api/ranking'); $('#ranking').innerHTML = r.ranking.map((x) => `<div class="rk ${x.voce ? 'voce' : ''}"><span>${x.posicao}. ${esc(x.nome.replace(' (rival da IA)', ''))} ${x.simulado ? '<em>rival da IA</em>' : ''}</span><b>${x.pontos}</b></div>`).join('') }
+
+  async function coach() { const { mensagens } = await api('/api/conversa'); $('#chat').innerHTML = mensagens.length ? mensagens.map((m) => `<div class="b ${m.papel}">${esc(m.texto)}</div>`).join('') : '<div class="b ia">Fala! Sou o seu coach. Pergunte sobre treino, dieta, substituições ou a sua meta.</div>'; $('#chat').scrollTop = 1e9 }
+  async function enviar(t) { if (!t) return; $('#chat').insertAdjacentHTML('beforeend', `<div class="b usuario">${esc(t)}</div><div class="b ia" id="pens">Pensando…</div>`); $('#chat').scrollTop = 1e9
+    try { const r = await post('/api/conversa', { texto: t }); $('#pens').outerHTML = `<div class="b ia">${esc(r.resposta)}</div>` } catch (e) { $('#pens')?.remove(); erro($('#chat-msg'), e) } $('#chat').scrollTop = 1e9 }
+  $('#f-chat').onsubmit = (e) => { e.preventDefault(); const t = $('#chat-txt').value.trim(); $('#chat-txt').value = ''; enviar(t) }
+  $$('#sugestoes button').forEach((b) => (b.onclick = () => enviar(b.textContent)))
+
+  $('#rx-dias').innerHTML = DIAS.map((d, i) => `<label style="display:flex;gap:4px;align-items:center;flex-direction:row"><input type="checkbox" value="${i}" style="width:auto">${d}</label>`).join('')
+  async function receitas() { const r = await api('/api/prescricoes'); $('#lista-rx').innerHTML = r.prescricoes.map((p) => `<div class="cartao"><div class="cab"><div><b>${esc(p.nome)}</b> <span class="dim">${esc(p.dose)}${p.horario ? ' · ' + esc(p.horario) : ''}${p.medico ? ' · ' + esc(p.medico) : ''}</span></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-pri" data-feito="${p.id}">Feito hoje</button><button class="btn btn-ghost" data-apagar="${p.id}">Apagar</button></div></div>
+      <div class="semana">${p.semana.map((s, i) => `<span class="${s.feito ? 'feito' : s.previsto ? 'prev' : ''}">${DIAS[i]}</span>`).join('')}</div></div>`).join('')
+    $$('[data-feito]').forEach((b) => (b.onclick = async () => { await post(`/api/prescricoes/${b.dataset.feito}/feito`); receitas() }))
+    $$('[data-apagar]').forEach((b) => (b.onclick = async () => { if (confirm('Apagar este registro?')) { await api(`/api/prescricoes/${b.dataset.apagar}`, { method: 'DELETE' }); receitas() } })) }
+  $('#f-rx').onsubmit = async (e) => { e.preventDefault(); try { await post('/api/prescricoes', { nome: $('#rx-nome').value, dose: $('#rx-dose').value, horario: $('#rx-hora').value, medico: $('#rx-med').value, aceite_medico: $('#rx-ok').checked, dias: $$('#rx-dias input:checked').map((c) => +c.value) }); $('#rx-msg').textContent = 'Salvo.'; $('#rx-msg').className = 'msg'; receitas() } catch (err) { erro($('#rx-msg'), err) } }
+
+  async function perfil() { await conta(); const p = C.perfil; if (!p) return
+    $('#p-nome').value = p.nome; $('#p-sexo').value = p.sexo; $('#p-nasc').value = p.nascimento; $('#p-alt').value = p.altura_cm; $('#p-ativ').value = p.atividade; $('#p-obj').value = p.objetivo
+    $('#p-dias').value = p.dias_treino; $('#p-min').value = p.minutos_treino; $('#p-local').value = p.local_treino; $('#p-mpeso').value = p.meta_peso || ''; $('#p-mbf').value = p.meta_bf || ''; $('#p-rot').value = p.rotina; $('#p-res').value = p.restricoes }
+  $('#f-perfil').onsubmit = async (e) => { e.preventDefault(); try { await api('/api/perfil', { method: 'PUT', body: JSON.stringify({ nome: $('#p-nome').value, sexo: $('#p-sexo').value, nascimento: $('#p-nasc').value, altura_cm: $('#p-alt').value, atividade: $('#p-ativ').value, objetivo: $('#p-obj').value,
+    dias_treino: $('#p-dias').value, minutos_treino: $('#p-min').value, local_treino: $('#p-local').value, meta_peso: $('#p-mpeso').value, meta_bf: $('#p-mbf').value, rotina: $('#p-rot').value, restricoes: $('#p-res').value }) })
+    $('#p-msg').textContent = 'Perfil salvo. Agora registre as suas medidas.'; $('#p-msg').className = 'msg' } catch (err) { erro($('#p-msg'), err) } }
+
+  async function plano() { await conta(); $('#meu-plano').innerHTML = C.plano ? `<b>Plano ${esc(C.plano)}</b> ativo.` : '<b>Plano grátis.</b> <span class="dim">Calculadora, medidas, metas, primeiro treino e 10 mensagens por dia.</span>'
+    $('#planos').innerHTML = C.planos.map((p, i) => `<div class="plano ${i === 0 ? 'destaque' : ''}"><h3>${esc(p.nome)}</h3><div class="preco">R$ ${p.preco.toFixed(2).replace('.', ',')}<small>/mês</small></div><ul>${p.itens.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>${p.checkout ? `<a class="btn btn-pri" href="${esc(p.checkout)}">Assinar o ${esc(p.nome)}</a>` : '<button class="btn btn-sec" disabled>Em breve</button>'}</div>`).join('') }
+  conta().then(() => abrir((location.hash || '#hoje').slice(1)))
+})()
+</script>
+<script src="/s/login.js"></script>
+<script src="/s/olho.js"></script>
+</body>
+</html>
