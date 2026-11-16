@@ -5,6 +5,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
 COPY static ./static
+COPY skills ./skills
+COPY conhecimento ./conhecimento
 ARG GIT_COMMIT=dev
 ENV GIT_COMMIT=${GIT_COMMIT} PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 SHAPEAI_DADOS=/data HOME=/tmp
 USER 10001
