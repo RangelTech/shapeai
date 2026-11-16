@@ -20,6 +20,7 @@ import uuid
 from pathlib import Path
 
 import httpx
+from starlette.concurrency import run_in_threadpool
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -485,7 +486,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
                 raise HTTPException(422, "envie a foto ou o texto da receita")
             nome, conteudo = "", [{"type": "text", "text": "Transcreva esta receita:\n" + texto}]
         try:
-            d = ler_receita(conteudo)
+            d = await run_in_threadpool(ler_receita, conteudo)
         except Exception:  # noqa: BLE001
             raise HTTPException(502, "não consegui ler a receita agora; tente de novo ou digite os itens")
         return {**d, "foto": nome}
@@ -573,7 +574,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
         msgs.append({"role": "user", "content": texto})
         db.exec("INSERT INTO mensagens(usuario,papel,texto,criado) VALUES(?,?,?,?)", (u["id"], "usuario", texto, agora()))
         try:
-            resposta = chamar_llm(msgs, 3000)
+            resposta = await run_in_threadpool(chamar_llm, msgs, 3000)
         except Exception:  # noqa: BLE001
             raise HTTPException(502, "o coach não respondeu agora; tente de novo em instantes")
         db.exec("INSERT INTO mensagens(usuario,papel,texto,criado) VALUES(?,?,?,?)", (u["id"], "ia", resposta, agora()))
