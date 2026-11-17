@@ -28,6 +28,13 @@ CREATE TABLE IF NOT EXISTS fotos (nome TEXT PRIMARY KEY, usuario INTEGER NOT NUL
 CREATE INDEX IF NOT EXISTS fotos_usuario ON fotos(usuario, tipo, criado);
 -- planos gerados pela IA (treino e dieta da semana)
 CREATE TABLE IF NOT EXISTS planos (id INTEGER PRIMARY KEY, usuario INTEGER NOT NULL, tipo TEXT NOT NULL, dados TEXT NOT NULL, criado REAL NOT NULL);
+-- registro série a série (carga e repetições) para 1RM e evolução por exercício
+CREATE TABLE IF NOT EXISTS series (id INTEGER PRIMARY KEY, usuario INTEGER NOT NULL, exercicio TEXT NOT NULL, nome TEXT NOT NULL, carga REAL NOT NULL,
+  reps INTEGER NOT NULL, criado REAL NOT NULL);
+CREATE INDEX IF NOT EXISTS series_usuario ON series(usuario, exercicio, criado);
+-- aplicações registradas (zona do corpo) para o rodízio dos locais
+CREATE TABLE IF NOT EXISTS zonas_aplicadas (id INTEGER PRIMARY KEY, usuario INTEGER NOT NULL, composto TEXT NOT NULL, via TEXT NOT NULL, zona TEXT NOT NULL,
+  dia TEXT NOT NULL, criado REAL NOT NULL);
 CREATE INDEX IF NOT EXISTS planos_usuario ON planos(usuario, tipo, criado);
 -- gamificação: cada check-in vale pontos (treino feito, prato fotografado, medida, água...)
 CREATE TABLE IF NOT EXISTS checkins (id INTEGER PRIMARY KEY, usuario INTEGER NOT NULL, tipo TEXT NOT NULL, dia TEXT NOT NULL, ref TEXT NOT NULL DEFAULT '',

@@ -120,3 +120,44 @@ def test_receita_vira_protocolo(tmp_path):
     c.post("/api/conversa", json={"texto": "me explica minha receita"})
     sistema = vistos[-1][0]["content"]
     assert "Deposteron (= Testosterona cipionato): 100 mg a cada 7 dias" in sistema and "NÃO monte" in sistema and "Blast Iniciante" not in sistema
+
+
+# ---------------- biblioteca de exercícios (RAG por local), séries/1RM e zonas de aplicação (spec 45 D.9.2) ----------------
+from app import exercicios  # noqa: E402
+
+
+def test_praca_nunca_recebe_maquina():
+    c = exercicios.candidatos("praca")
+    assert c and all(e["equip"] in ("body only", "other", "outro") for e in c)
+    maquina = next(e for e in exercicios.BASE if e["equip"] == "machine")
+    ex = exercicios.enriquecer({"id": maquina["id"], "nome": "Cadeira extensora"}, "praca")
+    assert "imgs" not in ex  # a IA escolheu máquina para quem treina na praça: o servidor não aceita
+    ok = exercicios.enriquecer({"id": c[0]["id"]}, "praca")
+    assert ok["imgs"][0].endswith("/0.webp") and ok["musculos"]
+
+
+def test_treino_usa_a_lista_do_local_e_traz_animacao(amb):
+    c = amb
+    c.put("/api/perfil", json={"nome": "Bia", "sexo": "f", "nascimento": "1994-04-10", "altura_cm": 165, "atividade": "moderado", "objetivo": "emagrecer",
+                              "local_treino": "praca", "dias_treino": 3})
+    flexao = next(e for e in exercicios.candidatos("praca") if e["prim"])
+    VISTOS.clear()
+    c.post("/api/plano/treino")
+    prompt = VISTOS[-1][-1]["content"]
+    assert "Use SOMENTE exercícios desta lista" in prompt and flexao["id"] in prompt and "máquina" not in prompt
+
+
+def test_series_1rm_e_zonas(amb):
+    c = amb
+    r = c.post("/api/series", json={"exercicio": "Pushups", "nome": "Flexão", "carga": 0, "reps": 15}).json()
+    assert r["rm_atual"] == 0
+    r = c.post("/api/series", json={"exercicio": "Barbell_Squat", "nome": "Agachamento", "carga": 100, "reps": 6}).json()
+    assert r["rm_atual"] == 120.0 and r["rm_max"] == 120.0
+    assert c.post("/api/series", json={"exercicio": "x", "carga": 9999, "reps": 1}).status_code == 422
+    z = c.get("/api/zonas", params={"composto": "Tirzepatida"}).json()
+    assert z["via"] == "sc" and z["proxima"] == "abdomen_sd"
+    z = c.post("/api/zonas", json={"composto": "Tirzepatida", "zona": "abdomen_sd"}).json()
+    assert z["proxima"] == "abdomen_se"  # rodízio: nunca o mesmo ponto em seguida
+    z = c.get("/api/zonas", params={"composto": "Enantato de testosterona"}).json()
+    assert z["via"] == "im" and z["proxima"] == "gluteo_d"
+    assert c.post("/api/zonas", json={"composto": "Enantato de testosterona", "zona": "abdomen_sd"}).status_code == 422

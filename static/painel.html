@@ -53,6 +53,29 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
 .aviso{background:rgba(255,200,80,.08);border:1px solid rgba(255,200,80,.35);border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:12px}
 .msg.erro{color:#f87171}.msg{min-height:20px;font-size:14px;margin-top:6px}
 @media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}}
+
+/* mapa do corpo, animação dos exercícios, timer e séries (spec 45 D.9.2) */
+.corpo{display:flex;gap:6px;justify-content:center}.corpo-svg{width:110px;height:auto}
+.corpo-svg .sil{fill:#122019;stroke:#2a4033;stroke-width:1.2}.corpo-svg .m{fill:#1b2c22;stroke:#25392d;stroke-width:.6;transition:fill .3s}
+.corpo-svg .m.on{fill:var(--marca);filter:drop-shadow(0 0 4px rgba(124,255,178,.7))}.corpo-svg .m.sec{fill:rgba(124,255,178,.35)}
+.corpo-svg .rot{fill:#6f8b7a;font-size:13px;text-anchor:middle;font-family:Inter,sans-serif}
+.corpo-svg .zona circle{fill:rgba(124,255,178,.15);stroke:rgba(124,255,178,.5);stroke-width:1.5}
+.corpo-svg .zona.ult circle{fill:rgba(255,120,90,.35);stroke:#ff8a6a}
+.corpo-svg .zona.prox circle{fill:var(--marca);stroke:#fff;stroke-width:2;animation:pulsoZ 1.4s ease-in-out infinite}
+@keyframes pulsoZ{0%,100%{opacity:1}50%{opacity:.45}}
+.dia-cab{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.ex2{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--bd)}
+.anim{position:relative;width:120px;height:90px;border-radius:12px;overflow:hidden;background:#fff}
+.anim img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.anim img:last-child{animation:quadro 1.6s steps(1) infinite}
+@keyframes quadro{0%{opacity:0}50%{opacity:1}}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.tags span{font-size:12px;border:1px solid var(--bd);border-radius:999px;padding:2px 8px;color:#bfe9cf}
+.acoes-ex{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.acoes-ex input{width:72px;padding:6px 8px;border-radius:8px;background:var(--bg2);border:1px solid var(--bd);color:#fff}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;color:var(--marca);min-width:48px}
+.rm{font-size:12.5px;color:#9fd8b5}
+.zonas-card{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+@media (max-width:700px){.ex2{grid-template-columns:1fr}.anim{width:100%;height:160px}.zonas-card{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -111,6 +134,9 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
       <div class="cartao"><div class="cab"><div><h3>Concentração estimada, semana a semana</h3><span class="dim">Cada aplicação sobe a curva; o éster define a descida.</span></div></div>
         <div style="position:relative;height:360px"><canvas id="pk-graf"></canvas></div><p class="dim" id="pk-aviso" style="font-size:13px;margin-top:8px"></p></div>
       <div class="cartao" id="h-obs" hidden></div>
+      <div class="cartao"><div class="cab"><div><h3>Onde aplicar hoje</h3><span class="dim">Rodízio dos pontos de aplicação: o ponto que pulsa é o próximo; os vermelhos foram os últimos.</span></div>
+        <select id="z-comp"></select></div><div class="zonas-card"><div id="z-mapa"></div><div><p id="z-prox" style="font-size:18px;font-weight:700"></p><p class="dim" id="z-ult"></p>
+        <button class="btn btn-pri" id="z-registrar">Apliquei neste ponto</button><p class="msg" id="z-msg"></p></div></div></div>
     </div>
     <div class="cartao"><h3 style="margin-bottom:12px">Calendário de aplicações</h3><form class="form" id="f-rx">
       <label>Composto<input id="rx-nome" required placeholder="ex.: Testosterona cipionato"></label><label>Dose<input id="rx-dose" required placeholder="como está na receita"></label><label>Horário<input id="rx-hora" type="time"></label>
@@ -129,7 +155,7 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
     <label>Nome<input id="p-nome" required></label><label>Sexo<select id="p-sexo"><option value="m">Homem</option><option value="f">Mulher</option></select></label><label>Nascimento<input id="p-nasc" type="date" required></label>
     <label>Altura (cm)<input id="p-alt" type="number" required></label><label>Atividade no dia a dia<select id="p-ativ"><option value="sedentario">Sedentário</option><option value="leve">Leve</option><option value="moderado" selected>Moderado</option><option value="intenso">Intenso</option><option value="atleta">Atleta</option></select></label>
     <label>Objetivo<select id="p-obj"><option value="emagrecer">Emagrecer</option><option value="definir">Definir</option><option value="manter">Manter</option><option value="ganhar_massa">Ganhar massa</option></select></label>
-    <label>Dias de treino por semana<input id="p-dias" type="number" min="1" max="7" value="4"></label><label>Minutos por treino<input id="p-min" type="number" value="60"></label><label>Onde treina<select id="p-local"><option value="academia">Academia</option><option value="casa">Em casa</option></select></label>
+    <label>Dias de treino por semana<input id="p-dias" type="number" min="1" max="7" value="4"></label><label>Minutos por treino<input id="p-min" type="number" value="60"></label><label>Onde treina<select id="p-local"><option value="academia">Academia completa</option><option value="condominio">Academia de condomínio / hotel</option><option value="casa">Casa com halteres ou elásticos</option><option value="casa_sem">Casa sem equipamento</option><option value="praca">Praça / barra fixa / calistenia</option></select></label>
     <label>Meta de peso (kg)<input id="p-mpeso" type="number" step=".1"></label><label>Meta de BF (%)<input id="p-mbf" type="number" step=".1"></label><span></span>
     <label class="cheia">Sua rotina (horários de trabalho, sono, refeições)<textarea id="p-rot" rows="2"></textarea></label>
     <label class="cheia">Restrições e preferências (alergias, o que não come)<textarea id="p-res" rows="2"></textarea></label>
@@ -179,7 +205,30 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   $('#foto-prato').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; const kcal = prompt('Quantas calorias, mais ou menos? (opcional)') || 0
     try { const r = await api(`/api/fotos?tipo=refeicao&kcal=${+kcal || 0}`, { method: 'POST', body: f }); $('#check-msg').textContent = `Prato registrado! +${r.ganhou} pontos`; hoje() } catch (err) { erro($('#check-msg'), err) } e.target.value = '' }
 
-  const htmlTreino = (t) => t.dias ? t.dias.map((d) => `<div class="dia"><h4>${esc(d.dia)} <small class="dim">${esc(d.foco || '')}</small></h4>${(d.exercicios || []).map((x) => `<div class="ex"><div><b>${esc(x.nome)}</b> <small>${x.series}x${esc(x.reps)} · descanso ${x.descanso_s}s · ${esc(x.equipamento || '')}</small><br><small>${esc(x.dica || '')}</small></div><a href="${esc(x.video)}" target="_blank" rel="noopener">Ver vídeo</a></div>`).join('')}</div>`).join('') + (t.observacoes ? `<p class="dim">${esc(t.observacoes)}</p>` : '') : '<p class="dim">Toque em Montar meu treino.</p>'
+  const MPT = { abdominals: 'abdômen', abductors: 'abdutores', adductors: 'adutores', biceps: 'bíceps', calves: 'panturrilhas', chest: 'peito', forearms: 'antebraços', glutes: 'glúteos', hamstrings: 'posteriores', lats: 'dorsais', 'lower back': 'lombar', 'middle back': 'meio das costas', neck: 'pescoço', quadriceps: 'quadríceps', shoulders: 'ombros', traps: 'trapézio', triceps: 'tríceps' }
+  const htmlEx = (x) => `<div class="ex2" data-ex="${esc(x.id || x.nome)}" data-nome="${esc(x.nome)}">
+      ${x.imgs ? `<div class="anim"><img src="${x.imgs[0]}" alt="" loading="lazy"><img src="${x.imgs[1]}" alt="${esc(x.nome)}" loading="lazy"></div>` : '<div></div>'}
+      <div><b>${esc(x.nome)}</b> <small class="dim">${x.series}x${esc(x.reps)} · ${esc(x.equipamento || '')}</small>
+        <div class="tags">${(x.musculos || []).map((m) => `<span>${esc(MPT[m] || m)}</span>`).join('')}</div>
+        <small class="dim">${esc(x.dica || '')}</small>
+        <div class="acoes-ex"><button class="btn btn-sec" data-desc="${x.descanso_s || 60}">Descanso ${x.descanso_s || 60}s</button><span class="timer"></span>
+          <input type="number" step="0.5" min="0" placeholder="kg" class="kg"><input type="number" min="1" placeholder="reps" class="rp"><button class="btn btn-sec" data-serie>Registrar série</button>
+          <span class="rm"></span><a href="${esc(x.video)}" target="_blank" rel="noopener" class="dim">vídeo</a></div></div></div>`
+  const htmlTreino = (t) => t.dias ? t.dias.map((d) => `<div class="dia"><div class="dia-cab"><h4>${esc(d.dia)} <small class="dim">${esc(d.foco || '')}</small></h4>${window.Corpo && d.musculos ? Corpo.musculos(d.musculos) : ''}</div>${(d.exercicios || []).map(htmlEx).join('')}</div>`).join('') + (t.observacoes ? `<p class="dim">${esc(t.observacoes)}</p>` : '') : '<p class="dim">Toque em Montar meu treino.</p>'
+  let TIMER = null
+  document.addEventListener('click', async (e) => {
+    const bd = e.target.closest('[data-desc]')
+    if (bd) {
+      const span = bd.nextElementSibling; let n = +bd.dataset.desc; clearInterval(TIMER); span.textContent = n + 's'
+      TIMER = setInterval(() => { n--; span.textContent = n > 0 ? n + 's' : 'Bora!'; if (n <= 0) { clearInterval(TIMER); try { navigator.vibrate && navigator.vibrate([200, 100, 200]); const a = new AudioContext(), o = a.createOscillator(); o.connect(a.destination); o.frequency.value = 880; o.start(); setTimeout(() => { o.stop(); a.close() }, 350) } catch {} } }, 1000)
+    }
+    const bs = e.target.closest('[data-serie]')
+    if (bs) {
+      const ex = bs.closest('.ex2'), kg = ex.querySelector('.kg').value, rp = ex.querySelector('.rp').value
+      try { const r = await post('/api/series', { exercicio: ex.dataset.ex, nome: ex.dataset.nome, carga: kg || 0, reps: rp }); ex.querySelector('.rm').textContent = `1RM estimado ${String(r.rm_atual).replace('.', ',')} kg · recorde ${String(r.rm_max).replace('.', ',')} kg · ${r.series.length} séries` }
+      catch (err) { ex.querySelector('.rm').textContent = err.message }
+    }
+  })
   async function treino() { $('#treino').innerHTML = htmlTreino(await api('/api/plano/treino')) }
   $('#gerar-treino').onclick = async (e) => { e.target.disabled = true; $('#tr-msg').textContent = 'O coach está montando o seu treino…'; $('#tr-msg').className = 'msg'
     try { $('#treino').innerHTML = htmlTreino(await post('/api/plano/treino')); $('#tr-msg').textContent = '' } catch (err) { erro($('#tr-msg'), err) } e.target.disabled = false }
@@ -259,7 +308,13 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
         <div class="meta"><span>${i.semanas} semanas</span>${i.inicio_semana ? `<span>começa na sem. ${i.inicio_semana}</span>` : ''}${i.via ? `<span>${esc(i.via)}</span>` : ''}</div></div>
         ${i.ficha || i.obs ? `<details><summary>Sobre este composto</summary>${i.obs ? `<p><b>Na receita:</b> ${esc(i.obs)}</p>` : ''}<p>${esc(i.ficha)}</p></details>` : ''}</div>` }).join('')
     $('#h-obs').hidden = !ativo.observacoes; $('#h-obs').innerHTML = `<h3 style="margin-bottom:6px">Orientações da receita</h3><p class="dim">${esc(ativo.observacoes)}</p>`
-    grafico(ativo.curva) }
+    grafico(ativo.curva)
+    const sel = $('#z-comp'); sel.innerHTML = ativo.itens.map((i) => `<option>${esc(i.nome)}</option>`).join(''); sel.onchange = zonasHoje; zonasHoje() }
+  let ZONA = null
+  async function zonasHoje() { const comp = $('#z-comp').value; if (!comp) return; const z = await api('/api/zonas?composto=' + encodeURIComponent(comp)); ZONA = z
+    $('#z-mapa').innerHTML = window.Corpo ? Corpo.zonas(z) : ''; $('#z-prox').textContent = 'Próximo ponto: ' + (z.nomes[z.proxima] || z.proxima)
+    $('#z-ult').textContent = z.ultimas.length ? 'Última: ' + (z.nomes[z.ultimas[0].zona] || z.ultimas[0].zona) + ' em ' + z.ultimas[0].dia.split('-').reverse().join('/') : 'Nenhuma aplicação registrada ainda.' }
+  $('#z-registrar').onclick = async () => { if (!ZONA) return; try { await post('/api/zonas', { composto: $('#z-comp').value, zona: ZONA.proxima }); $('#z-msg').textContent = 'Registrado. Próximo ponto atualizado.'; zonasHoje() } catch (e) { erro($('#z-msg'), e) } }
 
   async function perfil() { await conta(); const p = C.perfil; if (!p) return
     $('#p-nome').value = p.nome; $('#p-sexo').value = p.sexo; $('#p-nasc').value = p.nascimento; $('#p-alt').value = p.altura_cm; $('#p-ativ').value = p.atividade; $('#p-obj').value = p.objetivo
@@ -274,6 +329,7 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
 })()
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="/s/corpo.js"></script>
 <script src="/s/login.js"></script>
 <script src="/s/olho.js"></script>
 </body>

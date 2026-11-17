@@ -27,7 +27,7 @@ from fastapi.staticfiles import StaticFiles
 
 import base64
 
-from app import admin, auth, fitness, mailer, protocolos, receita, senha_rotas
+from app import admin, auth, fitness, mailer, protocolos, receita, senha_rotas, exercicios
 from app.config import Config, carregar
 from app.db import Banco, agora
 
@@ -191,7 +191,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
         g = r.get("gasto") or {}
         return (f"{p['nome']}, {'homem' if p['sexo'] == 'm' else 'mulher'}, {idade(p)} anos, {p['altura_cm']} cm, objetivo: {p['objetivo']}, atividade: {p['atividade']}.\n"
                 f"Rotina: {p['rotina'] or 'não informada'}. Restrições/preferências: {p['restricoes'] or 'nenhuma'}.\n"
-                f"Treina {p['dias_treino']}x/semana, {p['minutos_treino']} min, em {p['local_treino']}.\n"
+                f"Treina {p['dias_treino']}x/semana, {p['minutos_treino']} min, em: {exercicios.LOCAIS[exercicios.normalizar_local(p['local_treino'])][0]}.\n"
                 f"Última medida: peso {m.get('peso')} kg, BF {m.get('bf')}% ({r.get('categoria_bf', '?')}), cintura {m.get('cintura')} cm.\n"
                 f"Calorias alvo {g.get('calorias_alvo')} kcal; proteína {g.get('proteina_g')} g, carboidrato {g.get('carboidrato_g')} g, gordura {g.get('gordura_g')} g; água {g.get('agua_ml')} ml.\n"
                 f"Metas: peso {p.get('meta_peso')} kg, BF {p.get('meta_bf')}%. Nível {r['pontos']['nivel']}, sequência de {r['sequencia']} dias.\n"
@@ -294,7 +294,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
                  b.get("atividade") if b.get("atividade") in fitness.ATIVIDADE else "moderado",
                  b.get("objetivo") if b.get("objetivo") in fitness.OBJETIVOS else "emagrecer",
                  str(b.get("rotina") or "")[:600], str(b.get("restricoes") or "")[:400], max(1, min(int(b.get("dias_treino") or 4), 7)),
-                 max(15, min(int(b.get("minutos_treino") or 60), 180)), "casa" if b.get("local_treino") == "casa" else "academia",
+                 max(15, min(int(b.get("minutos_treino") or 60), 180)), exercicios.normalizar_local(b.get("local_treino")),
                  num("meta_peso"), num("meta_bf"), agora()))
         return resumo(u)
 
@@ -365,14 +365,19 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
         if not plano_de(u) and db.um("SELECT 1 FROM planos WHERE usuario=? AND tipo='treino'", (u["id"],)):
             raise HTTPException(402, "refazer o treino toda semana é do plano Pro")
         pedido = [{"role": "system", "content": persona(contexto=contexto(u), solicitacoes="(não se aplica)", material="(não se aplica)")},
-                  {"role": "user", "content": "Monte o meu treino da semana respeitando dias, minutos e local. No máximo 6 exercícios por dia; dica com até 8 palavras. "
+                  {"role": "user", "content": "Monte o meu treino da semana respeitando dias, minutos e o LOCAL onde eu treino. No máximo 6 exercícios por dia; "
+                                              "dica com até 8 palavras. Use SOMENTE exercícios desta lista (são os possíveis no meu local), copiando o id exato:\n"
+                                              f"{exercicios.texto_candidatos(exercicios.candidatos(perfil(u)['local_treino']))}\n"
                                               "Responda SÓ com JSON, sem texto antes ou depois: "
-                                              '{"dias":[{"dia":"Segunda","foco":"...","exercicios":[{"nome":"...","series":4,"reps":"10-12","descanso_s":60,'
-                                              '"equipamento":"...","dica":"..."}]}],"observacoes":"..."}'}]
-        d = tentar_json(pedido, 4000)
+                                              '{"dias":[{"dia":"Segunda","foco":"...","exercicios":[{"id":"<id da lista>","nome":"<nome em português>","series":4,"reps":"10-12","descanso_s":60,'
+                                              '"dica":"..."}]}],"observacoes":"..."}'}]
+        d = tentar_json(pedido, 5000)
+        local = perfil(u)["local_treino"]
         for dia in d.get("dias") or []:
-            for ex in dia.get("exercicios") or []:
-                ex["video"] = video(str(ex.get("nome") or ""))
+            dia["exercicios"] = [exercicios.enriquecer(ex, local) for ex in (dia.get("exercicios") or [])]
+            for ex in dia["exercicios"]:
+                ex["video"] = video(str(ex.get("nome_en") or ex.get("nome") or ""))
+            dia["musculos"] = sorted({m for ex in dia["exercicios"] for m in ex.get("musculos", [])})
         pid = db.exec("INSERT INTO planos(usuario,tipo,dados,criado) VALUES(?,?,?,?)", (u["id"], "treino", json.dumps(d, ensure_ascii=False), agora())).lastrowid
         return {"id": pid, **d}
 
@@ -425,6 +430,59 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
         lista += fitness.rivais(u["id"], meus, semana(), hoje_.weekday())
         lista.sort(key=lambda x: (-x["pontos"], not x.get("voce")))
         return [{**x, "posicao": i + 1} for i, x in enumerate(lista)]
+
+    # ------------------------------------------------ biblioteca, séries (1RM) e zonas de aplicação
+    @app.get("/api/locais")
+    def locais():
+        return {"locais": [{"id": k, "nome": v[0]} for k, v in exercicios.LOCAIS.items()], "musculos": exercicios.MUSCULOS_PT}
+
+    def serie_resumo(u: dict, ex: str) -> dict:
+        hist = db.todos("SELECT carga, reps, criado FROM series WHERE usuario=? AND exercicio=? ORDER BY criado", (u["id"], ex))
+        pts = [{"dia": dt.date.fromtimestamp(h["criado"]).isoformat(), "rm": exercicios.um_rm(h["carga"], h["reps"]), "carga": h["carga"], "reps": h["reps"]} for h in hist]
+        return {"exercicio": ex, "series": pts[-30:], "rm_atual": pts[-1]["rm"] if pts else None, "rm_max": max((x["rm"] for x in pts), default=None)}
+
+    @app.post("/api/series")
+    async def registrar_serie(request: Request):
+        u = usuario(request)
+        b = await request.json()
+        ex = str(b.get("exercicio") or "")[:80]
+        try:
+            carga, reps = float(b.get("carga") or 0), int(b.get("reps") or 0)
+        except (TypeError, ValueError):
+            raise HTTPException(422, "carga e repetições em números")
+        if not ex or not 0 <= carga <= 600 or not 1 <= reps <= 100:
+            raise HTTPException(422, "confira a carga (kg) e as repetições")
+        db.exec("INSERT INTO series(usuario,exercicio,nome,carga,reps,criado) VALUES(?,?,?,?,?,?)", (u["id"], ex, str(b.get("nome") or ex)[:80], carga, reps, agora()))
+        return serie_resumo(u, ex)
+
+    @app.get("/api/series")
+    def ver_series(request: Request, ex: str = ""):
+        u = usuario(request)
+        if ex:
+            return serie_resumo(u, ex)
+        ult = db.todos("SELECT exercicio, nome, MAX(criado) c FROM series WHERE usuario=? GROUP BY exercicio ORDER BY c DESC LIMIT 20", (u["id"],))
+        return {"exercicios": [serie_resumo(u, x["exercicio"]) | {"nome": x["nome"]} for x in ult]}
+
+    def zonas_de(u: dict, composto: str) -> dict:
+        via = exercicios.via_do_composto(composto)
+        ult = db.todos("SELECT zona, dia, composto FROM zonas_aplicadas WHERE usuario=? AND via=? ORDER BY criado DESC LIMIT 12", (u["id"], via))
+        return {"via": via, "zonas": exercicios.ZONAS[via], "nomes": exercicios.NOMES_ZONA, "proxima": exercicios.proxima_zona(via, [a["zona"] for a in ult]), "ultimas": ult}
+
+    @app.get("/api/zonas")
+    def ver_zonas(request: Request, composto: str = ""):
+        return zonas_de(usuario(request), composto)
+
+    @app.post("/api/zonas")
+    async def registrar_zona(request: Request):
+        u = usuario(request)
+        b = await request.json()
+        comp = str(b.get("composto") or "")[:60]
+        via = exercicios.via_do_composto(comp)
+        zona = str(b.get("zona") or "")
+        if zona not in exercicios.ZONAS[via]:
+            raise HTTPException(422, "zona inválida para esta via de aplicação")
+        db.exec("INSERT INTO zonas_aplicadas(usuario,composto,via,zona,dia,criado) VALUES(?,?,?,?,?,?)", (u["id"], comp, via, zona, exercicios.hoje(), agora()))
+        return zonas_de(u, comp)
 
     @app.get("/api/ranking")
     def ranking(request: Request):
