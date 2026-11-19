@@ -1,8 +1,11 @@
 """Gera conhecimento/base.json (trechos do RAG) a partir das planilhas da doutora (conhecimento/fonte/*.xlsx).
 
 Fonte: material da Dra. do projeto loki (guia de hormônios e peptídeos, planilha de tirzepatida, suplementos, remédios
-e exames). As colunas de dose de hormônio e peptídeo NÃO entram: a IA explica, mas a dose vem da receita do cliente. Cada linha de planilha vira um trecho; os roteiros da doutora (suporte no ciclo, TPC, exames por fase,
-ésteres) entram como trechos de texto. Rodar de novo sempre que a planilha mudar:  python scripts/gerar_conhecimento.py
+e exames). As DOSAGENS DE REFERÊNCIA POR PERFIL (colunas "Dosagem TRT", "Cruise/Blast Iniciante", "Mediano", "Avançado",
+"Atleta") entram em cada trecho, com a ressalva de que são dados de referência — a prescrição individual
+continua sendo feita na consulta. Cada linha de planilha vira um trecho; os roteiros da doutora
+(suporte no ciclo, TPC, exames por fase, ésteres) entram como trechos de texto.
+Rodar de novo sempre que a planilha mudar:  python scripts/gerar_conhecimento.py
 """
 from __future__ import annotations
 
@@ -36,6 +39,20 @@ def num(v: str) -> str:
         return v
 
 
+def dosagens_por_perfil(linha: dict) -> str:
+    """As colunas 'Dosagem ...' viram dosagens de referência por perfil (vazias/N/A saem)."""
+    partes = []
+    for cab, val in linha.items():
+        if not cab.startswith("Dosagem") or val.upper() in ("", "N/A"):
+            continue
+        perfil = cab.removeprefix("Dosagem").strip()
+        partes.append(f"{perfil} {val}")
+    if not partes:
+        return ""
+    return ("Dosagens por perfil (referência da planilha; a prescrição individual é ajustada na consulta): "
+            + "; ".join(partes) + ".")
+
+
 def main() -> None:
     trechos: list[dict] = []
 
@@ -54,7 +71,10 @@ def main() -> None:
                  f"Concentração comum: {h.get('Concentração Comum','')}. "
                  f"Efeitos: {h.get('Efeitos Anabólicos','')} Colaterais: {h.get('Colaterais Principais','')} "
                  f"Nota anabólica {num(h.get('Nota Anabólica (0-10)',''))}/10, nota de colaterais {num(h.get('Nota Colaterais (0-10)',''))}/10, "
-                 f"razão benefício/colateral {num(h.get('Razão',''))}.")
+                 f"razão benefício/colateral {num(h.get('Razão',''))}. ")
+        dose = dosagens_por_perfil(h)
+        if dose:
+            texto += dose
         add(f"{nome} {ester}", texto, ["hormonio", nome.lower(), ester.lower(), h.get("Família", "").lower()])
 
     for p in linhas(guia, "Peptídeos e Auxiliares"):
@@ -62,7 +82,10 @@ def main() -> None:
         texto = (f"{nome} ({p.get('Uso','')}, {p.get('Classe / Família','')}, mecanismo {p.get('Tipo / Mecanismo','')}). "
                  f"Apresentação: {p.get('Veículo / Apresentação','')}, concentração {p.get('Concentração Comum','')}. "
                  f"Efeitos: {p.get('Efeitos de Performance/Anabólicos','')} Colaterais: {p.get('Colaterais Principais','')} "
-                 f"Nota de performance {num(p.get('Nota Performance (0-10)',''))}/10, colaterais {num(p.get('Nota Colaterais (0-10)',''))}/10.")
+                 f"Nota de performance {num(p.get('Nota Performance (0-10)',''))}/10, colaterais {num(p.get('Nota Colaterais (0-10)',''))}/10. ")
+        dose = dosagens_por_perfil(p)
+        if dose:
+            texto += dose
         add(nome, texto, ["peptideo", nome.lower()])
 
     dra = FONTE / "planilha_dra.xlsx"

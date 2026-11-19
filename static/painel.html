@@ -83,7 +83,7 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   <a class="logo" href="/painel"><i>↗</i>Shape AI</a>
   <nav class="abas" role="tablist">
     <button data-aba="hoje" aria-selected="true">Hoje</button><button data-aba="treino">Treino</button><button data-aba="dieta">Dieta</button><button data-aba="medidas">Medidas</button>
-    <button data-aba="fotos">Fotos</button><button data-aba="ranking">Ranking</button><button data-aba="coach">Coach</button><button data-aba="receitas">Hormônios</button><button data-aba="perfil">Perfil</button><button data-aba="plano">Plano</button>
+    <button data-aba="fotos">Fotos</button><button data-aba="ranking">Ranking</button><button data-aba="coach">Coach</button><button data-aba="receitas">Hormônios / Mounjaro</button><button data-aba="perfil">Perfil</button><button data-aba="plano">Plano</button>
   </nav>
   <button class="btn btn-ghost" id="sair">Sair</button>
 </div></header>
@@ -115,21 +115,13 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
     <div class="chat" id="chat"></div><form class="envio" id="f-chat"><input id="chat-txt" placeholder="Pergunte ao seu coach…" autocomplete="off"><button class="btn btn-pri">Enviar</button></form><div class="msg" id="chat-msg"></div></div></section>
   <section data-painel="receitas" hidden>
     <div id="h-vazio" class="cartao h-heroi" hidden>
-      <div><span class="selo-h">Seu protocolo, do seu médico</span><h2>Transforme a sua receita em um painel vivo.</h2>
-        <p class="dim">Tire uma foto da receita. O Shape AI lê cada composto, dose e frequência e monta as ampolas, o gráfico da semana, o calendário de aplicações e os exames de cada fase.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><label class="btn btn-pri">Fotografar a receita<input type="file" accept="image/*" capture="environment" id="h-foto" hidden></label><button class="btn btn-sec" id="h-digitar">Digitar a receita</button></div>
-        <textarea id="h-texto" rows="4" hidden placeholder="Cole ou digite a receita como está escrita"></textarea><button class="btn btn-sec" id="h-ler-texto" hidden>Ler receita</button>
-        <div class="msg" id="h-msg"></div></div>
+      <div><span class="selo-h">Prescrições do consultório</span><h2>Nenhuma prescrição salva.</h2>
+        <p class="dim">Peça à IA para gerar uma prescrição na conversa. Ela aparecerá aqui para imprimir, assinar e enviar ao paciente.</p></div>
       <div class="ampolas-deco" aria-hidden="true"></div>
     </div>
-    <div id="h-conferir" class="cartao" hidden><div class="cab"><h3>Confira antes de salvar</h3><span class="dim" id="h-med"></span></div>
-      <p class="dim" style="margin-bottom:12px">Lemos a receita assim. Corrija o que estiver diferente do papel.</p>
-      <div class="pk pk-cab"><small>Composto</small><small>mg por aplicação</small><small>a cada (dias)</small><small>semanas</small><small>começa na semana</small><span></span></div>
-      <div id="h-itens"></div><p class="msg erro" id="h-ilegivel"></p>
-      <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-pri" id="h-salvar">Salvar meu protocolo</button><button class="btn btn-ghost" id="h-cancelar">Cancelar</button></div></div>
     <div id="h-ativo" hidden>
-      <div class="cartao h-topo"><div><span class="selo-h">Protocolo ativo</span><h2 id="h-titulo">Seu protocolo</h2><p class="dim" id="h-origem"></p></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sec" id="h-explicar">Explicar meu protocolo</button><label class="btn btn-ghost">Nova receita<input type="file" accept="image/*" id="h-foto2" hidden></label></div></div>
+      <div class="cartao h-topo"><div><span class="selo-h">Prescrição salva</span><h2 id="h-titulo">Prescrição</h2><p class="dim" id="h-origem"></p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-pri" id="h-imprimir">Imprimir prescrição</button><button class="btn btn-sec" id="h-explicar">Explicar protocolo</button></div></div>
       <div class="ampolas" id="h-ampolas"></div>
       <div class="cartao"><div class="cab"><div><h3>Concentração estimada, semana a semana</h3><span class="dim">Cada aplicação sobe a curva; o éster define a descida.</span></div></div>
         <div style="position:relative;height:360px"><canvas id="pk-graf"></canvas></div><p class="dim" id="pk-aviso" style="font-size:13px;margin-top:8px"></p></div>
@@ -253,7 +245,7 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
   const fala = (t) => esc(t).replace(/(^|\s)(\/s\/guia\/[a-z0-9_]+\.webp)/gi, (_, a, u) => `${a}<img src="${u}" alt="" loading="lazy">`)
   async function coach() { const { mensagens } = await api('/api/conversa'); $('#chat').innerHTML = mensagens.length ? mensagens.map((m) => `<div class="b ${m.papel}">${m.papel === 'ia' ? fala(m.texto) : esc(m.texto)}</div>`).join('') : '<div class="b ia">Fala! Sou o seu coach. Pergunte sobre treino, dieta, suplementos, protocolos hormonais, tirzepatida ou a sua meta.</div>'; $('#chat').scrollTop = 1e9 }
   async function enviar(t) { if (!t) return; $('#chat').insertAdjacentHTML('beforeend', `<div class="b usuario">${esc(t)}</div><div class="b ia" id="pens">Pensando…</div>`); $('#chat').scrollTop = 1e9
-    try { const r = await post('/api/conversa', { texto: t }); $('#pens').outerHTML = `<div class="b ia">${fala(r.resposta)}</div>` } catch (e) { $('#pens')?.remove(); erro($('#chat-msg'), e) } $('#chat').scrollTop = 1e9 }
+    try { const r = await post('/api/conversa', { texto: t }); $('#pens').outerHTML = `<div class="b ia">${fala(r.resposta)}</div>`; if (r.prescricao_id) hormonios() } catch (e) { $('#pens')?.remove(); erro($('#chat-msg'), e) } $('#chat').scrollTop = 1e9 }
   $('#f-chat').onsubmit = (e) => { e.preventDefault(); const t = $('#chat-txt').value.trim(); $('#chat-txt').value = ''; enviar(t) }
   $$('#sugestoes button').forEach((b) => (b.onclick = () => enviar(b.textContent)))
 
@@ -265,27 +257,22 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
     $$('[data-apagar]').forEach((b) => (b.onclick = async () => { if (confirm('Apagar este registro?')) { await api(`/api/prescricoes/${b.dataset.apagar}`, { method: 'DELETE' }); receitas() } })) }
   $('#f-rx').onsubmit = async (e) => { e.preventDefault(); try { await post('/api/prescricoes', { nome: $('#rx-nome').value, dose: $('#rx-dose').value, horario: $('#rx-hora').value, medico: $('#rx-med').value, dias: $$('#rx-dias input:checked').map((c) => +c.value) }); $('#rx-msg').textContent = 'Salvo.'; $('#rx-msg').className = 'msg'; receitas() } catch (err) { erro($('#rx-msg'), err) } }
 
-  let COMP = [], GRAF = null, LIDO = null
+  let GRAF = null, PROTOCOLO = null
   const CORES = ['#7CFFB2', '#3ad7ff', '#ffb547', '#ff6b9a', '#b18cff', '#f5f06e', '#5ef0d0', '#ff8a5c']
   const ampolaSvg = (cor, oral) => oral
     ? `<svg viewBox="0 0 70 110" width="70" height="110"><rect x="12" y="10" width="46" height="20" rx="5" fill="#1d2a22" stroke="${cor}" stroke-opacity=".6"/><rect x="8" y="28" width="54" height="74" rx="10" fill="url(#gv)" stroke="${cor}" stroke-opacity=".7"/><rect x="14" y="48" width="42" height="30" rx="4" fill="${cor}" opacity=".85"/><circle cx="24" cy="92" r="4" fill="${cor}"/><circle cx="35" cy="92" r="4" fill="${cor}" opacity=".7"/><circle cx="46" cy="92" r="4" fill="${cor}" opacity=".5"/><defs><linearGradient id="gv" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/></linearGradient></defs></svg>`
     : `<svg viewBox="0 0 70 110" width="70" height="110"><rect x="20" y="4" width="30" height="14" rx="3" fill="${cor}"/><rect x="17" y="16" width="36" height="6" rx="2" fill="#c9d4cd"/><path d="M24 22h22v6c8 4 12 10 12 18v50a10 10 0 0 1-10 10H22a10 10 0 0 1-10-10V46c0-8 4-14 12-18z" fill="rgba(255,255,255,.07)" stroke="${cor}" stroke-opacity=".75"/><path d="M14 62h42v34a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z" fill="${cor}" opacity=".55"/><rect x="18" y="44" width="34" height="14" rx="3" fill="#0b130e" stroke="${cor}" stroke-opacity=".5"/><path d="M20 30c-3 4-4 10-4 18" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/></svg>`
   const ORAIS = ['oxandrolona', 'metandienona', 'oximetolona', 'estanozolol_oral', 'turanibol', 'mesterolona']
   const freq = (d) => d === 7 ? '1x por semana' : d === 3.5 ? '2x por semana' : d === 1 ? 'todo dia' : d < 1 ? `${Math.round(1 / d)}x ao dia` : `a cada ${String(d).replace('.', ',')} dias`
-  const linhaRx = (v = {}) => `<div class="pk"><select>${COMP.map((c) => `<option value="${c.id}" ${c.id === v.composto ? 'selected' : ''}>${esc(c.nome)}</option>`).join('')}<option value="outro" ${v.composto === 'outro' ? 'selected' : ''}>Outro: ${esc(v.nome_na_receita || '')}</option></select>
-    <input type="number" min="0" step="any" value="${v.dose_mg ?? ''}"><input type="number" min="0.25" step="0.25" value="${v.a_cada_dias ?? 7}"><input type="number" min="1" value="${v.semanas ?? 12}"><input type="number" min="0" value="${v.inicio_semana ?? 0}"><button class="btn btn-ghost" title="Remover">×</button></div>`
-  function conferir(d) { LIDO = d; $('#h-vazio').hidden = true; $('#h-ativo').hidden = true; $('#h-conferir').hidden = false
-    $('#h-med').textContent = [d.medico, d.data].filter(Boolean).join(' · '); $('#h-ilegivel').textContent = d.ilegivel ? 'Não deu para ler: ' + d.ilegivel : ''
-    $('#h-itens').innerHTML = (d.itens.length ? d.itens : [{}]).map(linhaRx).join(''); $$('#h-itens .pk button').forEach((b) => (b.onclick = () => b.closest('.pk').remove())) }
-  async function lerFoto(f) { if (!f) return; $('#h-msg').textContent = 'Lendo a sua receita…'; $('#h-msg').className = 'msg'
-    try { const r = await fetch('/api/receita/ler', { method: 'POST', body: f, headers: { 'Content-Type': f.type || 'image/jpeg' } }); const j = await r.json(); if (!r.ok) throw new Error(j.detail || 'Não deu certo.'); conferir(j) } catch (e) { $('#h-msg').textContent = e.message; $('#h-msg').className = 'msg erro' } }
-  $('#h-foto').onchange = (e) => lerFoto(e.target.files[0]); $('#h-foto2').onchange = (e) => { $('#h-vazio').hidden = false; lerFoto(e.target.files[0]) }
-  $('#h-digitar').onclick = () => { $('#h-texto').hidden = false; $('#h-ler-texto').hidden = false; $('#h-texto').focus() }
-  $('#h-ler-texto').onclick = async () => { try { $('#h-msg').textContent = 'Lendo…'; conferir(await post('/api/receita/ler', { texto: $('#h-texto').value })) } catch (e) { erro($('#h-msg'), e) } }
-  $('#h-cancelar').onclick = () => hormonios()
-  $('#h-salvar').onclick = async () => { const itens = $$('#h-itens .pk').map((l, i) => { const [s, d, a, w, ini] = [...l.querySelectorAll('select,input')]; return { composto: s.value, nome_na_receita: (LIDO.itens[i] || {}).nome_na_receita || '', dose_mg: +d.value, a_cada_dias: +a.value, semanas: +w.value, inicio_semana: +ini.value, via: (LIDO.itens[i] || {}).via || '', obs: (LIDO.itens[i] || {}).obs || '' } })
-    try { await post('/api/protocolo', { ...LIDO, itens }); hormonios() } catch (e) { erro($('#h-ilegivel'), e) } }
   $('#h-explicar').onclick = () => { abrir('coach'); enviar('Me explica o meu protocolo: cada composto, como aplicar, o calendário e os exames de cada fase.') }
+  $('#h-imprimir').onclick = () => {
+    if (!PROTOCOLO) return
+    const p = PROTOCOLO, d = p.data_receita ? p.data_receita.split('-').reverse().join('/') : ''
+    const itens = p.itens.map((i) => `<li><b>${esc(i.nome_na_receita || i.nome)}</b> — ${String(i.dose_mg).replace('.', ',')} mg, a cada ${String(i.a_cada_dias).replace('.', ',')} dias, durante ${i.semanas} semanas${i.via ? `, via ${esc(i.via)}` : ''}${i.obs ? `<br>${esc(i.obs)}` : ''}</li>`).join('')
+    const w = window.open('', '_blank'); if (!w) return
+    w.document.write(`<!doctype html><html lang="pt"><meta charset="utf-8"><title>Prescrição</title><style>body{font:16px Arial,sans-serif;color:#111;max-width:760px;margin:48px auto;line-height:1.5}h1{font-size:22px;text-align:center}li{margin:0 0 16px}.meta{margin:28px 0}.assinatura{margin:90px 0 0 auto;width:320px;border-top:1px solid #111;text-align:center;padding-top:8px}@media print{body{margin:20mm auto}}</style><h1>PRESCRIÇÃO</h1><div class="meta"><b>Paciente:</b> ${esc(p.paciente || '________________________________')}<br><b>Data:</b> ${esc(d || '____/____/________')}</div><ol>${itens}</ol>${p.observacoes ? `<p><b>Orientações:</b><br>${esc(p.observacoes).replace(/\n/g, '<br>')}</p>` : ''}<div class="assinatura">${esc(p.medico || 'Médico')}<br>Assinatura e carimbo</div><script>window.onload=()=>window.print()<\/script></html>`)
+    w.document.close()
+  }
   function grafico(r) { if (!r) return; $('#pk-aviso').textContent = r.aviso
     const maxG = Math.max(...Object.values(r.series).map((v) => Math.max(...v)))
     const nomes = Object.keys(r.series), dados = { labels: r.dias.map((d) => d % 7 === 0 ? 'sem ' + (d / 7) : ''), datasets: [
@@ -296,18 +283,18 @@ main.p{width:min(1100px,100%);margin:0 auto;padding:96px 24px 80px}
       scales: { x: { ticks: { color: '#7d8f84', autoSkip: false, maxRotation: 0 }, grid: { color: '#14231a' } }, y: { title: { display: true, text: 'mg ativos (estimativa)', color: '#7d8f84' }, ticks: { color: '#7d8f84' }, grid: { color: '#14231a' } },
         y1: { display: duplo, position: 'right', title: { display: true, text: 'mg (escala menor)', color: '#7d8f84' }, ticks: { color: '#7d8f84' }, grid: { drawOnChartArea: false } } },
       plugins: { legend: { labels: { color: '#cfe' } }, tooltip: { callbacks: { title: (it) => 'Dia ' + r.dias[it[0].dataIndex] } } } } }) }
-  async function hormonios() { if (!COMP.length) COMP = (await api('/api/protocolo/compostos')).compostos
-    const { ativo } = await api('/api/protocolo'); $('#h-conferir').hidden = true
+  async function hormonios() {
+    const { ativo } = await api('/api/protocolo'); PROTOCOLO = ativo
     $('#h-vazio').hidden = !!ativo; $('#h-ativo').hidden = !ativo
-    if (!ativo) { $('#h-msg').textContent = ''; $('.ampolas-deco').innerHTML = [0, 1, 2].map((i) => ampolaSvg(CORES[i], i === 2)).join(''); return }
-    $('#h-titulo').textContent = ativo.itens.length + (ativo.itens.length === 1 ? ' composto' : ' compostos') + ' no seu protocolo'
-    $('#h-origem').textContent = 'Receita de ' + (ativo.medico || 'médico não identificado') + (ativo.data_receita ? ' · ' + ativo.data_receita.split('-').reverse().join('/') : '')
+    if (!ativo) { $('.ampolas-deco').innerHTML = [0, 1, 2].map((i) => ampolaSvg(CORES[i], i === 2)).join(''); return }
+    $('#h-titulo').textContent = ativo.itens.length + (ativo.itens.length === 1 ? ' item na prescrição' : ' itens na prescrição')
+    $('#h-origem').textContent = (ativo.medico || 'Prescrição gerada pela IA') + (ativo.paciente ? ' · Paciente: ' + ativo.paciente : '') + (ativo.data_receita ? ' · ' + ativo.data_receita.split('-').reverse().join('/') : '')
     $('#h-ampolas').innerHTML = ativo.itens.map((i, k) => { const cor = CORES[k % CORES.length]
       return `<div class="ampola" style="--cor:${cor};animation-delay:${k * 80}ms">${ampolaSvg(cor, ORAIS.includes(i.composto))}<div><h4>${esc(i.nome_na_receita || i.nome)}</h4><small class="dim">${esc(i.nome)}</small>
         <div class="dose">${String(i.dose_mg).replace('.', ',')} <small>mg</small></div><small class="dim">${freq(i.a_cada_dias)}</small>
         <div class="meta"><span>${i.semanas} semanas</span>${i.inicio_semana ? `<span>começa na sem. ${i.inicio_semana}</span>` : ''}${i.via ? `<span>${esc(i.via)}</span>` : ''}</div></div>
         ${i.ficha || i.obs ? `<details><summary>Sobre este composto</summary>${i.obs ? `<p><b>Na receita:</b> ${esc(i.obs)}</p>` : ''}<p>${esc(i.ficha)}</p></details>` : ''}</div>` }).join('')
-    $('#h-obs').hidden = !ativo.observacoes; $('#h-obs').innerHTML = `<h3 style="margin-bottom:6px">Orientações da receita</h3><p class="dim">${esc(ativo.observacoes)}</p>`
+    $('#h-obs').hidden = !ativo.observacoes; $('#h-obs').innerHTML = `<h3 style="margin-bottom:6px">Orientações</h3><p class="dim">${esc(ativo.observacoes)}</p>`
     grafico(ativo.curva)
     const sel = $('#z-comp'); sel.innerHTML = ativo.itens.map((i) => `<option>${esc(i.nome)}</option>`).join(''); sel.onchange = zonasHoje; zonasHoje() }
   let ZONA = null

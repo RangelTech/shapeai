@@ -91,7 +91,9 @@ def test_protocolo_rag_e_curva(amb):
     assert len(j["prescricoes"][0]["semana"]) == 7 and c.post(f"/api/prescricoes/{pid}/feito").json()["ok"]
     c.post("/api/conversa", json={"texto": "qual a dose de deca pra iniciante e como fica a tirzepatida?"})
     sistema = VISTOS[-1][0]["content"]
-    assert "Nandrolona" in sistema and "Tirzepatida" in sistema and "NÃO monte" in sistema
+    assert "Nandrolona" in sistema and "Tirzepatida" in sistema
+    assert "Antes de montar qualquer protocolo" in sistema
+    assert "Emissão da prescrição" in sistema
     comp = c.get("/api/protocolo/compostos").json()["compostos"]
     assert any(x["id"] == "sustanon" for x in comp)
     r = c.post("/api/protocolo/curva", json={"itens": [{"composto": "testosterona_enantato", "dose_mg": 250, "a_cada_dias": 3.5, "semanas": 12},
@@ -99,27 +101,30 @@ def test_protocolo_rag_e_curva(amb):
     assert len(r["series"]) == 2 and max(r["total"]) > 300 and r["total"][0] == 0
 
 
-def test_receita_vira_protocolo(tmp_path):
-    lido = json.dumps({"medico": "Dra. Ana CRM 1", "data": "2026-11-10", "observacoes": "exames na 6a semana",
-                       "itens": [{"composto": "testosterona_cipionato", "nome_na_receita": "Deposteron", "dose_mg": 100, "a_cada_dias": 7, "semanas": 8, "via": "IM"},
-                                 {"composto": "xyz", "nome_na_receita": "Vitamina D", "dose_mg": 0, "a_cada_dias": 1, "semanas": 8}]})
+def test_chat_salva_prescricao_no_protocolo(tmp_path):
+    estruturado = json.dumps({"pronto": True, "paciente": "Paciente Teste", "medico": "Dra. Ana CRM 1", "data": "2026-11-10",
+                              "observacoes": "exames na 6a semana", "itens": [{"composto": "testosterona_cipionato",
+                              "nome_na_receita": "Deposteron", "dose_mg": 100, "a_cada_dias": 7, "semanas": 8, "via": "IM"}]})
     vistos = []
+    def llm_prescricao(msgs):
+        vistos.append(msgs)
+        return estruturado if msgs[0]["content"].startswith("Converta a prescrição") else "Proposta para Paciente Teste: Deposteron 100 mg semanal por 8 semanas."
     cfg = Config(dados=str(tmp_path), segredo_sessao="s", dev=True)
-    c = TestClient(criar_app(cfg, llm=lambda m: (vistos.append(m), "ok")[1], visao=lambda m: lido))
+    c = TestClient(criar_app(cfg, llm=llm_prescricao))
     cod = c.post("/api/entrar/codigo", json={"email": "r@x.com"}).json()["codigo_dev"]
     c.post("/api/entrar", json={"email": "r@x.com", "codigo": cod})
     assert c.get("/api/protocolo").json()["ativo"] is None
-    d = c.post("/api/receita/ler", content=JPG, headers={"content-type": "image/jpeg"}).json()
-    assert d["medico"].startswith("Dra. Ana") and d["itens"][1]["composto"] == "outro" and d["foto"]
-    assert c.post("/api/receita/ler", json={"texto": "Deposteron 100 mg semanal"}).json()["itens"]
-    assert c.post("/api/protocolo", json={"itens": []}).status_code == 422
-    c.post("/api/protocolo", json=d)
+    r = c.post("/api/conversa", json={"texto": "Gere uma prescrição de Deposteron para Paciente Teste"}).json()
+    assert r["prescricao_id"] and "Prescrição salva" in r["resposta"]
     p = c.get("/api/protocolo").json()["ativo"]
-    assert p["itens"][0]["nome"].startswith("Testosterona cipionato") and p["curva"]["total"] and "foto" not in p
+    assert p["paciente"] == "Paciente Teste" and p["itens"][0]["nome"].startswith("Testosterona cipionato")
+    assert p["curva"]["total"] and "foto" not in p
     assert "Testosterona" in p["itens"][0]["ficha"]
+    assert "Imprimir prescrição" in c.get("/painel").text
     c.post("/api/conversa", json={"texto": "me explica minha receita"})
     sistema = vistos[-1][0]["content"]
-    assert "Deposteron (= Testosterona cipionato): 100 mg a cada 7 dias" in sistema and "NÃO monte" in sistema and "Blast Iniciante" not in sistema
+    assert "Deposteron (= Testosterona cipionato): 100 mg a cada 7 dias" in sistema
+    assert "Prescrição ativa salva" in sistema
 
 
 # ---------------- biblioteca de exercícios (RAG por local), séries/1RM e zonas de aplicação (spec 45 D.9.2) ----------------

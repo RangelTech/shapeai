@@ -1,9 +1,4 @@
-"""Protocolo do cliente a partir da RECEITA do médico.
-
-A IA não monta protocolo hormonal. O cliente manda a foto (ou o texto) da receita; a IA de visão lê e devolve os itens
-estruturados; o cliente confere e salva. Com isso o app monta a aba Hormônios: ampolas, dose, frequência, calendário e
-curva estimada (app/protocolos.py). Origem sempre registrada: médico e data da receita.
-"""
+"""Prescrição estruturada do médico/IA exibida na aba Hormônios e pronta para impressão."""
 from __future__ import annotations
 
 import json
@@ -15,7 +10,7 @@ from app.protocolos import COMPOSTOS
 ESQUEMA = """
 CREATE TABLE IF NOT EXISTS protocolos_cliente (id INTEGER PRIMARY KEY, usuario INTEGER NOT NULL, medico TEXT NOT NULL DEFAULT '',
   data_receita TEXT NOT NULL DEFAULT '', itens TEXT NOT NULL, observacoes TEXT NOT NULL DEFAULT '', foto TEXT NOT NULL DEFAULT '',
-  ativo INTEGER NOT NULL DEFAULT 1, criado REAL NOT NULL);
+  paciente TEXT NOT NULL DEFAULT '', ativo INTEGER NOT NULL DEFAULT 1, criado REAL NOT NULL);
 CREATE INDEX IF NOT EXISTS protocolos_cliente_usuario ON protocolos_cliente(usuario, criado);
 """
 LER = """Você lê receitas e prescrições médicas de protocolos hormonais, tirzepatida e peptídeos e transcreve EXATAMENTE o que está escrito.
@@ -29,6 +24,9 @@ Ids aceitos para "composto": {ids}. Se o composto não estiver na lista, use "ou
 
 def preparar(db: Banco) -> None:
     db.con.executescript(ESQUEMA)
+    colunas = {r["name"] for r in db.con.execute("PRAGMA table_info(protocolos_cliente)")}
+    if "paciente" not in colunas:
+        db.con.execute("ALTER TABLE protocolos_cliente ADD COLUMN paciente TEXT NOT NULL DEFAULT ''")
 
 
 def prompt_leitura() -> str:
@@ -66,9 +64,9 @@ def salvar(db: Banco, usuario: int, d: dict, foto: str = "") -> int:
     if not itens:
         raise ValueError("nenhum item na receita")
     db.exec("UPDATE protocolos_cliente SET ativo=0 WHERE usuario=?", (usuario,))
-    return db.exec("INSERT INTO protocolos_cliente(usuario,medico,data_receita,itens,observacoes,foto,criado) VALUES(?,?,?,?,?,?,?)",
+    return db.exec("INSERT INTO protocolos_cliente(usuario,medico,data_receita,itens,observacoes,foto,paciente,criado) VALUES(?,?,?,?,?,?,?,?)",
                    (usuario, str(d.get("medico") or "")[:120], str(d.get("data") or "")[:10], json.dumps(itens, ensure_ascii=False),
-                    str(d.get("observacoes") or "")[:2000], foto, agora())).lastrowid
+                    str(d.get("observacoes") or "")[:2000], foto, str(d.get("paciente") or "")[:120], agora())).lastrowid
 
 
 def ativo(db: Banco, usuario: int) -> dict | None:
@@ -81,7 +79,9 @@ def ativo(db: Banco, usuario: int) -> dict | None:
 def contexto(db: Banco, usuario: int) -> str:
     p = ativo(db, usuario)
     if not p:
-        return "Nenhuma receita cadastrada. Se a pessoa já tem prescrição, peça a foto da receita na aba Hormônios."
+        return ("Não há prescrição ativa salva para este paciente. Use o MATERIAL DE REFERÊNCIA e o contexto da conversa; "
+                "quando o médico pedir explicitamente para gerar uma prescrição, responda com a proposta completa. "
+                "O sistema estrutura e salva os campos na aba Hormônios para impressão.")
     def nome(i: dict) -> str:
         oficial = COMPOSTOS.get(i["composto"], ("",))[0]
         if i["nome_na_receita"] and oficial:
@@ -90,5 +90,5 @@ def contexto(db: Banco, usuario: int) -> str:
     linhas = [f"- {nome(i)}: {i['dose_mg']:g} mg a cada {i['a_cada_dias']:g} dias, "
               f"{i['semanas']} semanas{', começa na semana ' + str(i['inicio_semana']) if i['inicio_semana'] else ''}"
               f"{' (' + i['via'] + ')' if i['via'] else ''}{' — ' + i['obs'] if i['obs'] else ''}" for i in p["itens"]]
-    return (f"Receita de {p['medico'] or 'médico não identificado'}{' em ' + p['data_receita'] if p['data_receita'] else ''} (transcrita da receita do cliente):\n"
+    return (f"Prescrição ativa salva para {p.get('paciente') or 'paciente não identificado'} por {p['medico'] or 'médico não identificado'}{' em ' + p['data_receita'] if p['data_receita'] else ''}:\n"
             + "\n".join(linhas) + (f"\nOrientações da receita: {p['observacoes']}" if p["observacoes"] else ""))

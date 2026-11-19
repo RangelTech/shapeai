@@ -3,8 +3,9 @@
 A pessoa conta a rotina e a meta, registra medidas (o BF sai pelo método da Marinha), e a IA monta treino e dieta da semana
 em cima das calorias e macros calculados aqui (app/fitness.py). Check-ins dão pontos, nível e sequência; o ranking mistura
 pessoas reais com atletas de motivação gerados pela IA (decisão do Lucas, 16/11: aparecem como jogadores normais).
-Protocolos (hormônio, tirzepatida, peptídeos): o chat responde com o material da doutora do projeto loki (RAG em
-app/protocolos.py) e o painel mostra a curva estimada de cada composto, no estilo do steroidplotter.
+Protocolos (hormônio, tirzepatida, peptídeos): o chat responde e propõe com o material da doutora do projeto loki
+(RAG em app/protocolos.py), inclusive montando protocolos por perfil com as dosagens de referência das
+planilhas; o painel mostra a curva estimada de cada composto, no estilo do steroidplotter.
 """
 from __future__ import annotations
 
@@ -24,8 +25,6 @@ from starlette.concurrency import run_in_threadpool
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-
-import base64
 
 from app import admin, auth, fitness, mailer, protocolos, receita, senha_rotas, exercicios
 from app.config import Config, carregar
@@ -70,7 +69,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
     admin.preparar(db)
 
     def persona(**kw) -> str:
-        """Prompt de sistema: a skill shape-ai (editável no /admin) + contexto, receita e material."""
+        """Prompt de sistema: a skill shape-ai (editável no /admin) + contexto, prescrição e material."""
         return CABECA.format(skill=admin.skill(db, "shape-ai"), **kw)
     FOTOS = Path(cfg.dados) / "fotos"
     FOTOS.mkdir(exist_ok=True)
@@ -514,41 +513,6 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
         p.pop("foto", None)
         return {"ativo": p}
 
-    def ler_receita(conteudo: list[dict]) -> dict:
-        msgs = [{"role": "system", "content": receita.prompt_leitura()}, {"role": "user", "content": conteudo}]
-        if visao:
-            return receita.ler_json(visao(msgs))
-        r = httpx.post(cfg.visao_base + "/chat/completions", headers={"Authorization": f"Bearer {cfg.visao_key}"}, timeout=180,
-                       json={"model": cfg.visao_modelo, "messages": msgs, "temperature": 0, "max_tokens": 2000})
-        r.raise_for_status()
-        return receita.ler_json(r.json()["choices"][0]["message"]["content"] or "")
-
-    @app.post("/api/receita/ler")
-    async def receita_ler(request: Request):
-        """Foto (corpo binário, image/*) ou texto ({"texto": ...}) da receita -> itens para o cliente conferir."""
-        u = usuario(request)
-        tipo = request.headers.get("content-type", "")
-        if tipo.startswith("image/"):
-            corpo = await request.body()
-            if not corpo or len(corpo) > MAX_FOTO:
-                raise HTTPException(422, "foto vazia ou grande demais (até 12 MB)")
-            nome = uuid.uuid4().hex + ".jpg"
-            (FOTOS / nome).write_bytes(corpo)
-            db.exec("INSERT INTO fotos(nome,usuario,tipo,criado) VALUES(?,?,?,?)", (nome, u["id"], "receita", agora()))
-            conteudo = [{"type": "text", "text": "Transcreva esta receita."},
-                        {"type": "image_url", "image_url": {"url": f"data:{tipo.split(';')[0]};base64,{base64.b64encode(corpo).decode()}"}}]
-        else:
-            b = await request.json()
-            texto = str(b.get("texto") or "").strip()[:6000]
-            if not texto:
-                raise HTTPException(422, "envie a foto ou o texto da receita")
-            nome, conteudo = "", [{"type": "text", "text": "Transcreva esta receita:\n" + texto}]
-        try:
-            d = await run_in_threadpool(ler_receita, conteudo)
-        except Exception:  # noqa: BLE001
-            raise HTTPException(502, "não consegui ler a receita agora; tente de novo ou digite os itens")
-        return {**d, "foto": nome}
-
     @app.post("/api/protocolo")
     async def salvar_protocolo(request: Request):
         u = usuario(request)
@@ -635,8 +599,44 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
             resposta = await run_in_threadpool(chamar_llm, msgs, 3000)
         except Exception:  # noqa: BLE001
             raise HTTPException(502, "o coach não respondeu agora; tente de novo em instantes")
+        prescricao_id = None
+        # Pedido explícito de emissão: a conversa continua natural, e uma segunda chamada
+        # estrutura a prescrição para o mesmo registro que abastece a aba Hormônios.
+        verbo_emissao = re.search(r"\b(gerar|gere|criar|crie|monte|montar|prescreva|prescrever|emita|emitir)\b", texto, re.I)
+        alvo_prescricao = re.search(r"\b(prescri[cç][aã]o|receita|ciclo|protocolo|tirzepatida|mounjaro|horm[oô]nio)\b", texto, re.I)
+        emitir = verbo_emissao and alvo_prescricao
+        if emitir:
+            instrucao = """Converta a prescrição/protocolo que você acabou de propor em JSON para o prontuário.
+Use somente os medicamentos e dados clínicos que já constam na conversa e na sua proposta. Não invente nem complete dose, intervalo ou duração; se algum campo necessário estiver ausente, devolva pronto=false e lista os campos em faltantes.
+Formato EXATO: {"pronto":true,"paciente":"nome do paciente, se informado","medico":"","data":"AAAA-MM-DD","observacoes":"","itens":[{"composto":"id conhecido ou outro","nome_na_receita":"nome","dose_mg":0,"a_cada_dias":7,"semanas":1,"inicio_semana":0,"via":"IM/SC/oral","obs":""}],"faltantes":[]}
+Cada item exige dose_mg maior que zero e a_cada_dias e semanas explicitamente definidos. Não inclua explicações fora do JSON."""
+            estruturar = [{"role": "system", "content": instrucao},
+                          {"role": "user", "content": "Pedido do médico: " + texto + "\nProposta da IA: " + resposta}]
+            try:
+                bruto = await run_in_threadpool(chamar_llm, estruturar, 1800)
+                dado = json_da_ia(bruto)
+                brutos = dado.get("itens") or []
+                itens = receita.itens_validos(brutos)
+                try:
+                    campos_clinicos = all(float(x["dose_mg"]) > 0 and float(x["a_cada_dias"]) > 0
+                                          and int(float(x["semanas"])) > 0 for x in brutos)
+                except (TypeError, ValueError, KeyError):
+                    campos_clinicos = False
+                completos = dado.get("pronto") is True and itens and len(itens) == len(brutos) and campos_clinicos
+                if completos:
+                    if not str(dado.get("data") or "").strip():
+                        dado["data"] = dt.datetime.now(TZ).date().isoformat()
+                    prescricao_id = receita.salvar(db, u["id"], {**dado, "itens": itens})
+                    resposta += "\n\nPrescrição salva na aba Hormônios. O botão Imprimir prepara o documento para assinatura."
+                elif dado.get("faltantes"):
+                    resposta += "\n\nAinda não salvei a prescrição: faltam dados explícitos para " + ", ".join(map(str, dado["faltantes"])) + "."
+                else:
+                    resposta += "\n\nNão consegui registrar a prescrição: a IA não devolveu todos os campos em formato válido."
+            except Exception:  # noqa: BLE001
+                logging.exception("falha ao estruturar prescrição do chat")
+                resposta += "\n\nNão consegui registrar a prescrição agora. Tente novamente."
         db.exec("INSERT INTO mensagens(usuario,papel,texto,criado) VALUES(?,?,?,?)", (u["id"], "ia", resposta, agora()))
-        return {"resposta": resposta}
+        return {"resposta": resposta, "prescricao_id": prescricao_id}
 
     # ------------------------------------------------ Cakto
     @app.post("/api/cakto")
