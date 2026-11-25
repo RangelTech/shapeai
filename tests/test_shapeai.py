@@ -1,3 +1,4 @@
+from produtos_core.teste import entrar
 import json
 import os
 
@@ -28,8 +29,7 @@ def llm_falso(msgs):
 def amb(tmp_path):
     cfg = Config(dados=str(tmp_path), segredo_sessao="s", dev=True, cakto_segredo="ck", planos_por_produto={"p-pro": "pro"})
     c = TestClient(criar_app(cfg, llm=llm_falso))
-    cod = c.post("/api/entrar/codigo", json={"email": "bia@x.com"}).json()["codigo_dev"]
-    assert c.post("/api/entrar", json={"email": "bia@x.com", "codigo": cod}).status_code == 200
+    entrar(c, "bia@x.com")
     return c
 
 
@@ -111,8 +111,7 @@ def test_chat_salva_prescricao_no_protocolo(tmp_path):
         return estruturado if msgs[0]["content"].startswith("Converta a prescrição") else "Proposta para Paciente Teste: Deposteron 100 mg semanal por 8 semanas."
     cfg = Config(dados=str(tmp_path), segredo_sessao="s", dev=True)
     c = TestClient(criar_app(cfg, llm=llm_prescricao))
-    cod = c.post("/api/entrar/codigo", json={"email": "r@x.com"}).json()["codigo_dev"]
-    c.post("/api/entrar", json={"email": "r@x.com", "codigo": cod})
+    entrar(c, "r@x.com")
     assert c.get("/api/protocolo").json()["ativo"] is None
     r = c.post("/api/conversa", json={"texto": "Gere uma prescrição de Deposteron para Paciente Teste"}).json()
     assert r["prescricao_id"] and "Prescrição salva" in r["resposta"]
