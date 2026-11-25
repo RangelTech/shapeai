@@ -1,0 +1,29 @@
+{
+  "_doc": "Contrato de planos do produto (spec 57 §3, item 4). Quem muda preço muda AQUI, no código e na oferta da Cakto; o teste tests/test_planos_contrato.py falha se o código e este arquivo divergirem. Mapa produto da Cakto -> plano e links de checkout ficam no Infisical (nunca no git).",
+  "produto": "shapeai",
+  "moeda": "BRL",
+  "periodo": "mensal",
+  "planos": [
+    {
+      "codigo": "pro",
+      "nome": "Pro",
+      "preco": 39.9
+    },
+    {
+      "codigo": "elite",
+      "nome": "Elite",
+      "preco": 79.9
+    }
+  ],
+  "cakto": {
+    "conta": "lucas",
+    "infisical": "rt-produtos/shapeai",
+    "mapa": "SHAPEAI_PLANOS_CAKTO",
+    "checkouts": "SHAPEAI_CHECKOUTS",
+    "webhook": "POST /api/cakto (segredo em SHAPEAI_CAKTO_SEGREDO)",
+    "codigos_vendidos": [
+      "elite",
+      "pro"
+    ]
+  }
+}
