@@ -416,7 +416,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
     def placar(u: dict) -> list[dict]:
         hoje_ = dt.datetime.now(TZ).date()
         ini = (hoje_ - dt.timedelta(days=hoje_.weekday())).isoformat()
-        reais = db.todos("""SELECT c.usuario, COALESCE(p.nome,'Atleta') nome, SUM(c.pontos) pontos FROM checkins c LEFT JOIN perfis p ON p.usuario=c.usuario
+        reais = db.todos("""SELECT c.usuario, MAX(COALESCE(p.nome,'Atleta')) nome, SUM(c.pontos) pontos FROM checkins c LEFT JOIN perfis p ON p.usuario=c.usuario
                             WHERE c.dia>=? GROUP BY c.usuario ORDER BY pontos DESC LIMIT 30""", (ini,))
         meus = next((r["pontos"] for r in reais if r["usuario"] == u["id"]), 0)
 
@@ -459,7 +459,7 @@ def criar_app(cfg: Config | None = None, llm=None, visao=None) -> FastAPI:
         u = usuario(request)
         if ex:
             return serie_resumo(u, ex)
-        ult = db.todos("SELECT exercicio, nome, MAX(criado) c FROM series WHERE usuario=? GROUP BY exercicio ORDER BY c DESC LIMIT 20", (u["id"],))
+        ult = db.todos("SELECT exercicio, MAX(nome) nome, MAX(criado) c FROM series WHERE usuario=? GROUP BY exercicio ORDER BY c DESC LIMIT 20", (u["id"],))
         return {"exercicios": [serie_resumo(u, x["exercicio"]) | {"nome": x["nome"]} for x in ult]}
 
     def zonas_de(u: dict, composto: str) -> dict:
